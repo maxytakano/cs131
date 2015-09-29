@@ -14,6 +14,7 @@ parser code
 
 scan with {: return new Symbol (sym.EOF); :};
 
+
 //--------------------------------------------------------------------
 //
 //--------------------------------------------------------------------
@@ -79,9 +80,12 @@ terminal
     T_TILDE,
     T_TRUE,
     T_WHILE,
-    T_VOID
+    T_VOID, 
+    //added new terminals
+    T_NEW,
+    T_DELETE
     ;
-
+    
 terminal String
     T_FLOAT_LITERAL,
     T_INT_LITERAL,
@@ -148,7 +152,10 @@ non terminal
     Pointer,
     OptArrayList,
     ArrayList,
-    Array
+    Array,
+    //New stuff below here
+    NewStmt,
+    DeleteStmt
     ;
 
 non terminal String    
@@ -201,6 +208,13 @@ Program ::=         {:
                     :}
     ;
 
+//THIS COULD BE THE WRONG LOCATION
+NewStmt ::= T_NEW Designator OptCtorCall T_SEMI
+    ;
+
+//THIS COULD BE THE WRONG LOCATION
+DeleteStmt ::= T_DELETE Designator T_SEMI
+    ;
 
 OptGlobalDecls ::=  GlobalDecls
     |               /* empty */
