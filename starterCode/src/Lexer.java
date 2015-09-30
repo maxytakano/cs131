@@ -255,7 +255,9 @@ class Lexer
                           nState = S_HEX;
                         } else {
                           ungetChar (c);
-                          token = new Token (sym.T_INT_LITERAL, new String (buffer));
+                          String buffer_string = buffer.toString();
+                          Integer decimal_result = Integer.parseInt(buffer_string.substring(2), 16);
+                          token = new Token (sym.T_INT_LITERAL, new String (decimal_result.toString()));
                         }
                         break;
 
@@ -264,7 +266,9 @@ class Lexer
                           nState = S_OCTAL;
                         } else {
                           ungetChar (c);
-                          token = new Token (sym.T_INT_LITERAL, new String (buffer));
+                          String buffer_string = buffer.toString();
+                          Integer decimal_result = Integer.parseInt(buffer_string.substring(1), 8);
+                          token = new Token (sym.T_INT_LITERAL, new String (decimal_result.toString()));
                         }
                         break;
 
@@ -341,6 +345,8 @@ class Lexer
 				nCount++;
 			}
 		} // End of while loop
+
+        // System.out.println(token);
 
 		if (bError) {
 			if (token.GetCode () == sym.T_FLOAT_LITERAL) {

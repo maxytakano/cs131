@@ -54,17 +54,30 @@ class SymbolTable
 	//----------------------------------------------------------------
 	public STO access(String strName)
 	{
-		Stack<Scope> scope_stk = new Stack<scope>();
+		Stack<Scope> scope_stk = (Stack<Scope>)m_stkScopes.clone();
 		Scope scope;
 		STO stoReturn = null;
 
-		for (scope_stk = m_stkScopes; !scope_stk.empty();) {
+		while (!scope_stk.empty()) {
 			scope = scope_stk.pop();
             if ((stoReturn = scope.access(strName)) != null)
                 return stoReturn;
 		}
 
 		return null;
+
+        // Stack stk = new Stack();
+        // Scope scope;
+        // STO stoReturn = null;
+
+        // for (Enumeration<Scope> e = m_stkScopes.elements(); e.hasMoreElements();)
+        // {
+        //     scope = e.nextElement();
+        //     if ((stoReturn = scope.access(strName)) != null)
+        //         return stoReturn;
+        // }
+
+        // return null;
 	}
 
 	//----------------------------------------------------------------
