@@ -208,14 +208,6 @@ Program ::=         {:
                     :}
     ;
 
-//THIS COULD BE THE WRONG LOCATION
-NewStmt ::= T_NEW Designator OptCtorCall T_SEMI
-    ;
-
-//THIS COULD BE THE WRONG LOCATION
-DeleteStmt ::= T_DELETE Designator T_SEMI
-    ;
-
 OptGlobalDecls ::=  GlobalDecls
     |               /* empty */
     ;
@@ -508,6 +500,8 @@ Stmt ::=            VarDecl
     |               ReturnStmt
     |               ReadStmt
     |               WriteStmt
+    |               NewStmt
+    |               DeleteStmt
     ;
 
 
@@ -599,6 +593,14 @@ ReadStmt ::=        T_CIN T_ISTREAM Designator T_SEMI
 
 
 WriteStmt ::=       T_COUT T_OSTREAM WritePairList T_SEMI
+    ;
+
+//THIS COULD BE THE WRONG LOCATION
+NewStmt ::= T_NEW Designator OptCtorCall T_SEMI
+    ;
+
+//THIS COULD BE THE WRONG LOCATION
+DeleteStmt ::= T_DELETE Designator T_SEMI
     ;
 
 
