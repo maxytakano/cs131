@@ -141,7 +141,6 @@ non terminal
     WritePair,
     ConstExpr,
     ExprList,
-    UnarySign,
     Equality,
     Relation,
     OptInit,
@@ -158,11 +157,12 @@ non terminal
     DeleteStmt
     ;
 
-non terminal String    
+non terminal String
     AddOp,
     MulOp,
     IncDecOp,
-    ParamDecl
+    ParamDecl,
+    UnarySign
     ;
 
 non terminal STO
@@ -200,7 +200,7 @@ non terminal Vector
 //--------------------------------------------------------------------
 
 Program ::=         {:
-                        ((MyParser) parser).DoProgramStart(); 
+                        ((MyParser) parser).DoProgramStart();
                     :}
                     OptGlobalDecls
                     {:
@@ -786,6 +786,16 @@ IncDecOp ::=        T_PLUSPLUS
                     :}
     ;
 
+UnarySign ::=       T_MINUS
+                    {:
+                        RESULT = "-";
+                    :}
+    |               T_PLUS
+                    {:
+                        RESULT = "+";
+                    :}
+    ;
+
 
 Designator ::=      T_STAR Designator:_1
                     {:
@@ -819,7 +829,7 @@ Designator ::=      T_STAR Designator:_1
                     {:
                         RESULT = _2;
                     :}
-    |               Designator2:_1 
+    |               Designator2:_1
                     {:
                         RESULT = _1;
                     :}
