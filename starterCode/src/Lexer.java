@@ -165,11 +165,10 @@ class Lexer
 	//
 	//----------------------------------------------------------------
 	private Token
-	getNumToken (char cFirst)
-	{
+	getNumToken (char cFirst) {
 		int 			nState;
 		char			c;
-		StringBuffer		buffer = new StringBuffer (20);
+		StringBuffer	buffer = new StringBuffer (20);
 		int 			nCount;
 		int 			nExpCount = 0;
 		Token			token = null;
@@ -187,257 +186,176 @@ class Lexer
 		final int		S_HEX = 9;
 
 
-		if (cFirst == '0')
-		{
+		if (cFirst == '0') {
 			nState = S_ZEROES;
 			nCount = 0;
-		}
-		else
-		{
+		} else {
 			nState = S_DIGITS;
 
 			buffer.append (cFirst);
 			nCount = 1;
 		}
 
-		while (token == null)
-		{
+		while (token == null) {
 			c = getChar ();
 			bAddChar = true;
 
-      boolean switchThisChar = true;
+            boolean switchThisChar = true;
 
-      if (nState == S_ZEROES)
-      {
-        switchThisChar = false;
+            if (nState == S_ZEROES) {
+                switchThisChar = false;
 
-        while (c == '0')
-        {
-          c = getChar();
-        }
-        
-        if (c == '.')
-        {
-          nState = S_MANTISSA;
-        }
-        else if (isOctal(c))
-        {
-          buffer.append('0');
-          switchThisChar = true;
-          nState = S_OCTAL;
-        }
-        else if (c == 'x' || c == 'X')
-        {
-          buffer.append('0');
-          nState = S_HEX;
-        }
-        else
-        {
-          ungetChar (c);
-          token = new Token (sym.T_INT_LITERAL, "0");
-          break;
-        }
-      }
+                while (c == '0') {
+                  c = getChar();
+                }
 
-      if (switchThisChar)
-      {
-			  switch (nState)
-        {
-          case S_DIGITS:
+                if (c == '.') {
+                  nState = S_MANTISSA;
+                } else if (isOctal(c)) {
+                  buffer.append('0');
+                  switchThisChar = true;
+                  nState = S_OCTAL;
+                } else if (c == 'x' || c == 'X') {
+                  buffer.append('0');
+                  nState = S_HEX;
+                } else {
+                  ungetChar (c);
+                  token = new Token (sym.T_INT_LITERAL, "0");
+                  break;
+                }
+            }
 
-            if (c == '.')
-            {
-              nState = S_MANTISSA;
-            }
-            else if (Character.isDigit (c))
-            {
-              nState = S_DIGITS;
-            }
-            else
-            {
-              ungetChar (c);
-              token = new Token (sym.T_INT_LITERAL, 
-                  new String (buffer));
-            }
-            break;
+            if (switchThisChar) {
+                switch (nState) {
+                    case S_DIGITS:
+                        if (c == '.') {
+                          nState = S_MANTISSA;
+                        } else if (Character.isDigit (c)) {
+                          nState = S_DIGITS;
+                        } else {
+                          ungetChar (c);
+                          token = new Token (sym.T_INT_LITERAL, new String (buffer));
+                        }
+                        break;
 
+                    case S_MANTISSA:
+                        if (c == 'E' || c == 'D') {
+                          nCount = 0;
+                          nState = S_EXP;
+                        } else if (Character.isDigit (c)) {
+                          nState = S_MANTISSA;
+                        } else {
+                          ungetChar (c);
+                          token = new Token (sym.T_FLOAT_LITERAL, new String (buffer));
+                        }
+                        break;
 
-          case S_MANTISSA:
-            
-            if (c == 'E' || c == 'D')
-            {
-              nCount = 0;
-              nState = S_EXP;
-            }
-            else if (Character.isDigit (c))
-            {
-              nState = S_MANTISSA;
-            }
-            else
-            {
-              ungetChar (c);
-              token = new Token (sym.T_FLOAT_LITERAL, 
-                  new String (buffer));
-            }
-            break;
+                    case S_HEX:
+                        if (Character.isDigit (c) || isHex (c)) {
+                          nState = S_HEX;
+                        } else {
+                          ungetChar (c);
+                          token = new Token (sym.T_INT_LITERAL, new String (buffer));
+                        }
+                        break;
 
+                    case S_OCTAL:
+                        if (isOctal(c)) {
+                          nState = S_OCTAL;
+                        } else {
+                          ungetChar (c);
+                          token = new Token (sym.T_INT_LITERAL, new String (buffer));
+                        }
+                        break;
 
-          case S_HEX:
-            
-            if (Character.isDigit (c) || isHex (c))
-            {
-              nState = S_HEX;
-            }
-            else
-            {
-              ungetChar (c);
-              token = new Token (sym.T_INT_LITERAL,
-                  new String (buffer));
-            }
-            break;
+                    case S_EXP:
+                        bAddChar = false;
+                        if (c == '-' || c == '+') {
+                          buffer.append (c);
+                          nState = S_EXPSIGN;
+                        } else if (c == '0') {
+                          nState = S_EXPONENT;
+                          nExpCount = 0;
+                        } else if (Character.isDigit (c)) {
+                          buffer.append (c);
+                          nState = S_EXPONENT;
+                          nExpCount = 1;
+                        } else {
+                          ungetChar (c);
+                          c = buffer.charAt (buffer.length () - 1);
+                          ungetChar (c);
+                          buffer.deleteCharAt (buffer.length () - 1);
+                          token = new Token (sym.T_FLOAT_LITERAL, new String (buffer));
+                        }
+                        break;
 
+                    case S_EXPSIGN:
+                        bAddChar = false;
+                        if (c == '0') {
+                          nState = S_EXPONENT;
+                          nExpCount = 0;
+                        } else if (Character.isDigit (c)) {
+                          buffer.append (c);
+                          nState = S_EXPONENT;
+                          nExpCount = 1;
+                        } else {
+                          ungetChar (c);
+                          c = buffer.charAt (buffer.length () - 1);
+                          ungetChar (c);
+                          buffer.deleteCharAt (buffer.length () - 1);
+                          c = buffer.charAt (buffer.length () - 1);
+                          ungetChar (c);
+                          buffer.deleteCharAt (buffer.length () - 1);
+                          token = new Token (sym.T_FLOAT_LITERAL, new String (buffer));
+                        }
+                        break;
 
-          case S_OCTAL:
-            
-            if (isOctal(c))
-            {
-              nState = S_OCTAL;
-            }
-            else
-            {
-              ungetChar (c);
-              token = new Token (sym.T_INT_LITERAL,
-                  new String (buffer));
-            }
-            break;
+                    case S_EXPONENT:
+                        bAddChar = false;
+                        if (c == '0' && nExpCount == 0) {
+                          nState = S_EXPONENT;
+                        } else if (Character.isDigit (c)) {
+                          nExpCount++;
+                          if (nExpCount <= MAXEXPLEN) {
+                            buffer.append (c);
+                          } else {
+                            bExpError = true;
+                          }
+                        } else {
+                          ungetChar (c);
+                          if (nExpCount == 0)
+                            buffer.append ('0');
+                          token = new Token (sym.T_FLOAT_LITERAL, new String (buffer));
+                        }
+                }
+            } // End of switch
 
-
-          case S_EXP:
-            
-            bAddChar = false;
-            if (c == '-' || c == '+')
-            {
-              buffer.append (c);
-              nState = S_EXPSIGN;
-            }
-            else if (c == '0')
-            {
-              nState = S_EXPONENT;
-              nExpCount = 0;
-            }
-            else if (Character.isDigit (c))
-            {
-              buffer.append (c);
-              nState = S_EXPONENT;
-              nExpCount = 1;
-            }
-            else
-            {
-              ungetChar (c);
-              c = buffer.charAt (buffer.length () - 1);
-              ungetChar (c);
-              buffer.deleteCharAt (buffer.length () - 1);
-              token = new Token (sym.T_FLOAT_LITERAL,
-                  new String (buffer));		
-            }
-            break;
-
-          
-          case S_EXPSIGN:
-              
-            bAddChar = false;
-            if (c == '0')
-            {
-              nState = S_EXPONENT;
-              nExpCount = 0;
-            }
-            else if (Character.isDigit (c))
-            {
-              buffer.append (c);
-              nState = S_EXPONENT;
-              nExpCount = 1;
-            }
-            else
-            {
-              ungetChar (c);
-              c = buffer.charAt (buffer.length () - 1);
-              ungetChar (c);
-              buffer.deleteCharAt (buffer.length () - 1);
-              c = buffer.charAt (buffer.length () - 1);
-              ungetChar (c);
-              buffer.deleteCharAt (buffer.length () - 1);
-              token = new Token (sym.T_FLOAT_LITERAL,
-                  new String (buffer));		
-            }
-            break;
-
-
-          case S_EXPONENT:
-
-            bAddChar = false;
-            if (c == '0' && nExpCount == 0)
-            {
-              nState = S_EXPONENT;
-            }
-            else if (Character.isDigit (c))
-            {
-              nExpCount++;
-              if (nExpCount <= MAXEXPLEN)
-              {
-                buffer.append (c);
-              }
-              else
-              {
-                bExpError = true;
-              }
-            }
-            else
-            {
-              ungetChar (c);
-              if (nExpCount == 0)
-                buffer.append ('0');
-              token = new Token (sym.T_FLOAT_LITERAL,
-                  new String (buffer));		
-            }
-         }
-      }
-
-			if (bAddChar)
-			{
-				if (nCount < MAXNUMLEN)
-				{
+			if (bAddChar) {
+				if (nCount < MAXNUMLEN) {
 					buffer.append (c);
-				}
-				else if (nCount == MAXNUMLEN)
-				{
-				}
-				else
-				{
+				} else if (nCount == MAXNUMLEN) {
+                    // !This is empty
+				} else {
 					bError = true;
 				}
 				nCount++;
 			}
-		}
+		} // End of while loop
 
-		
-		if (bError)
-		{
-			if (token.GetCode () == sym.T_FLOAT_LITERAL)
-			{
+		if (bError) {
+			if (token.GetCode () == sym.T_FLOAT_LITERAL) {
 				m_errors.print ("float literal (mantissa) too long");
-			}
-			else
-			{
+			} else {
 				m_errors.print ("integer literal too long");
 			}
 		}
 
-		if (bExpError)
-		{
+		if (bExpError) {
 			m_errors.print ("float literal (exponent) too long");
 		}
-		
-    return (token);
+
+        // Return the completed token.
+        return (token);
 	}
 
 
