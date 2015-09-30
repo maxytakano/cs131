@@ -12,7 +12,7 @@ class SymbolTable
 	private int m_nLevel;
 	private Scope m_scopeGlobal;
 	private FuncSTO m_func = null;
-    
+
 	//----------------------------------------------------------------
 	//
 	//----------------------------------------------------------------
@@ -65,19 +65,6 @@ class SymbolTable
 		}
 
 		return null;
-
-        // Stack stk = new Stack();
-        // Scope scope;
-        // STO stoReturn = null;
-
-        // for (Enumeration<Scope> e = m_stkScopes.elements(); e.hasMoreElements();)
-        // {
-        //     scope = e.nextElement();
-        //     if ((stoReturn = scope.access(strName)) != null)
-        //         return stoReturn;
-        // }
-
-        // return null;
 	}
 
 	//----------------------------------------------------------------
