@@ -1,0 +1,3 @@
+[submodule "starterCode/yuno"]
+	path = starterCode/yuno
+	url = https://github.com/bulatb/yuno.git
