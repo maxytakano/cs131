@@ -15,6 +15,14 @@ class NumericType extends BasicType
 	}
 
 	//----------------------------------------------------------------
+	//
+	//----------------------------------------------------------------
+	public NumericType(String strName, int size)
+	{
+		super(strName, size);
+	}
+
+	//----------------------------------------------------------------
 	// Check to see if the type is a Numeric Type
 	//----------------------------------------------------------------
 	public boolean isNumeric()	{return true;}

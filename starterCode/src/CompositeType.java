@@ -15,6 +15,14 @@ class CompositeType extends Type
 	}
 
 	//----------------------------------------------------------------
+	//
+	//----------------------------------------------------------------
+	public CompositeType(String strName, int size)
+	{
+		super(strName, size);
+	}
+
+	//----------------------------------------------------------------
 	// Check to see if the type is a Composite Type
 	//----------------------------------------------------------------
 	public boolean isComposite()	{return true;}

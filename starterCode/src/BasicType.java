@@ -15,6 +15,14 @@ class BasicType extends Type
 	}
 
 	//----------------------------------------------------------------
+	//
+	//----------------------------------------------------------------
+	public BasicType(String strName, int size)
+	{
+		super(strName, size);
+	}
+
+	//----------------------------------------------------------------
 	// Check to see if the type is a Basic Type
 	//----------------------------------------------------------------
 	public boolean isBasic()	{return true;}

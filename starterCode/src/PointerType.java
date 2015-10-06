@@ -15,6 +15,14 @@ class PointerType extends CompositeType
 	}
 
 	//----------------------------------------------------------------
+	//
+	//----------------------------------------------------------------
+	public PointerType(String strName, int size)
+	{
+		super(strName, size);
+	}
+
+	//----------------------------------------------------------------
 	// Check to see if the type is a Pointer Type
 	//----------------------------------------------------------------
 	public boolean isPointer()	{return true;}
