@@ -18,7 +18,7 @@ class ArithmeticOp extends BinaryOp
     }
 
     //----------------------------------------------------------------
-    // Abstract method for checking operands
+    // Method for checking operands
     //----------------------------------------------------------------
     public STO checkOperands(STO a, STO b) {
         // operand types must be numeric, and the resulting type is int

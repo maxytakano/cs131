@@ -158,14 +158,14 @@ non terminal
     ;
 
 non terminal String
-    MulOp,
     IncDecOp,
     ParamDecl,
     UnarySign
     ;
 
 non terminal Operator
-    AddOp
+    AddOp,
+    MulOp
     ;
 
 non terminal STO
@@ -732,7 +732,7 @@ Expr7 ::=           Expr7:_1 AddOp:_2 Expr8:_3
 
 Expr8 ::=           Expr8:_1 MulOp:_2 Designator:_3
                     {:
-                        RESULT = _1;
+                        RESULT = ((MyParser) parser).doBinaryExpr(_1, _2, _3);
                     :}
     |               Designator:_1
                     {:
@@ -768,15 +768,15 @@ AddOp ::=           T_PLUS
 
 MulOp ::=           T_STAR
                     {:
-                        RESULT = "*";
+                        RESULT = new MulOp("*");
                     :}
     |               T_SLASH
                     {:
-                        RESULT = "/";
+                        RESULT = new DivOp("/");
                     :}
     |               T_MOD
                     {:
-                        RESULT = "%";
+                        RESULT = new ModOp("%");
                     :}
     ;
 

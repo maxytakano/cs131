@@ -1,5 +1,5 @@
 function : int main() {
-  int i = 5 + true;
+  int i = 5.0 % 5.0;
 
   return 0;
 }
