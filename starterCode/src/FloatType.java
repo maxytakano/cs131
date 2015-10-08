@@ -6,12 +6,14 @@
 
 class FloatType extends NumericType
 {
+	public static final String TYPE_NAME = "float";
+
 	//----------------------------------------------------------------
 	// Constructor for the Float type. All Floats are 32 bits long
 	//----------------------------------------------------------------
 	public FloatType()
 	{
-		super("Float", 32);
+		super(TYPE_NAME, 4);
 	}
 
 	//----------------------------------------------------------------

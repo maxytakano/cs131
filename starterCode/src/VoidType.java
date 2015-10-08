@@ -6,12 +6,14 @@
 
 class VoidType extends Type
 {
+	public static final String TYPE_NAME = "void";
+
 	//----------------------------------------------------------------
 	// Constructor for the Void type. All Voids are 0 bits long
 	//----------------------------------------------------------------
 	public VoidType()
 	{
-		super("Void", 0);
+		super(TYPE_NAME, 0);
 	}
 
 	//----------------------------------------------------------------

@@ -6,12 +6,14 @@
 
 class BooleanType extends BasicType
 {
+	public static final String TYPE_NAME = "bool";
+
 	//----------------------------------------------------------------
 	// Constructor for the Boolean type. All Booleans are 32 bits long
 	//----------------------------------------------------------------
 	public BooleanType()
 	{
-		super("Boolean", 32);
+		super(TYPE_NAME, 4);
 	}
 
 	//----------------------------------------------------------------

@@ -36,17 +36,12 @@ class ModOp extends ArithmeticOp
         Type bType = b.getType();
 
         if ( !(aType.isInt()) ) {
-            System.out.println("a not numberic");
-            return new ErrorSTO( Formatter.toString(ErrorMsg.error1n_Expr, aType.getName(), getName()) );
+            return new ErrorSTO( Formatter.toString(ErrorMsg.error1w_Expr, aType.getName(), getName(), IntType.TYPE_NAME) );
         } else if ( !(bType.isInt()) ) {
-            System.out.println("b not numberic");
-            return new ErrorSTO( Formatter.toString(ErrorMsg.error1n_Expr, bType.getName(), getName()) );
+            return new ErrorSTO( Formatter.toString(ErrorMsg.error1w_Expr, bType.getName(), getName(), IntType.TYPE_NAME) );
         } else {
-
             StringBuilder expr_builder = new StringBuilder();
             expr_builder.append(a.getName()).append(getName()).append(b.getName());
-
-            System.out.println("returning int type " + expr_builder.toString());
 
             ExprSTO expr = new ExprSTO(expr_builder.toString(), new IntType());
             return expr;

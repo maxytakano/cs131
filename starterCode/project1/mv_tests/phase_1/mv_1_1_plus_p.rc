@@ -1,0 +1,9 @@
+function : int main() {
+  int i = 5 + 5;
+  float j = 5.0 + 3;
+  j = 3 + 5.0;
+  j = 0 + 0.0;
+  j = 1.0 + 1.0;
+
+  return 0;
+}

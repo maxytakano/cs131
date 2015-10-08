@@ -372,7 +372,7 @@ class MyParser extends parser
         STO result = o.checkOperands(a, b);
         if (result.isError()) {
             m_nNumErrors++;
-            m_errors.print("eyyyy");
+            m_errors.print(result.getName());
             return result;
         }
         return result;

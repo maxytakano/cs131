@@ -6,12 +6,14 @@
 
 class IntType extends NumericType
 {
+	public static final String TYPE_NAME = "int";
+
 	//----------------------------------------------------------------
 	// Constructor for the Int type. All Int are 32 bits long
 	//----------------------------------------------------------------
 	public IntType()
 	{
-		super("Int", 32);
+		super(TYPE_NAME, 4);
 	}
 
 	//----------------------------------------------------------------
