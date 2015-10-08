@@ -64,8 +64,8 @@ abstract class Type
 	//	etc. Below is an example of isInt(). Feel free to
 	//	change this around.
 	//----------------------------------------------------------------
-	public boolean  isError()   	{ return false; }
-	public boolean  isInt()	    	{ return false; }
+	public boolean isError()   		{ return false; }
+	public boolean isInt()	    	{ return false; }
 	public boolean isBasic()		{ return false; }
 	public boolean isNumeric()		{ return false;	}
 	public boolean isFloat()		{ return false; }

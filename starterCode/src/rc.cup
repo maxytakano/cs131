@@ -158,11 +158,14 @@ non terminal
     ;
 
 non terminal String
-    AddOp,
     MulOp,
     IncDecOp,
     ParamDecl,
     UnarySign
+    ;
+
+non terminal Operator
+    AddOp
     ;
 
 non terminal STO
@@ -718,7 +721,7 @@ Expr6 ::=           Expr6:_1 Relation Expr7
 
 Expr7 ::=           Expr7:_1 AddOp:_2 Expr8:_3
                     {:
-                        RESULT = _1;
+                        RESULT = ((MyParser) parser).doBinaryExpr(_1, _2, _3);
                     :}
     |               Expr8:_1
                     {:
@@ -752,11 +755,13 @@ Relation ::=        T_LT
 
 AddOp ::=           T_PLUS
                     {:
-                        RESULT = "+";
+                        // Addop add_operation = new AddOp("+");
+                        RESULT = new AddOp("+");
                     :}
     |               T_MINUS
                     {:
-                        RESULT = "-";
+                        // RESULT = "-";
+                        RESULT = new MinusOp("-");
                     :}
     ;
 
@@ -870,11 +875,11 @@ Designator3 ::=     T_LPAREN Expr:_2 T_RPAREN
                     :}
     |               T_INT_LITERAL:_1
                     {:
-                        RESULT = new ConstSTO (_1, null, 0);    // fix me!
+                        RESULT = new ConstSTO (_1, new IntType(), Integer.parseInt(_1));    // fixed?
                     :}
     |               T_FLOAT_LITERAL:_1
                     {:
-                        RESULT = new ConstSTO (_1, null, 0.00);  // fix me!
+                        RESULT = new ConstSTO (_1, new FloatType(), Float.parseFloat(_1));  // fixed?
                     :}
     |               T_STR_LITERAL:_1
                     {:
@@ -882,15 +887,15 @@ Designator3 ::=     T_LPAREN Expr:_2 T_RPAREN
                     :}
     |               T_TRUE
                     {:
-                        RESULT = new ConstSTO ("true", null, 1);    // fix me!
+                        RESULT = new ConstSTO ("true", new BooleanType(), 1);    // fixed?
                     :}
     |               T_FALSE
                     {:
-                        RESULT = new ConstSTO ("false", null, 0);   // fix me!
+                        RESULT = new ConstSTO ("false", new BooleanType(), 0);   // fixed?
                     :}
     |               T_NULLPTR
                     {:
-                        RESULT = new ExprSTO ("nullptr", null);     // fix me!
+                        RESULT = new ExprSTO ("nullptr", new NullPointerType());     // fixed?
                     :}
     |               T_THIS
                     {:

@@ -329,6 +329,7 @@ class MyParser extends parser
         return sto;
     }
 
+    // ** Phase 0 ** //
     //----------------------------------------------------------------
     //
     //----------------------------------------------------------------
@@ -360,6 +361,21 @@ class MyParser extends parser
         }
 
         return sto;
+    }
+
+    // ** Phase 1 check 1 ** //
+
+    //----------------------------------------------------------------
+    // Checks if we have a valid binary operation.
+    //----------------------------------------------------------------
+    STO doBinaryExpr(STO a, Operator o, STO b) {
+        STO result = o.checkOperands(a, b);
+        if (result.isError()) {
+            m_nNumErrors++;
+            m_errors.print("eyyyy");
+            return result;
+        }
+        return result;
     }
 
     //----------------------------------------------------------------
