@@ -1,0 +1,5 @@
+function : int main() {
+  int i = 5 % true;
+
+  return 0;
+}
