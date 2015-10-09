@@ -1,0 +1,3 @@
+Error, "/tmp/cs131_testrunner_X9aqMF/file.rc": 
+  Incompatible type str to binary operator |, equivalent to int expected.
+Compile: failure.

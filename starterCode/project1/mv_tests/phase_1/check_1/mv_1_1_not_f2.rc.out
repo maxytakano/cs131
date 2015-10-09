@@ -1,0 +1,3 @@
+Error, "/tmp/cs131_testrunner_39aqMF/file.rc": 
+  Incompatible type float to unary operator !, equivalent to bool expected.
+Compile: failure.
