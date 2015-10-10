@@ -141,8 +141,6 @@ non terminal
     WritePair,
     ConstExpr,
     ExprList,
-    Equality,
-    Relation,
     OptInit,
     OptCtorCall,
     CtorCall,
@@ -165,7 +163,9 @@ non terminal String
 
 non terminal Operator
     AddOp,
-    MulOp
+    MulOp,
+    Relation,
+    Equality
     ;
 
 non terminal STO
@@ -664,9 +664,9 @@ Expr1 ::=           Expr1:_1 T_AND Expr2
     ;
 
 
-Expr2 ::=           Expr2:_1 T_BAR Expr3
+Expr2 ::=           Expr2:_1 T_BAR Expr3:_3
                     {:
-                        RESULT = _1;
+                        RESULT = ((MyParser) parser).doBinaryExpr(_1, new BwOrOp("|"), _3);
                     :}
     |               Expr3:_1
                     {:
@@ -675,9 +675,9 @@ Expr2 ::=           Expr2:_1 T_BAR Expr3
     ;
 
 
-Expr3 ::=           Expr3:_1 T_CARET Expr4
+Expr3 ::=           Expr3:_1 T_CARET Expr4:_3
                     {:
-                        RESULT = _1;
+                        RESULT = ((MyParser) parser).doBinaryExpr(_1, new XorOp("^"), _3);
                     :}
     |               Expr4:_1
                     {:
@@ -686,9 +686,9 @@ Expr3 ::=           Expr3:_1 T_CARET Expr4
     ;
 
 
-Expr4 ::=           Expr4:_1 T_AMPERSAND Expr5
+Expr4 ::=           Expr4:_1 T_AMPERSAND Expr5:_3
                     {:
-                        RESULT = _1;
+                        RESULT = ((MyParser) parser).doBinaryExpr(_1, new BwAndOp("&"), _3);
                     :}
     |               Expr5:_1
                     {:
@@ -697,9 +697,9 @@ Expr4 ::=           Expr4:_1 T_AMPERSAND Expr5
     ;
 
 
-Expr5 ::=           Expr5:_1 Equality Expr6
+Expr5 ::=           Expr5:_1 Equality:_2 Expr6:_3
                     {:
-                        RESULT = _1;
+                        RESULT = ((MyParser) parser).doBinaryExpr(_1, _2, _3);
                     :}
     |               Expr6:_1
                     {:
@@ -708,9 +708,9 @@ Expr5 ::=           Expr5:_1 Equality Expr6
     ;
 
 
-Expr6 ::=           Expr6:_1 Relation Expr7
+Expr6 ::=           Expr6:_1 Relation:_2 Expr7:_3
                     {:
-                        RESULT = _1;
+                        RESULT = ((MyParser) parser).doBinaryExpr(_1, _2, _3);
                     :}
     |               Expr7:_1
                     {:
@@ -742,14 +742,32 @@ Expr8 ::=           Expr8:_1 MulOp:_2 Designator:_3
 
 
 Equality ::=        T_EQU
+                    {:
+                        RESULT = new EqualOp("==");
+                    :}
     |               T_NEQ
+                    {:
+                        RESULT = new NotEqualOp("!=");
+                    :}
     ;
 
 
 Relation ::=        T_LT
+                    {:
+                        RESULT = new LessThanOp("<");
+                    :}
     |               T_GT
+                    {:
+                        RESULT = new GreaterThanOp(">");
+                    :}
     |               T_LTE
+                    {:
+                        RESULT = new LessThanEqualOp("<=");
+                    :}
     |               T_GTE
+                    {:
+                        RESULT = new GreaterThanEqualOp(">=");
+                    :}
     ;
 
 

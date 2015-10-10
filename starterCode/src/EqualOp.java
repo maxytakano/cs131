@@ -7,19 +7,17 @@
 //---------------------------------------------------------------------
 //
 //---------------------------------------------------------------------
-abstract class BitwiseOp extends BinaryOp
+class EqualOp extends ComparisionOp
 {
     //----------------------------------------------------------------
     //
     //----------------------------------------------------------------
-    public BitwiseOp(String strName)
+    public EqualOp(String strName)
     {
         super(strName);
     }
 
-    //----------------------------------------------------------------
-    // Method for checking operands
-    //----------------------------------------------------------------
+    // override relation ops
     public STO checkOperands(STO a, STO b) {
         // double check this
         if (a.isError()) {
@@ -32,18 +30,21 @@ abstract class BitwiseOp extends BinaryOp
         Type aType = a.getType();
         Type bType = b.getType();
 
-        if ( !(aType.isInt()) ) {
-            return new ErrorSTO( Formatter.toString(ErrorMsg.error1w_Expr, aType.getName(), getName(), IntType.TYPE_NAME) );
-        } else if ( !(bType.isInt()) ) {
-            return new ErrorSTO( Formatter.toString(ErrorMsg.error1n_Expr, bType.getName(), getName(), IntType.TYPE_NAME) );
-        } else  {
+        if ( aType.isNumeric() && bType.isNumeric() ) {
             StringBuilder expr_builder = new StringBuilder();
             expr_builder.append(a.getName()).append(getName()).append(b.getName());
 
-            ExprSTO expr = new ExprSTO(expr_builder.toString(), new IntType());
+            ExprSTO expr = new ExprSTO(expr_builder.toString(), new BooleanType());
             return expr;
+        } else if ( aType.isBoolean() && bType.isBoolean() ) {
+            StringBuilder expr_builder = new StringBuilder();
+            expr_builder.append(a.getName()).append(getName()).append(b.getName());
+
+            ExprSTO expr = new ExprSTO(expr_builder.toString(), new BooleanType());
+            return expr;
+        } else {
+            return new ErrorSTO( Formatter.toString(ErrorMsg.error1b_Expr, aType.getName(), getName(), bType.getName()) );
         }
     }
-
 
 }
