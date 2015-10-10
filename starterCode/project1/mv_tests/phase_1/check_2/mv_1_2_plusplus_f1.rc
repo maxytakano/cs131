@@ -1,0 +1,6 @@
+function : int main() {
+  bool i = true;
+  i++;
+
+  return 0;
+}

@@ -174,6 +174,8 @@ class MyParser extends parser
             m_errors.print(Formatter.toString(ErrorMsg.redeclared_id, id));
         }
 
+        //VV: Passed in IntType arbitrarily as well so that the appropriate constructor is called and 
+        // we can make VarSTO a modifiable L Value
         VarSTO sto = new VarSTO(id);
         m_symtab.insert(sto);
     }
@@ -368,9 +370,24 @@ class MyParser extends parser
     //----------------------------------------------------------------
     // Checks if we have a valid binary operation.
     //----------------------------------------------------------------
-    STO doBinaryExpr(STO a, Operator o, STO b) {
+    STO doBinaryExpr(STO a, BinaryOp o, STO b) {
         STO result = o.checkOperands(a, b);
         if (result.isError()) {
+            m_nNumErrors++;
+            m_errors.print(result.getName());
+            return result;
+        }
+        return result;
+    }
+
+    // ** Phase 1 check 2 **/
+
+    //----------------------------------------------------------------
+    // Checks if we have a valid unary operation.
+    //----------------------------------------------------------------
+    STO doUnaryExpr(STO a, UnaryOp o) {
+        STO result = o.checkOperand(a);
+        if(result.isError()){
             m_nNumErrors++;
             m_errors.print(result.getName());
             return result;
