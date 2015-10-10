@@ -33,9 +33,9 @@ abstract class UnaryOp extends Operator
         // when both ops are int, or float otherwise.
 
         // double check this
-        if (a.isError()) {
-            return a;
-        }
+        // if (a.isError()) {
+        //     return a;
+        // }
 
         //Check for if it's modifyible first if not, return that error
         //This method is found in STO

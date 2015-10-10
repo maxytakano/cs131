@@ -25,12 +25,12 @@ abstract class BooleanOp extends BinaryOp
         // when both ops are int, or float otherwise.
 
         // double check this
-        if (a.isError()) {
-            return a;
-        }
-        if (b.isError()) {
-            return b;
-        }
+        // if (a.isError()) {
+        //     return a;
+        // }
+        // if (b.isError()) {
+        //     return b;
+        // }
 
         Type aType = a.getType();
         Type bType = b.getType();

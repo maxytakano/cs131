@@ -32,9 +32,9 @@ class NotOp extends UnaryOp
         /// operand types must be numeric, and the resulting type is int
         // when both ops are int, or float otherwise.
         // double check this
-        if (a.isError()) {
-            return a;
-        }
+        // if (a.isError()) {
+        //     return a;
+        // }
 
         Type aType = a.getType();
         

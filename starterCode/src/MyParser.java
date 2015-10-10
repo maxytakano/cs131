@@ -371,6 +371,13 @@ class MyParser extends parser
     // Checks if we have a valid binary operation.
     //----------------------------------------------------------------
     STO doBinaryExpr(STO a, BinaryOp o, STO b) {
+        if (a.isError()) {
+            return a;
+        }
+        if (b.isError()) {
+            return b;
+        }
+
         STO result = o.checkOperands(a, b);
         if (result.isError()) {
             m_nNumErrors++;
@@ -386,6 +393,10 @@ class MyParser extends parser
     // Checks if we have a valid unary operation.
     //----------------------------------------------------------------
     STO doUnaryExpr(STO a, UnaryOp o) {
+        if (a.isError()) {
+            return a;
+        }
+
         STO result = o.checkOperand(a);
         if(result.isError()){
             m_nNumErrors++;
