@@ -1,5 +1,6 @@
 function : int main() {
-  float i = 3 - 5.0;
+  bool i = !true;
+  i = !false;
 
   return 0;
 }

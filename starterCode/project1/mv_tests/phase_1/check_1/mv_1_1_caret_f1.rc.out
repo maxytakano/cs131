@@ -1,0 +1,3 @@
+Error, "/tmp/cs131_testrunner_Z9aqMF/file.rc": 
+  Incompatible type float to binary operator ^, equivalent to int expected.
+Compile: failure.

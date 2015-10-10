@@ -1,5 +1,5 @@
 function : int main() {
-  float i = 3 - 5.0;
+  bool i = "string" || true;
 
   return 0;
 }

@@ -1,0 +1,8 @@
+function : int main() {
+  bool i = true && true;
+  i = false && false;
+  i = true && false;
+  i = false && true;
+
+  return 0;
+}
