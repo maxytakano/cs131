@@ -36,9 +36,4 @@ abstract class Operator
         m_opName = str;
     }
 
-    //----------------------------------------------------------------
-    // Abstract method for checking operands
-    //----------------------------------------------------------------
-    public abstract STO checkOperands(STO a, STO b);
-
 }

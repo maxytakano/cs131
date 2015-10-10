@@ -1,0 +1,11 @@
+function : int main() {
+  int i = 5;
+  i++;
+  ++i;
+
+  int j = 5.0;
+  j++;
+  ++j;
+
+  return 0;
+}
