@@ -24,4 +24,15 @@ class ErrorType extends Type
 	//	for every check.
 	//----------------------------------------------------------------
     public boolean isError()            { return true; }
+
+    //----------------------------------------------------------------
+	// Check to see if the type is assignable to an type
+	//----------------------------------------------------------------
+	//Always gonna be false
+	public boolean isAssignableTo(Type t) { return false; }
+
+	//----------------------------------------------------------------
+	// Check to see if the type is a Type
+	//----------------------------------------------------------------
+	public boolean isEquivalentTo(Type t) {return t.isError();}
 }

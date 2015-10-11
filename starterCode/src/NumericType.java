@@ -4,7 +4,7 @@
 // Fall 2015
 //---------------------------------------------------------------------
 
-class NumericType extends BasicType
+abstract class NumericType extends BasicType
 {
 	//----------------------------------------------------------------
 	// Constructor for the Numeric type. All Numerics are 32 bits long
@@ -26,5 +26,15 @@ class NumericType extends BasicType
 	// Check to see if the type is a Numeric Type
 	//----------------------------------------------------------------
 	public boolean isNumeric()	{return true;}
+
+	//----------------------------------------------------------------
+	// Check to see if the type is assignable to an type
+	//----------------------------------------------------------------
+	public abstract boolean isAssignableTo(Type t);
+
+	//----------------------------------------------------------------
+	// Check to see if the type is a Type
+	//----------------------------------------------------------------
+	public abstract boolean isEquivalentTo(Type t);
 
 }

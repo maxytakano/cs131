@@ -4,7 +4,7 @@
 // Fall 2015
 //---------------------------------------------------------------------
 
-class CompositeType extends Type
+abstract class CompositeType extends Type
 {
 	//----------------------------------------------------------------
 	// Constructor for the Composite type. All Composite are 0 bits long
@@ -26,5 +26,15 @@ class CompositeType extends Type
 	// Check to see if the type is a Composite Type
 	//----------------------------------------------------------------
 	public boolean isComposite()	{return true;}
+
+	//----------------------------------------------------------------
+	// Check to see if the type is assignable to an type
+	//----------------------------------------------------------------
+	public abstract boolean isAssignableTo(Type t);
+
+	//----------------------------------------------------------------
+	// Check to see if the type is a Type
+	//----------------------------------------------------------------
+	public abstract boolean isEquivalentTo(Type t);
 
 }

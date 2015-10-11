@@ -4,7 +4,9 @@
 // Fall 2015
 //---------------------------------------------------------------------
 
-class StructType extends CompositeType
+//TODO WE NEED TO MAKE THIS NOT ABSTRACT AND GIVE IMPLEMMENTATION FOR 
+//ASSIGNABLETO AND EQUIVALENTTO
+abstract class StructType extends CompositeType
 {
 	//----------------------------------------------------------------
 	// Constructor for the Struct type. All Struct are 0 bits long
@@ -18,5 +20,16 @@ class StructType extends CompositeType
 	// Check to see if the type is a Struct Type
 	//----------------------------------------------------------------
 	public boolean isStruct()	{return true;}
+
+	//----------------------------------------------------------------
+	// Check to see if the type is assignable to an type
+	//----------------------------------------------------------------
+	public abstract boolean isAssignableTo(Type t);
+
+	//----------------------------------------------------------------
+	// Check to see if the type is a Type
+	//----------------------------------------------------------------
+	public abstract boolean isEquivalentTo(Type t);
+
 
 }
