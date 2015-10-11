@@ -4,7 +4,7 @@
 // Fall 2015
 //---------------------------------------------------------------------
 
-class BasicType extends Type
+abstract class BasicType extends Type
 {
 	//----------------------------------------------------------------
 	// Constructor for the Basic type. All Basics are 32 bits long
@@ -26,5 +26,15 @@ class BasicType extends Type
 	// Check to see if the type is a Basic Type
 	//----------------------------------------------------------------
 	public boolean isBasic()	{return true;}
+
+	//----------------------------------------------------------------
+	// Check to see if the type is assignable to an type
+	//----------------------------------------------------------------
+	public abstract boolean isAssignableTo(Type t);
+
+	//----------------------------------------------------------------
+	// Check to see if the type is a Type
+	//----------------------------------------------------------------
+	public abstract boolean isEquivalentTo(Type t);
 
 }

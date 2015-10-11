@@ -58,6 +58,16 @@ abstract class Type
 	}
 
 	//----------------------------------------------------------------
+	// Check to see if the type is assignable to an type
+	//----------------------------------------------------------------
+	public abstract boolean isAssignableTo(Type t);
+
+	//----------------------------------------------------------------
+	// Check to see if the type is a Type
+	//----------------------------------------------------------------
+	public abstract boolean isEquivalentTo(Type t);
+
+	//----------------------------------------------------------------
 	//	It will be helpful to ask a Type what specific Type it is.
 	//	The Java operator instanceof will do this, but you may
 	//	also want to implement methods like isNumeric(), isInt(),

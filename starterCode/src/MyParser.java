@@ -176,6 +176,7 @@ class MyParser extends parser
 
         //VV: Passed in IntType arbitrarily as well so that the appropriate constructor is called and 
         // we can make VarSTO a modifiable L Value
+        //VarSTO sto = new VarSTO(id,new IntType());
         VarSTO sto = new VarSTO(id);
         m_symtab.insert(sto);
     }
@@ -286,14 +287,27 @@ class MyParser extends parser
     //----------------------------------------------------------------
     //
     //----------------------------------------------------------------
-    STO DoAssignExpr(STO stoDes)
+    STO DoAssignExpr(STO stoDes, STO stoExpr)
     {
         if (!stoDes.isModLValue())
         {
             // Good place to do the assign checks
+            m_nNumErrors++;
+            m_errors.print(ErrorMsg.error3a_Assign);
+            return new ErrorSTO(ErrorMsg.error3a_Assign);
         }
-        
-        return stoDes;
+        Type lhs = stoDes.getType();
+        Type rhs = stoExpr.getType();
+        if(!(lhs.isAssignableTo(rhs))){
+            String errormsg = Formatter.toString(ErrorMsg.error3b_Assign, rhs.getName(), lhs.getName());
+            m_nNumErrors++;
+            m_errors.print(errormsg);
+            return new ErrorSTO( errormsg );
+        }
+        else{
+            //we need to figure out how to do the types
+            return new VarSTO(lhs.getName());
+        }
     }
 
     //----------------------------------------------------------------

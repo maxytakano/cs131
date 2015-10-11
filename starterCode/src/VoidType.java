@@ -21,4 +21,15 @@ class VoidType extends Type
 	//----------------------------------------------------------------
 	public boolean isVoid()	{return true;}
 
+	//----------------------------------------------------------------
+    // Check to see if assignable
+    //----------------------------------------------------------------
+    //void can never be assigned to as far as I am aware.
+    public boolean isAssignableTo(Type t) {return false;}
+
+    //----------------------------------------------------------------
+    // Check to see if type is equivalent to float
+    //----------------------------------------------------------------
+    public boolean isEquivalentTo(Type t) {return t.isVoid();}
+
 }

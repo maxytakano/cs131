@@ -25,6 +25,15 @@ class VarSTO extends STO
 		// fields as necessary
 	}
 
+	public VarSTO(String strName, Type typ, boolean modifiable, boolean addressable)
+	{
+		//we want VarSTOs to always be modifiable L Values, so we 
+		//pass is true and true for addressable and modifiable
+		super(strName, typ, modifiable, addressable);
+		// You may want to change the isModifiable and isAddressable 
+		// fields as necessary
+	}
+
 	//----------------------------------------------------------------
 	//
 	//----------------------------------------------------------------

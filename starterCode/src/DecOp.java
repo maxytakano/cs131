@@ -17,12 +17,4 @@ class DecOp extends UnaryOp
         super(strName);
     }
 
-    //----------------------------------------------------------------
-    // Abstract method for checking operands
-    //----------------------------------------------------------------
-    public STO checkOperands(STO a, STO b){
-        //Oh crud, this may not have been the best idea
-        return new ErrorSTO( "How the Heck did you even get here? Just why?" );
-    }
-
 }
