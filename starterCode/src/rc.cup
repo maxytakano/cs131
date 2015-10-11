@@ -552,10 +552,7 @@ CtorCall ::=        T_COLON T_LPAREN OptExprList T_RPAREN
     ;
 
 
-IfStmt ::=          T_IF Expr:_1 CodeBlock OptElse
-                    {:
-                        
-                    :}
+IfStmt ::=          T_IF Expr:_1 {: ((MyParser) parser).doConditionCheck(_1); :} CodeBlock OptElse
     ;
 
 
@@ -564,7 +561,7 @@ OptElse ::=         T_ELSE CodeBlock
     ;
 
 
-WhileStmt ::=       T_WHILE Expr CodeBlock
+WhileStmt ::=       T_WHILE Expr:_1 {: ((MyParser) parser).doConditionCheck(_1); :} CodeBlock
     ;
 
 

@@ -406,6 +406,22 @@ class MyParser extends parser
         return result;
     }
 
+    // ** Phase 1 check 4 **/
+    void doConditionCheck(STO expr) {
+        // do we need to do this check here, or can the expr not be an error here?
+        // if (expr.isError()) {
+        //     m_nNumErrors++;
+        //     m_errors.print(expr.getName);
+        // }
+
+        Type exprType = expr.getType();
+
+        if (!exprType.isBoolean()) {
+            m_nNumErrors++;
+            m_errors.print( Formatter.toString(ErrorMsg.error4_Test, exprType.getName()) );
+        }
+    }
+
     //----------------------------------------------------------------
     //
     //----------------------------------------------------------------
