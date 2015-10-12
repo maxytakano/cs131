@@ -24,13 +24,7 @@ class FloatType extends NumericType
 	//----------------------------------------------------------------
 	// Check to see if assignable
 	//----------------------------------------------------------------
-	public boolean isAssignableTo(Type t) {
-		//ints promoted to float
-		if(t.isFloat() || t.isInt())
-			return true;
-		else
-			return false;
-	}
+	public boolean isAssignableTo(Type t) { t.isFloat(); }
 
 	//----------------------------------------------------------------
 	// Check to see if type is equivalent to float

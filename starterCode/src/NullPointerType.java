@@ -25,7 +25,7 @@ class NullPointerType extends PointerType
 	// Check to see if the type is assignable to an type
 	//----------------------------------------------------------------
 	//TODO check if the Reference Compiler allows for assigning to nullptrs
-	public boolean isAssignableTo(Type t) { return false; }
+	public boolean isAssignableTo(Type t) { return true; }
 
 	//----------------------------------------------------------------
 	// Check to see if the type is a Type

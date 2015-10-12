@@ -25,8 +25,15 @@ class IntType extends NumericType
 	// Check to see if the type is assignable to an int
 	//----------------------------------------------------------------
 	//floats cannot become ints: pg 15, check 3B
-	//can bools become ints? i.e. true = 1 and false = 0?
-	public boolean isAssignableTo(Type t) {return t.isInt();}
+	//QUESTION: can bools become ints? i.e. true = 1 and false = 0?
+	//will 1 become true and 0 become false?
+	public boolean isAssignableTo(Type t) {
+		//ints promoted to float
+		if(t.isFloat() || t.isInt())
+			return true;
+		else
+			return false;
+	}
 
 	//----------------------------------------------------------------
 	// Check to see if the type is a Int Type

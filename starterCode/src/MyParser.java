@@ -284,6 +284,7 @@ class MyParser extends parser
         m_symtab.closeScope();
     }
 
+    // ** Phase 1 Check 3a Check 3b **/
     //----------------------------------------------------------------
     //
     //----------------------------------------------------------------
@@ -298,7 +299,7 @@ class MyParser extends parser
         }
         Type lhs = stoDes.getType();
         Type rhs = stoExpr.getType();
-        if(!(lhs.isAssignableTo(rhs))){
+        if(!(rhs.isAssignableTo(lhs))){
             String errormsg = Formatter.toString(ErrorMsg.error3b_Assign, rhs.getName(), lhs.getName());
             m_nNumErrors++;
             m_errors.print(errormsg);
@@ -433,6 +434,20 @@ class MyParser extends parser
         if (!exprType.isBoolean()) {
             m_nNumErrors++;
             m_errors.print( Formatter.toString(ErrorMsg.error4_Test, exprType.getName()) );
+        }
+    }
+
+    // ** Phase 1 Check 7** /
+    //----------------------------------------------------------------
+    //
+    //----------------------------------------------------------------
+    void doExitCheck(STO expr) {
+        Type exprType = expr.getType();
+
+        if(exprType.isAssignableTo(new IntType())) {
+
+            m_nNumErrors++;
+            m_errors.print( Formatter.toString(ErrorMsg.error7_Exit, exprType.getName()));
         }
     }
 
