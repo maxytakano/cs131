@@ -1,0 +1,9 @@
+starterCode/RC
+starterCode/bin
+starterCode/failedTests
+starterCode/max_test_1_1.rc
+starterCode/results.html
+starterCode/src/parser.java
+starterCode/src/sym.java
+starterCode/testcases
+.gitignore
