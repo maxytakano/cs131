@@ -7,6 +7,7 @@
 class FuncSTO extends STO
 {
 	private Type m_returnType;
+	private Vector<String> m_parameters;
 
 	//----------------------------------------------------------------
 	//
@@ -15,6 +16,17 @@ class FuncSTO extends STO
 	{
 		super (strName);
 		setReturnType(null);
+		// You may want to change the isModifiable and isAddressable                      
+		// fields as necessary
+	}
+
+	//----------------------------------------------------------------
+	//
+	//----------------------------------------------------------------
+	public FuncSTO(String strName, Type returnType)
+	{
+		super (strName);
+		setReturnType(returnType);
 		// You may want to change the isModifiable and isAddressable                      
 		// fields as necessary
 	}
@@ -37,6 +49,14 @@ class FuncSTO extends STO
 	public void setReturnType(Type typ)
 	{
 		m_returnType = typ;
+	}
+
+	//----------------------------------------------------------------
+	// Set the parameters for the function sto
+	//----------------------------------------------------------------
+	public void setParameters(Vector<String> params)
+	{
+		m_parameters = params.clone();
 	}
 
 	//----------------------------------------------------------------

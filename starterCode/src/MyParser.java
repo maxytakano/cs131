@@ -229,7 +229,7 @@ class MyParser extends parser
     //----------------------------------------------------------------
     //
     //----------------------------------------------------------------
-    void DoFuncDecl_1(String id)
+    void DoFuncDecl_1(String id, Type returnType)
     {
         if (m_symtab.accessLocal(id) != null)
         {
@@ -237,7 +237,7 @@ class MyParser extends parser
             m_errors.print(Formatter.toString(ErrorMsg.redeclared_id, id));
         }
     
-        FuncSTO sto = new FuncSTO(id);
+        FuncSTO sto = new FuncSTO(id, returnType);
         m_symtab.insert(sto);
 
         m_symtab.openScope();
@@ -265,6 +265,10 @@ class MyParser extends parser
         }
 
         // insert parameters here
+        // FuncSTO sto = m_symtab.getFunc();
+        // sto.setParameters(params);
+        // m_symtab.setFunc(sto);
+        m_symtab.getFunc().setParameters(params);
     }
 
     //----------------------------------------------------------------
