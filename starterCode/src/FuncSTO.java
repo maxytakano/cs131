@@ -3,11 +3,12 @@
 // Copyright (C) 2008-2015 Garo Bournoutian and Rick Ord
 // University of California, San Diego
 //---------------------------------------------------------------------
+import java.util.Vector;
 
 class FuncSTO extends STO
 {
 	private Type m_returnType;
-	private Vector<String> m_parameters;
+	private Vector<STO> m_parameters;
 
 	//----------------------------------------------------------------
 	//
@@ -16,7 +17,7 @@ class FuncSTO extends STO
 	{
 		super (strName);
 		setReturnType(null);
-		// You may want to change the isModifiable and isAddressable                      
+		// You may want to change the isModifiable and isAddressable
 		// fields as necessary
 	}
 
@@ -27,7 +28,7 @@ class FuncSTO extends STO
 	{
 		super (strName);
 		setReturnType(returnType);
-		// You may want to change the isModifiable and isAddressable                      
+		// You may want to change the isModifiable and isAddressable
 		// fields as necessary
 	}
 
@@ -35,9 +36,9 @@ class FuncSTO extends STO
 	//
 	//----------------------------------------------------------------
 	public boolean isFunc() 
-	{ 
+	{
 		return true;
-		// You may want to change the isModifiable and isAddressable                      
+		// You may want to change the isModifiable and isAddressable
 		// fields as necessary
 	}
 
@@ -54,9 +55,17 @@ class FuncSTO extends STO
 	//----------------------------------------------------------------
 	// Set the parameters for the function sto
 	//----------------------------------------------------------------
-	public void setParameters(Vector<String> params)
+	public void setParameters(Vector<STO> params)
 	{
-		m_parameters = params.clone();
+		if (params != null) {
+			m_parameters = (Vector<STO>)params.clone();
+		} else {
+			m_parameters = null;
+		}
+	}
+
+	public Vector<STO> getParameters() {
+		return m_parameters;
 	}
 
 	//----------------------------------------------------------------

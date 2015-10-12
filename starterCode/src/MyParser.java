@@ -221,7 +221,7 @@ class MyParser extends parser
             m_nNumErrors++;
             m_errors.print(Formatter.toString(ErrorMsg.redeclared_id, id));
         }
-        
+
         StructdefSTO sto = new StructdefSTO(id);
         m_symtab.insert(sto);
     }
@@ -236,7 +236,7 @@ class MyParser extends parser
             m_nNumErrors++;
             m_errors.print(Formatter.toString(ErrorMsg.redeclared_id, id));
         }
-    
+
         FuncSTO sto = new FuncSTO(id, returnType);
         m_symtab.insert(sto);
 
@@ -256,7 +256,7 @@ class MyParser extends parser
     //----------------------------------------------------------------
     //
     //----------------------------------------------------------------
-    void DoFormalParams(Vector<String> params)
+    void DoFormalParams(Vector<STO> params)
     {
         if (m_symtab.getFunc() == null)
         {
@@ -265,9 +265,6 @@ class MyParser extends parser
         }
 
         // insert parameters here
-        // FuncSTO sto = m_symtab.getFunc();
-        // sto.setParameters(params);
-        // m_symtab.setFunc(sto);
         m_symtab.getFunc().setParameters(params);
     }
 

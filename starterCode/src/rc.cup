@@ -156,7 +156,6 @@ non terminal
     ;
 
 non terminal String
-    ParamDecl,
     UnarySign
     ;
 
@@ -184,7 +183,8 @@ non terminal STO
     Expr8,
     Designator,
     Designator2,
-    Designator3
+    Designator3,
+    ParamDecl
     ;
 
 non terminal Type
@@ -322,7 +322,7 @@ CtorDtorDecl ::=    CtorDef
 CtorDef ::=         T_ID_U:_3
                     {:
                         ((MyParser) parser).SaveLineNum ();
-                        ((MyParser) parser).DoFuncDecl_1(_3);
+                        ((MyParser) parser).DoFuncDecl_1(_3, new VoidType());
                     :}
                     T_LPAREN OptParamList:_4 T_RPAREN
                     {:
@@ -338,7 +338,7 @@ CtorDef ::=         T_ID_U:_3
 DtorDef ::=         T_TILDE T_ID_U:_3
                     {:
                         ((MyParser) parser).SaveLineNum ();
-                        ((MyParser) parser).DoFuncDecl_1("~" + _3);
+                        ((MyParser) parser).DoFuncDecl_1("~" + _3, new VoidType());
                     :}
                     T_LPAREN T_RPAREN T_LBRACE OptStmtList T_RBRACE
                     {:
@@ -364,7 +364,7 @@ FieldFuncDecl ::=   FuncDef
 FuncDef ::=         T_FUNCTION T_COLON ReturnType:_1 OptRef:_2 T_ID:_3
                     {:
                         ((MyParser) parser).SaveLineNum ();
-                        ((MyParser) parser).DoFuncDecl_1(_3);
+                        ((MyParser) parser).DoFuncDecl_1(_3, _1);
                     :}
                     T_LPAREN OptParamList:_4 T_RPAREN
                     {:
@@ -380,7 +380,7 @@ FuncDef ::=         T_FUNCTION T_COLON ReturnType:_1 OptRef:_2 T_ID:_3
 
 FuncDecl ::=        T_EXTERN T_FUNCTION T_COLON ReturnType:_1 T_ID:_3
                     {:
-                        ((MyParser) parser).DoFuncDecl_1(_3);
+                        ((MyParser) parser).DoFuncDecl_1(_3, _1);
                     :}
                     T_LPAREN OptParamList:_4 T_RPAREN
                     {:
@@ -422,15 +422,15 @@ DecoratedBasicType ::= BasicType:_1 OptPointerList:_2
 
 BasicType ::=       T_INT
                     {:
-                        RESULT = null;  // gotta do something here!
+                        RESULT = new IntType();  // gotta do something here!
                     :}
     |               T_FLOAT
                     {:
-                        RESULT = null;  // gotta do something here!
+                        RESULT = new FloatType();  // gotta do something here!
                     :}
     |               T_BOOL
                     {:
-                        RESULT = null;  // gotta do something here!
+                        RESULT = new BooleanType();  // gotta do something here!
                     :}
     ;
 
@@ -512,24 +512,30 @@ Stmt ::=            VarDecl
 
 
 OptParamList ::=    ParamList:_1
+                    {:
+                        RESULT = _1;
+                    :}
     |               /* empty */
     ;
 
 
 ParamList ::=       ParamDecl:_2
                     {:
-                        RESULT = new Vector ();
-                        RESULT.addElement (_2);
+                        RESULT = new Vector();
+                        RESULT.addElement(_2);
                     :}
     |               ParamList:_1 T_COMMA ParamDecl:_2
                     {:
                         RESULT = _1;
-                        RESULT.addElement (_2);
+                        RESULT.addElement(_2);
                     :}
     ;
 
 
-ParamDecl ::=       Type OptRef T_ID OptArrayList
+ParamDecl ::=       Type:_type OptRef T_ID:_name OptArrayList
+                    {:
+                        RESULT = new VarSTO(_name, _type);
+                    :}
     ;
 
 
