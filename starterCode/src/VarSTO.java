@@ -6,6 +6,8 @@
 
 class VarSTO extends STO
 {
+	private Boolean m_passByReference;
+
 	//----------------------------------------------------------------
 	//
 	//----------------------------------------------------------------
@@ -25,6 +27,13 @@ class VarSTO extends STO
 		// fields as necessary
 	}
 
+	public VarSTO(String strName, Type typ, boolean optref)
+	{
+		// TODO: possibly use if logic on opt ref to determine modifiable and adressable
+		super(strName, typ, true, true);
+		setPassByReference(optref);
+	}
+
 	public VarSTO(String strName, Type typ, boolean modifiable, boolean addressable)
 	{
 		//we want VarSTOs to always be modifiable L Values, so we 
@@ -32,6 +41,14 @@ class VarSTO extends STO
 		super(strName, typ, modifiable, addressable);
 		// You may want to change the isModifiable and isAddressable 
 		// fields as necessary
+	}
+
+	public void setPassByReference(boolean optref) {
+		m_passByReference = optref;
+	}
+
+	public boolean getPassByReference() {
+		return m_passByReference;
 	}
 
 	//----------------------------------------------------------------

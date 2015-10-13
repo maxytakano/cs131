@@ -9,6 +9,7 @@ class FuncSTO extends STO
 {
 	private Type m_returnType;
 	private Vector<STO> m_parameters;
+	private Boolean m_returnByReference;
 
 	//----------------------------------------------------------------
 	//

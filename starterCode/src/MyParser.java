@@ -6,6 +6,7 @@
 
 import java_cup.runtime.*;
 import java.util.Vector;
+import java.util.Iterator;
 
 class MyParser extends parser
 {
@@ -163,10 +164,31 @@ class MyParser extends parser
         m_symtab.closeScope();
     }
 
+    // ** Phase 1 check 5 ** //
     //----------------------------------------------------------------
     //
     //----------------------------------------------------------------
-    void DoVarDecl(String id)
+
+    void DoVarDecl(String id, STO sto) {
+        if (sto == null) {
+            System.out.println("Expr is null in VarDecl");
+        } else {
+            DoVarDecl(id, sto.getType());
+        }
+    }
+
+    void DoConstDecl_2(String id, STO sto) {
+        if (sto == null) {
+            System.out.println("Expr is null in ConstDecl");
+        } else {
+            DoConstDecl(id, sto.getType());
+        }
+    }
+
+    //----------------------------------------------------------------
+    //
+    //----------------------------------------------------------------
+    void DoVarDecl(String id, Type type)
     {
         if (m_symtab.accessLocal(id) != null)
         {
@@ -174,10 +196,10 @@ class MyParser extends parser
             m_errors.print(Formatter.toString(ErrorMsg.redeclared_id, id));
         }
 
-        //VV: Passed in IntType arbitrarily as well so that the appropriate constructor is called and 
+        //VV: Passed in IntType arbitrarily as well so that the appropriate constructor is called and
         // we can make VarSTO a modifiable L Value
         //VarSTO sto = new VarSTO(id,new IntType());
-        VarSTO sto = new VarSTO(id);
+        VarSTO sto = new VarSTO(id, type);
         m_symtab.insert(sto);
     }
 
@@ -199,15 +221,15 @@ class MyParser extends parser
     //----------------------------------------------------------------
     //
     //----------------------------------------------------------------
-    void DoConstDecl(String id)
+    void DoConstDecl(String id, Type type)
     {
         if (m_symtab.accessLocal(id) != null)
         {
             m_nNumErrors++;
             m_errors.print(Formatter.toString(ErrorMsg.redeclared_id, id));
         }
-        
-        ConstSTO sto = new ConstSTO(id, null, 0);   // fix me
+
+        ConstSTO sto = new ConstSTO(id, type, 0);   // fix me
         m_symtab.insert(sto);
     }
 
@@ -315,13 +337,61 @@ class MyParser extends parser
     //----------------------------------------------------------------
     //
     //----------------------------------------------------------------
-    STO DoFuncCall(STO sto)
+    STO DoFuncCall(STO sto, Vector<STO> args)
     {
-        if (!sto.isFunc())
-        {
+        if (!sto.isFunc()) {
             m_nNumErrors++;
             m_errors.print(Formatter.toString(ErrorMsg.not_function, sto.getName()));
             return new ErrorSTO(sto.getName());
+        }
+
+        Vector<STO> params = ((FuncSTO)sto).getParameters();
+
+        int numArgs = (args == null) ? 0 : args.size();
+        int numParams = (params == null) ? 0: params.size();
+
+        if (numArgs == 0 && numParams == 0) {
+            return sto;
+        } else {
+            // 1. check if # of args differs from # expected params
+            if (numArgs != numParams) {
+                // # params error
+                m_nNumErrors++;
+                m_errors.print(Formatter.toString(ErrorMsg.error5n_Call, numArgs, numParams));
+                return new ErrorSTO(sto.getName());
+            }
+
+            // 2. check for corresponding param/arg errors
+            STO curArg, curParam;
+            Type argType, paramType;
+            for (int i = 0; i < numParams; i++) {
+                // Extract each corresponding arg and param
+                curArg = args.get(i);
+                curParam = params.get(i);
+                argType = curArg.getType();
+                paramType = curParam.getType();
+
+                if (!((VarSTO)curParam).getPassByReference()) {
+                    // if param is declared pass-by-value, make sure the argument is assignable to it
+                    if ( !(argType.isAssignableTo(paramType)) ) {
+                        m_nNumErrors++;
+                        m_errors.print(Formatter.toString(ErrorMsg.error5a_Call, argType.getName(),
+                            curParam.getName(), paramType.getName()));
+                    }
+                } else if ( ((VarSTO)curParam).getPassByReference() ) {
+                    // if param is declares pass-by-reference, check that the arg type is equiv to param type
+                    if (argType != paramType) {
+                        m_nNumErrors++;
+                        m_errors.print(Formatter.toString(ErrorMsg.error5r_Call, argType.getName(),
+                            curParam.getName(), paramType.getName()));
+                    }
+                    if ( !(curArg.isModLValue()) ) {
+                        m_nNumErrors++;
+                        m_errors.print(Formatter.toString(ErrorMsg.error5c_Call, curParam.getName(), paramType.getName()));
+                    }
+                }
+            }
+
         }
 
         return sto;
