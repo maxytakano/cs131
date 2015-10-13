@@ -165,25 +165,6 @@ class MyParser extends parser
     }
 
     // ** Phase 1 check 5 ** //
-    //----------------------------------------------------------------
-    //
-    //----------------------------------------------------------------
-
-    void DoVarDecl(String id, STO sto) {
-        if (sto == null) {
-            System.out.println("Expr is null in VarDecl");
-        } else {
-            DoVarDecl(id, sto.getType());
-        }
-    }
-
-    void DoConstDecl_2(String id, STO sto) {
-        if (sto == null) {
-            System.out.println("Expr is null in ConstDecl");
-        } else {
-            DoConstDecl(id, sto.getType());
-        }
-    }
 
     //----------------------------------------------------------------
     //
@@ -251,7 +232,7 @@ class MyParser extends parser
     //----------------------------------------------------------------
     //
     //----------------------------------------------------------------
-    void DoFuncDecl_1(String id, Type returnType)
+    void DoFuncDecl_1(String id, Type returnType, Boolean returnByReference)
     {
         if (m_symtab.accessLocal(id) != null)
         {
@@ -259,7 +240,7 @@ class MyParser extends parser
             m_errors.print(Formatter.toString(ErrorMsg.redeclared_id, id));
         }
 
-        FuncSTO sto = new FuncSTO(id, returnType);
+        FuncSTO sto = new FuncSTO(id, returnType, returnByReference);
         m_symtab.insert(sto);
 
         m_symtab.openScope();
@@ -350,51 +331,63 @@ class MyParser extends parser
         int numArgs = (args == null) ? 0 : args.size();
         int numParams = (params == null) ? 0: params.size();
 
+
         if (numArgs == 0 && numParams == 0) {
+            // Nothing to check, just return STO
             return sto;
-        } else {
-            // 1. check if # of args differs from # expected params
-            if (numArgs != numParams) {
-                // # params error
-                m_nNumErrors++;
-                m_errors.print(Formatter.toString(ErrorMsg.error5n_Call, numArgs, numParams));
-                return new ErrorSTO(sto.getName());
-            }
-
-            // 2. check for corresponding param/arg errors
-            STO curArg, curParam;
-            Type argType, paramType;
-            for (int i = 0; i < numParams; i++) {
-                // Extract each corresponding arg and param
-                curArg = args.get(i);
-                curParam = params.get(i);
-                argType = curArg.getType();
-                paramType = curParam.getType();
-
-                if (!((VarSTO)curParam).getPassByReference()) {
-                    // if param is declared pass-by-value, make sure the argument is assignable to it
-                    if ( !(argType.isAssignableTo(paramType)) ) {
-                        m_nNumErrors++;
-                        m_errors.print(Formatter.toString(ErrorMsg.error5a_Call, argType.getName(),
-                            curParam.getName(), paramType.getName()));
-                    }
-                } else if ( ((VarSTO)curParam).getPassByReference() ) {
-                    // if param is declares pass-by-reference, check that the arg type is equiv to param type
-                    if (argType != paramType) {
-                        m_nNumErrors++;
-                        m_errors.print(Formatter.toString(ErrorMsg.error5r_Call, argType.getName(),
-                            curParam.getName(), paramType.getName()));
-                    }
-                    if ( !(curArg.isModLValue()) ) {
-                        m_nNumErrors++;
-                        m_errors.print(Formatter.toString(ErrorMsg.error5c_Call, curParam.getName(), paramType.getName()));
-                    }
-                }
-            }
-
         }
 
-        return sto;
+        // 1. check if # of args differs from # expected params
+        if (numArgs != numParams) {
+            // # params error
+            m_nNumErrors++;
+            m_errors.print(Formatter.toString(ErrorMsg.error5n_Call, numArgs, numParams));
+            return new ErrorSTO(sto.getName());
+        }
+
+        // 2. check for corresponding param/arg errors
+        STO curArg, curParam;
+        Type argType, paramType;
+        Boolean errorFlag = false; // Error flag keeps track if there is any errors
+        for (int i = 0; i < numParams; i++) {
+            // Extract each corresponding arg and param
+            curArg = args.get(i);
+            curParam = params.get(i);
+            argType = curArg.getType();
+            paramType = curParam.getType();
+
+            if (!((VarSTO)curParam).getPassByReference()) {
+                // if param is declared pass-by-value, make sure the argument is assignable to it
+                if ( !(argType.isAssignableTo(paramType)) ) {
+                    m_nNumErrors++;
+                    m_errors.print(Formatter.toString(ErrorMsg.error5a_Call, argType.getName(),
+                        curParam.getName(), paramType.getName()));
+                    errorFlag = true;
+                }
+            } else if ( ((VarSTO)curParam).getPassByReference() ) {
+                // if param is declares pass-by-reference, check that the arg type is equiv to param type
+                if ( !(argType.isEquivalentTo(paramType)) ) {
+                    m_nNumErrors++;
+                    m_errors.print(Formatter.toString(ErrorMsg.error5r_Call, argType.getName(),
+                        curParam.getName(), paramType.getName()));
+                    errorFlag = true;
+                } else if ( !(curArg.isModLValue()) ) {
+                    m_nNumErrors++;
+                    m_errors.print(Formatter.toString(ErrorMsg.error5c_Call, curParam.getName(), paramType.getName()));
+                    errorFlag = true;
+                }
+            }
+        }
+
+        if (errorFlag) {
+            return new ErrorSTO("error in param check");
+        } else {
+            if ( ((FuncSTO)sto).isReturnByReference() ) {
+                sto.setIsAddressable(true);
+                sto.setIsModifiable(true);
+            }
+            return sto;
+        }
     }
 
     //----------------------------------------------------------------

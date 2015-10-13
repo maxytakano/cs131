@@ -36,6 +36,18 @@ class FuncSTO extends STO
 	//----------------------------------------------------------------
 	//
 	//----------------------------------------------------------------
+	public FuncSTO(String strName, Type returnType, Boolean returnByReference)
+	{
+		super (strName);
+		setReturnType(returnType);
+		setReturnByReference(returnByReference);
+		// You may want to change the isModifiable and isAddressable
+		// fields as necessary
+	}
+
+	//----------------------------------------------------------------
+	//
+	//----------------------------------------------------------------
 	public boolean isFunc() 
 	{
 		return true;
@@ -76,4 +88,13 @@ class FuncSTO extends STO
 	{
 		return m_returnType;
 	}
+
+	public void setReturnByReference(Boolean returnByReference) {
+		m_returnByReference = returnByReference;
+	}
+
+	public Boolean isReturnByReference() {
+		return m_returnByReference;
+	}
 }
+

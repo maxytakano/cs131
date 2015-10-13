@@ -251,7 +251,7 @@ VarDecl ::=         OptStatic:_1 DecoratedType:_2 T_ID:_3 OptArrayList:_4 OptIni
                     T_SEMI
     |               OptStatic:_1 T_AUTO T_ID:_3 T_ASSIGN Expr:_5
                     {:
-                        ((MyParser) parser).DoVarDecl (_3, _5);
+                        ((MyParser) parser).DoVarDecl (_3, _5.getType());
                     :}
                     T_SEMI
     |               OptStatic:_1 StructType:_2 T_ID:_3 OptArrayList:_4 OptCtorCall:_5
@@ -269,7 +269,7 @@ ConstDecl ::=       OptStatic:_1 T_CONST BasicType:_2 T_ID:_3 T_ASSIGN ConstExpr
                     T_SEMI
     |               OptStatic:_1 T_CONST T_AUTO T_ID:_3 T_ASSIGN ConstExpr:_5
                     {:
-                        ((MyParser) parser).DoConstDecl_2(_3, _5);
+                        ((MyParser) parser).DoConstDecl(_3, _5.getType());
                     :}
                     T_SEMI
     ;
@@ -325,7 +325,7 @@ CtorDtorDecl ::=    CtorDef
 CtorDef ::=         T_ID_U:_3
                     {:
                         ((MyParser) parser).SaveLineNum ();
-                        ((MyParser) parser).DoFuncDecl_1(_3, new VoidType());
+                        ((MyParser) parser).DoFuncDecl_1(_3, new VoidType(), false);
                     :}
                     T_LPAREN OptParamList:_4 T_RPAREN
                     {:
@@ -341,7 +341,7 @@ CtorDef ::=         T_ID_U:_3
 DtorDef ::=         T_TILDE T_ID_U:_3
                     {:
                         ((MyParser) parser).SaveLineNum ();
-                        ((MyParser) parser).DoFuncDecl_1("~" + _3, new VoidType());
+                        ((MyParser) parser).DoFuncDecl_1("~" + _3, new VoidType(), false);
                     :}
                     T_LPAREN T_RPAREN T_LBRACE OptStmtList T_RBRACE
                     {:
@@ -367,7 +367,7 @@ FieldFuncDecl ::=   FuncDef
 FuncDef ::=         T_FUNCTION T_COLON ReturnType:_1 OptRef:_2 T_ID:_3
                     {:
                         ((MyParser) parser).SaveLineNum ();
-                        ((MyParser) parser).DoFuncDecl_1(_3, _1);
+                        ((MyParser) parser).DoFuncDecl_1(_3, _1, _2);
                     :}
                     T_LPAREN OptParamList:_4 T_RPAREN
                     {:
@@ -383,7 +383,7 @@ FuncDef ::=         T_FUNCTION T_COLON ReturnType:_1 OptRef:_2 T_ID:_3
 
 FuncDecl ::=        T_EXTERN T_FUNCTION T_COLON ReturnType:_1 T_ID:_3
                     {:
-                        ((MyParser) parser).DoFuncDecl_1(_3, _1);
+                        ((MyParser) parser).DoFuncDecl_1(_3, _1, false);
                     :}
                     T_LPAREN OptParamList:_4 T_RPAREN
                     {:
@@ -634,7 +634,10 @@ WritePair ::=       Expr
     ;
 
 
-ConstExpr ::=       Expr
+ConstExpr ::=       Expr:_1
+                    {:
+                        RESULT = _1;
+                    :}
     ;
 
 
