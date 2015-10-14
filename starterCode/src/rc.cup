@@ -121,8 +121,6 @@ non terminal
     OptFieldFuncsList,
     FieldFuncsList,
     FieldFuncDecl,
-    OptStmtList,
-    StmtList,
     Stmt,
     CodeBlock,
     IfStmt,
@@ -148,7 +146,9 @@ non terminal
     Array,
     //New stuff below here
     NewStmt,
-    DeleteStmt
+    DeleteStmt,
+    OptStmtList,
+    StmtList
     ;
 
 non terminal String
@@ -599,12 +599,22 @@ ContinueStmt ::=    T_CONTINUE T_SEMI
     ;
 
 
-ExitStmt ::=        T_EXIT T_LPAREN Expr:_1 {: ((MyParser) parser).doExitCheck(_1); :} T_RPAREN T_SEMI
+ExitStmt ::=        T_EXIT T_LPAREN Expr:_1
+                    {:
+                        ((MyParser) parser).doExitCheck(_1);
+                    :}
+                    T_RPAREN T_SEMI
     ;
 
 
 ReturnStmt ::=      T_RETURN T_SEMI
-    |               T_RETURN Expr T_SEMI
+                    {:
+                        ((MyParser) parser).doReturnVoidCheck();
+                    :}
+    |               T_RETURN Expr:_1 T_SEMI
+                    {:
+                        ((MyParser) parser).doReturnTypeCheck(_1);
+                    :}
     ;
 
 

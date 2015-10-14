@@ -10,6 +10,7 @@ class FuncSTO extends STO
 	private Type m_returnType;
 	private Vector<STO> m_parameters;
 	private Boolean m_returnByReference;
+	private Boolean m_hasTopReturn;
 
 	//----------------------------------------------------------------
 	//
@@ -18,6 +19,7 @@ class FuncSTO extends STO
 	{
 		super (strName);
 		setReturnType(null);
+		setHasTopReturn(false);
 		// You may want to change the isModifiable and isAddressable
 		// fields as necessary
 	}
@@ -29,6 +31,7 @@ class FuncSTO extends STO
 	{
 		super (strName);
 		setReturnType(returnType);
+		setHasTopReturn(false);
 		// You may want to change the isModifiable and isAddressable
 		// fields as necessary
 	}
@@ -41,6 +44,7 @@ class FuncSTO extends STO
 		super (strName);
 		setReturnType(returnType);
 		setReturnByReference(returnByReference);
+		setHasTopReturn(false);
 		// You may want to change the isModifiable and isAddressable
 		// fields as necessary
 	}
@@ -95,6 +99,14 @@ class FuncSTO extends STO
 
 	public Boolean isReturnByReference() {
 		return m_returnByReference;
+	}
+
+	public void setHasTopReturn(Boolean hasTopReturn) {
+		m_hasTopReturn = hasTopReturn;
+	}
+
+	public Boolean getHasTopReturn() {
+		return m_hasTopReturn;
 	}
 }
 

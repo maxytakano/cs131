@@ -248,10 +248,16 @@ class MyParser extends parser
     }
 
     //----------------------------------------------------------------
-    //
+    // Closes the scope since we are done checking function
     //----------------------------------------------------------------
     void DoFuncDecl_2()
     {
+        FuncSTO curFunc = m_symtab.getFunc();
+        // check 6c
+        if (!curFunc.getHasTopReturn()) {
+            m_nNumErrors++;
+            m_errors.print(ErrorMsg.error6c_Return_missing);
+        }
         m_symtab.closeScope();
         m_symtab.setFunc(null);
     }
@@ -498,6 +504,49 @@ class MyParser extends parser
         if (!exprType.isBoolean()) {
             m_nNumErrors++;
             m_errors.print( Formatter.toString(ErrorMsg.error4_Test, exprType.getName()) );
+        }
+    }
+
+    /* Phase 1 check 6a */
+    void doReturnVoidCheck() {
+        Type returnType = m_symtab.getFunc().getReturnType();
+        if (returnType != null) {
+            m_nNumErrors++;
+            m_errors.print(ErrorMsg.error6a_Return_expr);
+        }
+    }
+
+    /* Phase 1 check 6b */
+    void doReturnTypeCheck(STO expr) {
+        Type exprType = expr.getType();
+        FuncSTO curFunc = m_symtab.getFunc();
+        Type returnType = curFunc.getReturnType();
+
+        if (!curFunc.isReturnByReference()) {
+            if (!exprType.isAssignableTo(returnType)) {
+                // return expr not assignable to return type
+                m_nNumErrors++;
+                m_errors.print( Formatter.toString(ErrorMsg.error6a_Return_type, exprType.getName(),
+                    returnType.getName()) );
+            }
+        } else {
+             if (!exprType.isEquivalentTo(returnType)) {
+                // return expr not equiv to return type of func
+                m_nNumErrors++;
+                m_errors.print( Formatter.toString(ErrorMsg.error6b_Return_equiv, exprType.getName(),
+                    returnType.getName()) );
+            } else if (!expr.isModLValue()) {
+                // return expr not a mod L-value
+                m_nNumErrors++;
+                m_errors.print(ErrorMsg.error6b_Return_modlval);
+            }
+        }
+
+        /* Phase 1 check 6c */
+        int curlevel = m_symtab.getLevel();
+        if (curlevel == 2) {
+            // global level is 1, just inside function is level 2
+            m_symtab.getFunc().setHasTopReturn(true);
         }
     }
 
