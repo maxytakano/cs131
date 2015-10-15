@@ -254,7 +254,7 @@ class MyParser extends parser
     {
         FuncSTO curFunc = m_symtab.getFunc();
         // check 6c
-        if (!curFunc.getHasTopReturn()) {
+        if (!curFunc.getHasTopReturn() && !(curFunc.getReturnType().isVoid())  ) {
             m_nNumErrors++;
             m_errors.print(ErrorMsg.error6c_Return_missing);
         }
