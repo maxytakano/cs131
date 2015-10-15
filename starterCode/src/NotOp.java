@@ -44,7 +44,16 @@ class NotOp extends UnaryOp
         }  else {
             StringBuilder expr_builder = new StringBuilder();
             expr_builder.append(a.getName()).append(getName());
-            ExprSTO expr = new ExprSTO(expr_builder.toString(), new BooleanType());
+
+            STO expr;
+            if (a.isConst()) {
+                // both are const, return a const expr.
+                expr = new ConstSTO(expr_builder.toString(), new BooleanType());
+            } else {
+                // if any are var return a expr.
+                expr = new ExprSTO(expr_builder.toString(), new BooleanType());
+            }
+            
             return expr;
         }
     }

@@ -34,13 +34,28 @@ class EqualOp extends ComparisionOp
             StringBuilder expr_builder = new StringBuilder();
             expr_builder.append(a.getName()).append(getName()).append(b.getName());
 
-            ExprSTO expr = new ExprSTO(expr_builder.toString(), new BooleanType());
+            STO expr;
+            if (a.isConst() && b.isConst()) {
+                // both are const, return a const expr.
+                expr = new ConstSTO(expr_builder.toString(), new BooleanType());
+            } else {
+                // if any are var return a expr.
+                expr = new ExprSTO(expr_builder.toString(), new BooleanType());
+            }
             return expr;
         } else if ( aType.isBoolean() && bType.isBoolean() ) {
             StringBuilder expr_builder = new StringBuilder();
             expr_builder.append(a.getName()).append(getName()).append(b.getName());
 
-            ExprSTO expr = new ExprSTO(expr_builder.toString(), new BooleanType());
+            STO expr;
+            if (a.isConst() && b.isConst()) {
+                // both are const, return a const expr.
+                expr = new ConstSTO(expr_builder.toString(), new BooleanType());
+            } else {
+                // if any are var return a expr.
+                expr = new ExprSTO(expr_builder.toString(), new BooleanType());
+            }
+
             return expr;
         } else {
             return new ErrorSTO( Formatter.toString(ErrorMsg.error1b_Expr, aType.getName(), getName(), bType.getName()) );
