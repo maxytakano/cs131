@@ -20,12 +20,12 @@ class EqualOp extends ComparisonOp
     // override relation ops
     public STO checkOperands(STO a, STO b) {
         // double check this
-        // if (a.isError()) {
-        //     return a;
-        // }
-        // if (b.isError()) {
-        //     return b;
-        // }
+        if (a.isError()) {
+            return a;
+        }
+        if (b.isError()) {
+            return b;
+        }
 
         Type aType = a.getType();
         Type bType = b.getType();

@@ -22,12 +22,12 @@ abstract class BitwiseOp extends BinaryOp
     //----------------------------------------------------------------
     public STO checkOperands(STO a, STO b) {
         // double check this
-        // if (a.isError()) {
-        //     return a;
-        // }
-        // if (b.isError()) {
-        //     return b;
-        // }
+        if (a.isError()) {
+            return a;
+        }
+        if (b.isError()) {
+            return b;
+        }
 
         Type aType = a.getType();
         Type bType = b.getType();
@@ -42,8 +42,26 @@ abstract class BitwiseOp extends BinaryOp
 
             STO expr;
             if (a.isConst() && b.isConst()) {
+                int aVal, bVal;
+                int result;
+                String opName = getName();
+                aVal = ((ConstSTO) a).getIntValue();
+                bVal = ((ConstSTO) b).getIntValue();
+
+                switch(opName) {
+                    case "&":
+                        result = aVal & aVal;
+                        break;
+                    case "^":
+                        result = aVal ^ aVal;
+                        break;
+                    case "|":
+                        result = aVal | aVal;
+                        break;
+                }
+
                 // both are const, return a const expr.
-                expr = new ConstSTO(expr_builder.toString(), new IntType());
+                expr = new ConstSTO(expr_builder.toString(), new IntType(), result);
             } else {
                 // if any are var return a expr.
                 expr = new ExprSTO(expr_builder.toString(), new IntType());

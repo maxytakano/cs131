@@ -45,8 +45,15 @@ class ModOp extends ArithmeticOp
 
             STO expr;
             if (a.isConst() && b.isConst()) {
+                int aVal, bVal;
+                int result;
+                aVal = ((ConstSTO) a).getIntValue();
+                bVal = ((ConstSTO) b).getIntValue();
+
+                result = aVal % bVal;
+
                 // both are const, return a const expr.
-                expr = new ConstSTO(expr_builder.toString(), new IntType());
+                expr = new ConstSTO(expr_builder.toString(), new IntType(), result);
             } else {
                 // if any are var return a expr.
                 expr = new ExprSTO(expr_builder.toString(), new IntType());
