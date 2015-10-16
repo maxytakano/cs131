@@ -58,6 +58,10 @@ abstract class BitwiseOp extends BinaryOp
                     case "|":
                         result = aVal | aVal;
                         break;
+                    default:
+                        System.out.println("bitwiseop: shouldn't be here");
+                        result = 0;
+                        break;
                 }
 
                 // both are const, return a const expr.
