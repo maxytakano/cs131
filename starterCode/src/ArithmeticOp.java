@@ -36,7 +36,6 @@ class ArithmeticOp extends BinaryOp
 
         Type aType = a.getType();
         Type bType = b.getType();
-        Boolean resultIsInt = aType.isInt() && bType.isInt();
 
         if ( !(aType.isNumeric()) ) {
             return new ErrorSTO( Formatter.toString(ErrorMsg.error1n_Expr, aType.getName(), getName()) );
