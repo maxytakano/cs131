@@ -52,7 +52,7 @@ abstract class BooleanOp extends BinaryOp
                 // if any are var return a expr.
                 expr = new ExprSTO(expr_builder.toString(), new BooleanType());
             }
-            
+
             return expr;
         }
     }

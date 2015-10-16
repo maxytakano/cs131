@@ -51,7 +51,7 @@ class ModOp extends ArithmeticOp
                 // if any are var return a expr.
                 expr = new ExprSTO(expr_builder.toString(), new IntType());
             }
-            
+
             return expr;
         }
     }

@@ -7,12 +7,12 @@
 //---------------------------------------------------------------------
 //
 //---------------------------------------------------------------------
-abstract class ComparisionOp extends BinaryOp
+abstract class ComparisonOp extends BinaryOp
 {
     //----------------------------------------------------------------
     //
     //----------------------------------------------------------------
-    public ComparisionOp(String strName)
+    public ComparisonOp(String strName)
     {
         super(strName);
     }

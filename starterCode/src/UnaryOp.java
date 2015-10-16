@@ -67,7 +67,7 @@ abstract class UnaryOp extends Operator
                 // if any are var return a expr.
                 expr = new ExprSTO(expr_builder.toString(), new FloatType());
             }
-            
+
             return expr;
         }
     }

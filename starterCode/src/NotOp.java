@@ -37,7 +37,7 @@ class NotOp extends UnaryOp
         // }
 
         Type aType = a.getType();
-        
+
         if ( !(aType.isBoolean()) ) {
             //TODO: NEED TO REPLACE "bool" WITH ACTUAL TYPE THINGY WE DID ON THURSDAY.
             return new ErrorSTO( Formatter.toString(ErrorMsg.error1u_Expr, aType.getName(), getName(), BooleanType.TYPE_NAME) );
@@ -53,7 +53,7 @@ class NotOp extends UnaryOp
                 // if any are var return a expr.
                 expr = new ExprSTO(expr_builder.toString(), new BooleanType());
             }
-            
+
             return expr;
         }
     }
