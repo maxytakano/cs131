@@ -53,6 +53,12 @@ class ConstSTO extends STO
 		// fields as necessary
 	}
 
+	public ConstSTO(String strName, Type typ, BigDecimal val)
+	{
+		super(strName, typ);
+		m_value = val;
+	}
+
 	//----------------------------------------------------------------
 	//
 	//----------------------------------------------------------------

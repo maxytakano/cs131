@@ -4,6 +4,8 @@
 // Fall 2015
 //---------------------------------------------------------------------
 
+import java.math.BigDecimal;
+
 //---------------------------------------------------------------------
 //
 //---------------------------------------------------------------------
@@ -34,39 +36,69 @@ class ArithmeticOp extends BinaryOp
 
         Type aType = a.getType();
         Type bType = b.getType();
+        Boolean resultIsInt = aType.isInt() && bType.isInt();
 
         if ( !(aType.isNumeric()) ) {
             return new ErrorSTO( Formatter.toString(ErrorMsg.error1n_Expr, aType.getName(), getName()) );
         } else if ( !(bType.isNumeric()) ) {
             return new ErrorSTO( Formatter.toString(ErrorMsg.error1n_Expr, bType.getName(), getName()) );
-        } else if (aType.isInt() && bType.isInt()) {
-            StringBuilder expr_builder = new StringBuilder();
-            expr_builder.append(a.getName()).append(getName()).append(b.getName());
-
-            STO expr;
-            if (a.isConst() && b.isConst()) {
-                // both are const, return a const expr.
-                expr = new ConstSTO(expr_builder.toString(), new IntType());
-            } else {
-                // if any are var return a expr.
-                expr = new ExprSTO(expr_builder.toString(), new IntType());
-            }
-
-            return expr;
         } else {
+            String opName = getName();
             StringBuilder expr_builder = new StringBuilder();
-            expr_builder.append(a.getName()).append(getName()).append(b.getName());
+            expr_builder.append(a.getName()).append(opName).append(b.getName());
 
-            STO expr;
             if (a.isConst() && b.isConst()) {
-                // both are const, return a const expr.
-                expr = new ConstSTO(expr_builder.toString(), new FloatType());
-            } else {
-                // if any are var return a expr.
-                expr = new ExprSTO(expr_builder.toString(), new FloatType());
-            }
+                // result should be a constExpr.
+                ConstSTO constExpr;
+                BigDecimal result = null;
+                BigDecimal aVal, bVal;
+                aVal = ((ConstSTO) a).getValue();
+                bVal = ((ConstSTO) b).getValue();
 
-            return expr;
+                switch (opName) {
+                    case "+":
+                        result = aVal.add(bVal);
+                        break;
+                    case "-":
+                        result = aVal.subtract(bVal);
+                        break;
+                    case "*":
+                        result = aVal.multiply(bVal);
+                        break;
+                    case "/":
+                        if (bVal.equals(BigDecimal.ZERO)) {
+                            System.out.println(bVal);
+                            // divide by 0 error
+                            return new ErrorSTO(ErrorMsg.error8_Arithmetic);
+                        }
+
+                        result = aVal.divide(bVal);
+                        break;
+                    default:
+                        System.out.println("arithop: shouln't be here");
+                }
+
+                System.out.println("result is: " + result + " /intval " + result.intValue() + " /floatval " + result.floatValue());
+
+                if (aType.isInt() && bType.isInt()) {
+                    constExpr = new ConstSTO(expr_builder.toString(), new IntType(), result.intValue());
+                } else {
+                    constExpr = new ConstSTO(expr_builder.toString(), new FloatType(), result.floatValue());
+                }
+
+                return constExpr;
+            } else {
+                // result is an expr.
+                ExprSTO expr;
+
+                if (aType.isInt() && bType.isInt()) {
+                    expr = new ExprSTO(expr_builder.toString(), new IntType());
+                } else {
+                    expr = new ExprSTO(expr_builder.toString(), new FloatType());
+                }
+
+                return expr;
+            }
         }
     }
 

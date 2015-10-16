@@ -202,7 +202,7 @@ class MyParser extends parser
     //----------------------------------------------------------------
     //
     //----------------------------------------------------------------
-    void DoConstDecl(String id, Type type)
+    void DoConstDecl(String id, Type type, STO constExpr)
     {
         if (m_symtab.accessLocal(id) != null)
         {
@@ -210,7 +210,7 @@ class MyParser extends parser
             m_errors.print(Formatter.toString(ErrorMsg.redeclared_id, id));
         }
 
-        ConstSTO sto = new ConstSTO(id, type, 0);   // fix me
+        ConstSTO sto = new ConstSTO(id, type, ((ConstSTO)constExpr).getValue());   // fix me
         m_symtab.insert(sto);
     }
 
@@ -317,6 +317,7 @@ class MyParser extends parser
         }
         else{
             //we need to figure out how to do the types
+            // 10/15 : note, this probably shouldn't be returning at all
             return new VarSTO(lhs.getName());
         }
     }
