@@ -66,7 +66,6 @@ class ArithmeticOp extends BinaryOp
                         break;
                     case "/":
                         if (bVal.equals(BigDecimal.ZERO)) {
-                            System.out.println(bVal);
                             // divide by 0 error
                             return new ErrorSTO(ErrorMsg.error8_Arithmetic);
                         }
@@ -79,8 +78,6 @@ class ArithmeticOp extends BinaryOp
                     default:
                         System.out.println("arithop: shouln't be here");
                 }
-
-                System.out.println("result is: " + result + " /intval " + result.intValue() + " /floatval " + result.floatValue());
 
                 if (aType.isInt() && bType.isInt()) {
                     constExpr = new ConstSTO(expr_builder.toString(), new IntType(), result.intValue());
