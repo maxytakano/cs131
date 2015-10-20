@@ -4,6 +4,8 @@
 // Fall 2015
 //---------------------------------------------------------------------
 
+import java.math.BigDecimal;
+
 //---------------------------------------------------------------------
 //
 //---------------------------------------------------------------------
@@ -34,7 +36,26 @@ class NotEqualOp extends ComparisonOp
             StringBuilder expr_builder = new StringBuilder();
             expr_builder.append(a.getName()).append(getName()).append(b.getName());
 
-            ExprSTO expr = new ExprSTO(expr_builder.toString(), new BooleanType());
+            STO expr;
+            if (a.isConst() && b.isConst()) {
+                // both are const, return a const expr.
+                float aVal, bVal;
+                aVal = ((ConstSTO) a).getFloatValue();
+                bVal = ((ConstSTO) b).getFloatValue();
+
+                int booleanInt = (aVal != bVal) ? 1 : 0;
+                //VIVEK PRINTED HERE
+                System.out.println("------------------------------------------------------------------");
+                System.out.println("(in NotEqualOp) Operator: " + getName());
+                System.out.println("int result of const folding NotEqualOp: " + booleanInt);
+                System.out.println();
+                BigDecimal result = new BigDecimal(booleanInt);
+
+                expr = new ConstSTO(expr_builder.toString(), new BooleanType(), result);
+            } else {
+                // if any are var return a expr.
+                expr = new ExprSTO(expr_builder.toString(), new BooleanType());
+            }
             return expr;
         } else if ( aType.isBoolean() && bType.isBoolean() ) {
             StringBuilder expr_builder = new StringBuilder();
@@ -43,7 +64,20 @@ class NotEqualOp extends ComparisonOp
             STO expr;
             if (a.isConst() && b.isConst()) {
                 // both are const, return a const expr.
-                expr = new ConstSTO(expr_builder.toString(), new BooleanType());
+                boolean aVal, bVal;
+                aVal = ((ConstSTO) a).getBoolValue();
+                bVal = ((ConstSTO) b).getBoolValue();
+
+                int booleanInt = (aVal != bVal) ? 1 : 0;
+
+                //VIVEK PRINTED HERE
+                System.out.println("------------------------------------------------------------------");
+                System.out.println("(in NotEqualOp) Operator: " + getName());
+                System.out.println("int result of const folding NotEqualOp: " + booleanInt);
+                System.out.println();
+                BigDecimal result = new BigDecimal(booleanInt);
+
+                expr = new ConstSTO(expr_builder.toString(), new BooleanType(), result);
             } else {
                 // if any are var return a expr.
                 expr = new ExprSTO(expr_builder.toString(), new BooleanType());

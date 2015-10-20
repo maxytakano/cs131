@@ -35,7 +35,7 @@ abstract class BitwiseOp extends BinaryOp
         if ( !(aType.isInt()) ) {
             return new ErrorSTO( Formatter.toString(ErrorMsg.error1w_Expr, aType.getName(), getName(), IntType.TYPE_NAME) );
         } else if ( !(bType.isInt()) ) {
-            return new ErrorSTO( Formatter.toString(ErrorMsg.error1n_Expr, bType.getName(), getName(), IntType.TYPE_NAME) );
+            return new ErrorSTO( Formatter.toString(ErrorMsg.error1w_Expr, bType.getName(), getName(), IntType.TYPE_NAME) );
         } else  {
             StringBuilder expr_builder = new StringBuilder();
             expr_builder.append(a.getName()).append(getName()).append(b.getName());
