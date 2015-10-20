@@ -27,20 +27,20 @@ abstract class BooleanOp extends BinaryOp
         // when both ops are int, or float otherwise.
 
         // double check this
-        // if (a.isError()) {
-        //     return a;
-        // }
-        // if (b.isError()) {
-        //     return b;
-        // }
+        if (a.isError()) {
+            return a;
+        }
+        if (b.isError()) {
+            return b;
+        }
 
         Type aType = a.getType();
         Type bType = b.getType();
 
         if ( !(aType.isBoolean()) ) {
-            return new ErrorSTO( Formatter.toString(ErrorMsg.error1w_Expr, aType.getName(), getName()) );
+            return new ErrorSTO( Formatter.toString(ErrorMsg.error1w_Expr, aType.getName(), getName(), BooleanType.TYPE_NAME) );
         } else if ( !(bType.isBoolean()) ) {
-            return new ErrorSTO( Formatter.toString(ErrorMsg.error1w_Expr, bType.getName(), getName()) );
+            return new ErrorSTO( Formatter.toString(ErrorMsg.error1w_Expr, bType.getName(), getName(), BooleanType.TYPE_NAME) );
         } else {
 
             String opName = getName();

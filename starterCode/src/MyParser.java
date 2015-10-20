@@ -169,12 +169,25 @@ class MyParser extends parser
     //----------------------------------------------------------------
     //
     //----------------------------------------------------------------
-    void DoVarDecl(String id, Type type)
+    void DoVarDecl(String id, Type type, STO optInit)
     {
         if (m_symtab.accessLocal(id) != null)
         {
             m_nNumErrors++;
             m_errors.print(Formatter.toString(ErrorMsg.redeclared_id, id));
+        }
+
+        if (optInit != null) {
+            if (optInit.isError()) {
+                return;
+            }
+            Type initType = optInit.getType();
+            // user decided to initialize the variable, type check it
+            if (!initType.isAssignableTo(type)) {
+                m_nNumErrors++;
+                m_errors.print(Formatter.toString(ErrorMsg.error8_Assign, initType.getName(), type.getName()));
+                return;
+            }
         }
 
         //VV: Passed in IntType arbitrarily as well so that the appropriate constructor is called and
@@ -210,7 +223,31 @@ class MyParser extends parser
             m_errors.print(Formatter.toString(ErrorMsg.redeclared_id, id));
         }
 
-        ConstSTO sto = new ConstSTO(id, type, ((ConstSTO)constExpr).getValue());   // fix me
+        if (constExpr == null) {
+            // TODO: either set to 0 or throw an error.
+            // value of constExpr not known, throw an error
+            m_nNumErrors++;
+            m_errors.print(Formatter.toString(ErrorMsg.error8_CompileTime, id));
+            return;
+        } else if (constExpr.isError()) {
+            return;
+        } else if (!constExpr.isConst()) {
+            // value of constExpr not known, throw an error
+            m_nNumErrors++;
+            m_errors.print(Formatter.toString(ErrorMsg.error8_CompileTime, id));
+            return;
+        } else {
+            // check assignment
+            Type initType = constExpr.getType();
+            // user decided to initialize the variable, type check it
+            if (!initType.isAssignableTo(type)) {
+                m_nNumErrors++;
+                m_errors.print(Formatter.toString(ErrorMsg.error8_Assign, initType.getName(), type.getName()));
+                return;
+            }
+        }
+
+        ConstSTO sto = new ConstSTO(id, type, ((ConstSTO)constExpr).getValue());
         m_symtab.insert(sto);
     }
 
@@ -300,6 +337,10 @@ class MyParser extends parser
     //----------------------------------------------------------------
     STO DoAssignExpr(STO stoDes, STO stoExpr)
     {
+        if (stoExpr.isError()) {
+            return stoExpr;
+        }
+
         if (!stoDes.isModLValue())
         {
             // Good place to do the assign checks
@@ -337,12 +378,6 @@ class MyParser extends parser
 
         int numArgs = (args == null) ? 0 : args.size();
         int numParams = (params == null) ? 0: params.size();
-
-
-        if (numArgs == 0 && numParams == 0) {
-            // Nothing to check, just return STO
-            return sto;
-        }
 
         // 1. check if # of args differs from # expected params
         if (numArgs != numParams) {
@@ -389,11 +424,14 @@ class MyParser extends parser
         if (errorFlag) {
             return new ErrorSTO("error in param check");
         } else {
+            VarSTO returnSTO = new VarSTO(sto.getName(), ((FuncSTO)sto).getReturnType(), false, false);
             if ( ((FuncSTO)sto).isReturnByReference() ) {
-                sto.setIsAddressable(true);
-                sto.setIsModifiable(true);
+                // return a varSTO
+                returnSTO.setIsAddressable(true);
+                returnSTO.setIsModifiable(true);
             }
-            return sto;
+
+            return returnSTO;
         }
     }
 

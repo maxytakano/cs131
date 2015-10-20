@@ -135,7 +135,6 @@ non terminal
     WriteStmt,
     WritePairList,
     WritePair,
-    OptInit,
     OptCtorCall,
     CtorCall,
     OptPointerList,
@@ -181,7 +180,8 @@ non terminal STO
     Designator2,
     Designator3,
     ParamDecl,
-    ConstExpr
+    ConstExpr,
+    OptInit
     ;
 
 non terminal Type
@@ -246,17 +246,17 @@ ExternDecl ::=      T_EXTERN DecoratedBasicType:_2 T_ID:_3 OptArrayList:_4
 
 VarDecl ::=         OptStatic:_1 DecoratedType:_2 T_ID:_3 OptArrayList:_4 OptInit:_5
                     {:
-                        ((MyParser) parser).DoVarDecl (_3, _2);
+                        ((MyParser) parser).DoVarDecl (_3, _2, _5);
                     :}
                     T_SEMI
     |               OptStatic:_1 T_AUTO T_ID:_3 T_ASSIGN Expr:_5
                     {:
-                        ((MyParser) parser).DoVarDecl (_3, _5.getType());
+                        ((MyParser) parser).DoVarDecl (_3, _5.getType(), null);
                     :}
                     T_SEMI
     |               OptStatic:_1 StructType:_2 T_ID:_3 OptArrayList:_4 OptCtorCall:_5
                     {:
-                        ((MyParser) parser).DoVarDecl (_3, _2);
+                        ((MyParser) parser).DoVarDecl (_3, _2, null); // todo: 3rd param might not be null
                     :}
                     T_SEMI
     ;
@@ -449,8 +449,8 @@ ReturnType ::=      Type:_1
                     {:
                         RESULT = _1;
                     :}
-    |               T_VOID 
-                    {: 
+    |               T_VOID
+                    {:
                         RESULT = new VoidType(); 
                     :}
     ;
@@ -555,7 +555,10 @@ OptRef ::=          T_AMPERSAND
     ;
 
 
-OptInit ::=         T_ASSIGN Expr
+OptInit ::=         T_ASSIGN Expr:_1
+                    {:
+                        RESULT = _1;
+                    :}
     |               /* empty */
     ;
 
@@ -582,10 +585,10 @@ WhileStmt ::=       T_WHILE Expr:_1 {: ((MyParser) parser).doConditionCheck(_1);
     ;
 
 
-ForeachStmt ::=     T_FOREACH T_LPAREN Type:_type OptRef T_ID:_3 T_COLON Expr T_RPAREN
+ForeachStmt ::=     T_FOREACH T_LPAREN Type:_type OptRef T_ID:_3 T_COLON Expr:_expr T_RPAREN
                     {:
                         ((MyParser) parser).DoBlockOpen();
-                        ((MyParser) parser).DoVarDecl (_3, _type);
+                        ((MyParser) parser).DoVarDecl (_3, _type, _expr);
                     :}
                     CodeBlock
                     {:
@@ -923,8 +926,7 @@ Designator2 ::=     Designator2:_1 T_DOT T_ID:_3
                     :}
     |               Designator2:_1 T_LPAREN OptExprList:_2 T_RPAREN
                     {:
-                        ((MyParser) parser).DoFuncCall(_1, _2);
-                        RESULT = _1;
+                        RESULT = ((MyParser) parser).DoFuncCall(_1, _2);
                     :}
     |               Designator3:_1
                     {:
