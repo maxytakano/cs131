@@ -27,12 +27,12 @@ class ArithmeticOp extends BinaryOp
         // when both ops are int, or float otherwise.
 
         // double check this
-        // if (a.isError()) {
-        //     return a;
-        // }
-        // if (b.isError()) {
-        //     return b;
-        // }
+        if (a.isError()) {
+            return a;
+        }
+        if (b.isError()) {
+            return b;
+        }
 
         Type aType = a.getType();
         Type bType = b.getType();
@@ -71,7 +71,10 @@ class ArithmeticOp extends BinaryOp
                             return new ErrorSTO(ErrorMsg.error8_Arithmetic);
                         }
 
-                        result = aVal.divide(bVal);
+                        // Use java's divide implementation then re-store into big decimal
+                        float floatValue = aVal.floatValue() / bVal.floatValue();
+                        result = new BigDecimal(floatValue);
+
                         break;
                     default:
                         System.out.println("arithop: shouln't be here");

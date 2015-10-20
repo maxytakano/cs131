@@ -59,7 +59,7 @@ abstract class BitwiseOp extends BinaryOp
                         result = aVal | aVal;
                         break;
                     default:
-                        System.out.println("bitwiseop: shouldn't be here");
+                        System.out.println("BitwiseOp: shouldn't be here");
                         result = 0;
                         break;
                 }
