@@ -271,10 +271,12 @@ class MyParser extends parser
     //----------------------------------------------------------------
     void DoFuncDecl_1(String id, Type returnType, Boolean returnByReference)
     {
-        if (m_symtab.accessLocal(id) != null)
-        {
-            m_nNumErrors++;
-            m_errors.print(Formatter.toString(ErrorMsg.redeclared_id, id));
+        STO funcSTO = m_symtab.access(id);
+        if (funcSTO != null) {
+            if (!funcSTO.isFunc()) {
+                m_nNumErrors++;
+                m_errors.print(Formatter.toString(ErrorMsg.redeclared_id, id));
+            }
         }
 
         FuncSTO sto = new FuncSTO(id, returnType, returnByReference);
@@ -282,6 +284,32 @@ class MyParser extends parser
 
         m_symtab.openScope();
         m_symtab.setFunc(sto);
+    }
+
+    //----------------------------------------------------------------
+    //
+    //----------------------------------------------------------------
+    void DoFormalParams(Vector<STO> params, String id)
+    {
+        if (m_symtab.getFunc() == null)
+        {
+            m_nNumErrors++;
+            m_errors.print ("internal: DoFormalParams says no proc!");
+        }
+
+        // Already verified in DoFuncDecl_1 that existing symtab obj is a funcSTO
+        FuncSTO existingFunc = (FuncSTO) m_symtab.access(id);
+        if (existingFunc != null) {
+            // check if overloading function has different params
+            if (existingFunc.compareParams(params)) {
+                // Params are identical, throw overload error
+                m_nNumErrors++;
+                m_errors.print(ErrorMsg.error9_Decl);
+            }
+        }
+
+        // insert parameters here
+        m_symtab.getFunc().setParameters(params);
     }
 
     //----------------------------------------------------------------
@@ -297,21 +325,6 @@ class MyParser extends parser
         }
         m_symtab.closeScope();
         m_symtab.setFunc(null);
-    }
-
-    //----------------------------------------------------------------
-    //
-    //----------------------------------------------------------------
-    void DoFormalParams(Vector<STO> params)
-    {
-        if (m_symtab.getFunc() == null)
-        {
-            m_nNumErrors++;
-            m_errors.print ("internal: DoFormalParams says no proc!");
-        }
-
-        // insert parameters here
-        m_symtab.getFunc().setParameters(params);
     }
 
     //----------------------------------------------------------------
@@ -533,10 +546,9 @@ class MyParser extends parser
     // ** Phase 1 check 4 **/
     void doConditionCheck(STO expr) {
         // do we need to do this check here, or can the expr not be an error here?
-        // if (expr.isError()) {
-        //     m_nNumErrors++;
-        //     m_errors.print(expr.getName);
-        // }
+        if (expr.isError()) {
+            return;
+        }
 
         Type exprType = expr.getType();
 

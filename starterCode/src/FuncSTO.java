@@ -11,6 +11,7 @@ class FuncSTO extends STO
 	private Vector<STO> m_parameters;
 	private Boolean m_returnByReference;
 	private Boolean m_hasTopReturn;
+	private Vector<FuncSTO> overloadFuncs;
 
 	//----------------------------------------------------------------
 	//
@@ -83,6 +84,35 @@ class FuncSTO extends STO
 
 	public Vector<STO> getParameters() {
 		return m_parameters;
+	}
+
+	//----------------------------------------------------------------
+	// Compares one FuncSTO's params to another, returns true if they
+	// are all identical.
+	//----------------------------------------------------------------
+	public Boolean compareParams(Vector<STO> params) {
+		int numMyParams = (m_parameters == null) ? 0 : m_parameters.size();
+        int numParams = (params == null) ? 0: params.size();
+
+        if (numMyParams != numParams) {
+        	return false;
+        }
+
+        STO curMyParam, curParam;
+        Type myParamType, paramType;
+		for (int i = 0; i < numMyParams; i++) {
+			curMyParam = m_parameters.get(i);
+			curParam = params.get(i);
+			myParamType = curMyParam.getType();
+			paramType = curParam.getType();
+
+			if (!myParamType.isEquivalentTo(paramType)) {
+				return false;
+			}
+		}
+
+		// everything matched, return true
+		return true;
 	}
 
 	//----------------------------------------------------------------
