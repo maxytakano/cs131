@@ -4,6 +4,8 @@
 // Fall 2015
 //---------------------------------------------------------------------
 
+import java.math.BigDecimal;
+
 //---------------------------------------------------------------------
 //
 //---------------------------------------------------------------------
@@ -33,43 +35,37 @@ abstract class UnaryOp extends Operator
         // when both ops are int, or float otherwise.
 
         // double check this
-        // if (a.isError()) {
-        //     return a;
-        // }
-
-        //Check for if it's modifyible first if not, return that error
-        //This method is found in STO
-        if(!(a.isModLValue())){
-            return new ErrorSTO( Formatter.toString(ErrorMsg.error2_Lval, getName()));
+        if (a.isError()) {
+            return a;
         }
 
+        //Check for if it's numeric first if not, return that error
+        //This method is found in STO
         Type aType = a.getType();
 
         if ( !(aType.isNumeric()) ) {
             return new ErrorSTO( Formatter.toString(ErrorMsg.error2_Type, aType.getName(), getName()) );
-        }  else if (aType.isInt()) {
+        }  
 
-            StringBuilder expr_builder = new StringBuilder();
-            expr_builder.append(a.getName()).append(getName());
-
-            ExprSTO expr = new ExprSTO(expr_builder.toString(), new IntType());
-            return expr;
-        } else {
-
-            StringBuilder expr_builder = new StringBuilder();
-            expr_builder.append(a.getName()).append(getName());
-
-            STO expr;
-            if (a.isConst()) {
-                // both are const, return a const expr.
-                expr = new ConstSTO(expr_builder.toString(), new FloatType());
-            } else {
-                // if any are var return a expr.
-                expr = new ExprSTO(expr_builder.toString(), new FloatType());
-            }
-
-            return expr;
+        if(!(a.isModLValue())){
+            return new ErrorSTO( Formatter.toString(ErrorMsg.error2_Lval, getName()));
         }
+
+        StringBuilder expr_builder = new StringBuilder();
+        expr_builder.append(a.getName()).append(getName());
+
+        //we can never have a constant for the unary ops since ++ requires a modifyable L-Val
+
+        //here it's numeric and not Const, so we have ExprSTO
+        ExprSTO expr;
+
+        if(aType.isInt()) {
+            expr = new ExprSTO(expr_builder.toString(), new IntType());
+        } else {
+            expr = new ExprSTO(expr_builder.toString(), new FloatType());
+        }
+
+        return expr;
     }
 
 }

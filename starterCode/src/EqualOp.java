@@ -4,6 +4,8 @@
 // Fall 2015
 //---------------------------------------------------------------------
 
+import java.math.BigDecimal;
+
 //---------------------------------------------------------------------
 //
 //---------------------------------------------------------------------
@@ -37,7 +39,21 @@ class EqualOp extends ComparisonOp
             STO expr;
             if (a.isConst() && b.isConst()) {
                 // both are const, return a const expr.
-                expr = new ConstSTO(expr_builder.toString(), new BooleanType());
+                //there can only be one operator, == and the types are numeric (can be float)
+                float aVal, bVal;
+                aVal = ((ConstSTO) a).getFloatValue();
+                bVal = ((ConstSTO) b).getFloatValue();
+
+                int booleanInt = (aVal == bVal) ? 1 : 0;
+                //VIVEK PRINTED HERE
+                // System.out.println("------------------------------------------------------------------");
+                // System.out.println("(in EqualOp) Operator: " + getName());
+                // System.out.println("int result of const folding EqualOp: " + booleanInt);
+                // System.out.println();
+                
+                BigDecimal result = new BigDecimal(booleanInt);
+                
+                expr = new ConstSTO(expr_builder.toString(), new BooleanType(), result);
             } else {
                 // if any are var return a expr.
                 expr = new ExprSTO(expr_builder.toString(), new BooleanType());
@@ -50,7 +66,22 @@ class EqualOp extends ComparisonOp
             STO expr;
             if (a.isConst() && b.isConst()) {
                 // both are const, return a const expr.
-                expr = new ConstSTO(expr_builder.toString(), new BooleanType());
+                //there can only be one operator, == and the types are bools
+                boolean aVal, bVal;
+                aVal = ((ConstSTO) a).getBoolValue();
+                bVal = ((ConstSTO) b).getBoolValue();
+
+                int booleanInt = (aVal == bVal) ? 1 : 0;
+
+                //VIVEK PRINTED HERE
+                // System.out.println("------------------------------------------------------------------");
+                // System.out.println("(in EqualOp) Operator: " + getName());
+                // System.out.println("int result of const folding EqualOp: " + booleanInt);
+                // System.out.println();
+
+                BigDecimal result = new BigDecimal(booleanInt);
+
+                expr = new ConstSTO(expr_builder.toString(), new BooleanType(), result);
             } else {
                 // if any are var return a expr.
                 expr = new ExprSTO(expr_builder.toString(), new BooleanType());

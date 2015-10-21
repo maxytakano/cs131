@@ -4,6 +4,8 @@
 // Fall 2015
 //---------------------------------------------------------------------
 
+import java.math.BigDecimal;
+
 //---------------------------------------------------------------------
 //
 //---------------------------------------------------------------------
@@ -48,7 +50,19 @@ class NotOp extends UnaryOp
             STO expr;
             if (a.isConst()) {
                 // both are const, return a const expr.
-                expr = new ConstSTO(expr_builder.toString(), new BooleanType());
+
+                boolean aVal;
+                aVal = ((ConstSTO) a).getBoolValue();
+                int booleanInt = (!(aVal)) ? 1 : 0;
+                //VIVEK PRINTED HERE
+                // System.out.println("------------------------------------------------------------------");
+                // System.out.println("(in NotOp) Operator: " + getName());
+                // System.out.println("Origanl aVal passed in: " + aVal);
+                // System.out.println("int result of const folding NotOp: " + booleanInt);
+                // System.out.println();
+                BigDecimal result = new BigDecimal(booleanInt);
+
+                expr = new ConstSTO(expr_builder.toString(), new BooleanType(), result);
             } else {
                 // if any are var return a expr.
                 expr = new ExprSTO(expr_builder.toString(), new BooleanType());
