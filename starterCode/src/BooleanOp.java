@@ -69,11 +69,11 @@ abstract class BooleanOp extends BinaryOp
                 int booleanInt = (booleanResult) ? 1 : 0;
 
                 //VIVEK PRINTED HERE
-                System.out.println("------------------------------------------------------------------");
-                System.out.println("(in BooleanOp) Operator: " + opName);
-                System.out.println("result of const folding BooleanOp: " + booleanResult);
-                System.out.println("int result of const folding BooleanOp: " + booleanInt);
-                System.out.println();
+                // System.out.println("------------------------------------------------------------------");
+                // System.out.println("(in BooleanOp) Operator: " + opName);
+                // System.out.println("result of const folding BooleanOp: " + booleanResult);
+                // System.out.println("int result of const folding BooleanOp: " + booleanInt);
+                // System.out.println();
 
                 result = new BigDecimal(booleanInt);
                 expr = new ConstSTO(expr_builder.toString(), new BooleanType(), result);

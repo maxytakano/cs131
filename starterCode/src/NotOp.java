@@ -55,11 +55,11 @@ class NotOp extends UnaryOp
                 aVal = ((ConstSTO) a).getBoolValue();
                 int booleanInt = (!(aVal)) ? 1 : 0;
                 //VIVEK PRINTED HERE
-                System.out.println("------------------------------------------------------------------");
-                System.out.println("(in NotOp) Operator: " + getName());
-                System.out.println("Origanl aVal passed in: " + aVal);
-                System.out.println("int result of const folding NotOp: " + booleanInt);
-                System.out.println();
+                // System.out.println("------------------------------------------------------------------");
+                // System.out.println("(in NotOp) Operator: " + getName());
+                // System.out.println("Origanl aVal passed in: " + aVal);
+                // System.out.println("int result of const folding NotOp: " + booleanInt);
+                // System.out.println();
                 BigDecimal result = new BigDecimal(booleanInt);
 
                 expr = new ConstSTO(expr_builder.toString(), new BooleanType(), result);

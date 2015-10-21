@@ -39,17 +39,17 @@ abstract class UnaryOp extends Operator
             return a;
         }
 
-        //Check for if it's modifyible first if not, return that error
+        //Check for if it's numeric first if not, return that error
         //This method is found in STO
-        if(!(a.isModLValue())){
-            return new ErrorSTO( Formatter.toString(ErrorMsg.error2_Lval, getName()));
-        }
-
         Type aType = a.getType();
 
         if ( !(aType.isNumeric()) ) {
             return new ErrorSTO( Formatter.toString(ErrorMsg.error2_Type, aType.getName(), getName()) );
         }  
+
+        if(!(a.isModLValue())){
+            return new ErrorSTO( Formatter.toString(ErrorMsg.error2_Lval, getName()));
+        }
 
         StringBuilder expr_builder = new StringBuilder();
         expr_builder.append(a.getName()).append(getName());

@@ -45,10 +45,10 @@ class NotEqualOp extends ComparisonOp
 
                 int booleanInt = (aVal != bVal) ? 1 : 0;
                 //VIVEK PRINTED HERE
-                System.out.println("------------------------------------------------------------------");
-                System.out.println("(in NotEqualOp) Operator: " + getName());
-                System.out.println("int result of const folding NotEqualOp: " + booleanInt);
-                System.out.println();
+                // System.out.println("------------------------------------------------------------------");
+                // System.out.println("(in NotEqualOp) Operator: " + getName());
+                // System.out.println("int result of const folding NotEqualOp: " + booleanInt);
+                // System.out.println();
                 BigDecimal result = new BigDecimal(booleanInt);
 
                 expr = new ConstSTO(expr_builder.toString(), new BooleanType(), result);
@@ -71,10 +71,10 @@ class NotEqualOp extends ComparisonOp
                 int booleanInt = (aVal != bVal) ? 1 : 0;
 
                 //VIVEK PRINTED HERE
-                System.out.println("------------------------------------------------------------------");
-                System.out.println("(in NotEqualOp) Operator: " + getName());
-                System.out.println("int result of const folding NotEqualOp: " + booleanInt);
-                System.out.println();
+                // System.out.println("------------------------------------------------------------------");
+                // System.out.println("(in NotEqualOp) Operator: " + getName());
+                // System.out.println("int result of const folding NotEqualOp: " + booleanInt);
+                // System.out.println();
                 BigDecimal result = new BigDecimal(booleanInt);
 
                 expr = new ConstSTO(expr_builder.toString(), new BooleanType(), result);

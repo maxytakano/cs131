@@ -46,10 +46,10 @@ class EqualOp extends ComparisonOp
 
                 int booleanInt = (aVal == bVal) ? 1 : 0;
                 //VIVEK PRINTED HERE
-                System.out.println("------------------------------------------------------------------");
-                System.out.println("(in EqualOp) Operator: " + getName());
-                System.out.println("int result of const folding EqualOp: " + booleanInt);
-                System.out.println();
+                // System.out.println("------------------------------------------------------------------");
+                // System.out.println("(in EqualOp) Operator: " + getName());
+                // System.out.println("int result of const folding EqualOp: " + booleanInt);
+                // System.out.println();
                 
                 BigDecimal result = new BigDecimal(booleanInt);
                 
@@ -74,10 +74,10 @@ class EqualOp extends ComparisonOp
                 int booleanInt = (aVal == bVal) ? 1 : 0;
 
                 //VIVEK PRINTED HERE
-                System.out.println("------------------------------------------------------------------");
-                System.out.println("(in EqualOp) Operator: " + getName());
-                System.out.println("int result of const folding EqualOp: " + booleanInt);
-                System.out.println();
+                // System.out.println("------------------------------------------------------------------");
+                // System.out.println("(in EqualOp) Operator: " + getName());
+                // System.out.println("int result of const folding EqualOp: " + booleanInt);
+                // System.out.println();
 
                 BigDecimal result = new BigDecimal(booleanInt);
 

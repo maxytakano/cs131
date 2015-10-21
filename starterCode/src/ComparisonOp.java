@@ -75,11 +75,11 @@ abstract class ComparisonOp extends BinaryOp
                 int booleanInt = (comparisonResult) ? 1 : 0;
 
                 //VIVEK PRINTED HERE
-                System.out.println("------------------------------------------------------------------");
-                System.out.println("(in ComparisonOp) Operator: " + opName);
-                System.out.println("result of const folding ComparisonOp: " + comparisonResult);
-                System.out.println("int result of const folding ComparisonOp: " + booleanInt);
-                System.out.println();
+                // System.out.println("------------------------------------------------------------------");
+                // System.out.println("(in ComparisonOp) Operator: " + opName);
+                // System.out.println("result of const folding ComparisonOp: " + comparisonResult);
+                // System.out.println("int result of const folding ComparisonOp: " + booleanInt);
+                // System.out.println();
 
                 result = new BigDecimal(booleanInt);
                 expr = new ConstSTO(expr_builder.toString(), new BooleanType(), result);
@@ -87,7 +87,7 @@ abstract class ComparisonOp extends BinaryOp
                 // if any are var return a expr.
                 expr = new ExprSTO(expr_builder.toString(), new BooleanType());
             }
-
+            
             return expr;
         }
     }
