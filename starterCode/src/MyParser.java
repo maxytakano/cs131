@@ -271,18 +271,24 @@ class MyParser extends parser
     //----------------------------------------------------------------
     void DoFuncDecl_1(String id, Type returnType, Boolean returnByReference)
     {
+        // 1. Get the function associated with the passed id in the given scope
         STO funcSTO = m_symtab.access(id);
+
+        // 2. Check if the there was a non-function value related to id in the sym-
+        // table.
         if (funcSTO != null) {
             if (!funcSTO.isFunc()) {
+                // If so throw a re-declared error.
                 m_nNumErrors++;
                 m_errors.print(Formatter.toString(ErrorMsg.redeclared_id, id));
             }
         }
 
-        FuncSTO sto = new FuncSTO(id, returnType, returnByReference);
-        m_symtab.insert(sto);
 
-        m_symtab.openScope();
+        // set m_symtab's candidate function and open the scope.
+        FuncSTO sto = new FuncSTO(id, returnType, returnByReference);
+        // TODO: check if open scope here is correct.
+        // m_symtab.openScope();
         m_symtab.setFunc(sto);
     }
 
@@ -297,19 +303,30 @@ class MyParser extends parser
             m_errors.print ("internal: DoFormalParams says no proc!");
         }
 
+        FuncSTO candidateFunc = m_symtab.getFunc();
+        candidateFunc.setParameters(params);
         // Already verified in DoFuncDecl_1 that existing symtab obj is a funcSTO
         FuncSTO existingFunc = (FuncSTO) m_symtab.access(id);
-        if (existingFunc != null) {
-            // check if overloading function has different params
-            if (existingFunc.compareParams(params)) {
-                // Params are identical, throw overload error
-                m_nNumErrors++;
-                m_errors.print(ErrorMsg.error9_Decl);
-            }
-        }
 
-        // insert parameters here
-        m_symtab.getFunc().setParameters(params);
+        // 1. Null check to see if there is a existing function or not.
+        if (existingFunc != null) {
+            // 2. Check if we can overload the function
+            if ( existingFunc.hasParamMatch(candidateFunc.getParameters()) ) {
+                // Matching parameters, can't overload.
+                m_nNumErrors++;
+                m_errors.print( Formatter.toString(ErrorMsg.error9_Decl, existingFunc.getName()) );
+            } else {
+                // No matching parameters found, overload the function.
+                existingFunc.addOverload(candidateFunc);
+                // TODO: check if open scope here is correct.
+                m_symtab.openScope();
+            }
+        } else {
+            // 3. If there is no existing function, insert a new entry to symtab.
+            m_symtab.insert(candidateFunc);
+            // TODO: check if open scope here is correct.
+            m_symtab.openScope();
+        }
     }
 
     //----------------------------------------------------------------
@@ -387,7 +404,34 @@ class MyParser extends parser
             return new ErrorSTO(sto.getName());
         }
 
-        Vector<STO> params = ((FuncSTO)sto).getParameters();
+        /* Check 9b */
+        FuncSTO func = (FuncSTO) sto;
+        Vector<FuncSTO> overloads = func.getOverloads();
+        // 1. Check if this is an overloaded function
+        if (overloads != null) {
+            // 2. Function is overloaded, check if there is a function match (all equivalent params).
+            if (func.hasParamMatch(args)) {
+                // There is a function match, get the corresponding function to the passed args.
+                FuncSTO matchingFunc = func.getOverloadMatch(args);
+
+                VarSTO returnSTO = new VarSTO(matchingFunc.getName(), matchingFunc.getReturnType(), false, false);
+                if ( matchingFunc.isReturnByReference() ) {
+                    returnSTO.setIsAddressable(true);
+                    returnSTO.setIsModifiable(true);
+                }
+
+                return returnSTO;
+            } else {
+                // No exact match, throw illegal overload call error
+                m_nNumErrors++;
+                m_errors.print( Formatter.toString(ErrorMsg.error9_Illegal, func.getName()) );
+                // return since we only throw error9_illegal for overloads.
+                return new ErrorSTO(func.getName());
+            }
+        }
+
+        /* Check 5 */
+        Vector<STO> params = func.getParameters();
 
         int numArgs = (args == null) ? 0 : args.size();
         int numParams = (params == null) ? 0: params.size();
@@ -397,7 +441,7 @@ class MyParser extends parser
             // # params error
             m_nNumErrors++;
             m_errors.print(Formatter.toString(ErrorMsg.error5n_Call, numArgs, numParams));
-            return new ErrorSTO(sto.getName());
+            return new ErrorSTO(func.getName());
         }
 
         // 2. check for corresponding param/arg errors
@@ -437,9 +481,8 @@ class MyParser extends parser
         if (errorFlag) {
             return new ErrorSTO("error in param check");
         } else {
-            VarSTO returnSTO = new VarSTO(sto.getName(), ((FuncSTO)sto).getReturnType(), false, false);
-            if ( ((FuncSTO)sto).isReturnByReference() ) {
-                // return a varSTO
+            VarSTO returnSTO = new VarSTO(func.getName(), func.getReturnType(), false, false);
+            if ( func.isReturnByReference() ) {
                 returnSTO.setIsAddressable(true);
                 returnSTO.setIsModifiable(true);
             }
