@@ -4,10 +4,12 @@
 // Fall 2015
 //---------------------------------------------------------------------
 
-//TODO WE NEED TO MAKE THIS NOT ABSTRACT AND GIVE IMPLEMMENTATION FOR 
+//TODO WE NEED TO MAKE THIS NOT ABSTRACT AND GIVE IMPLEMMENTATION FOR
 //ASSIGNABLETO AND EQUIVALENTTO
 abstract class StructType extends CompositeType
 {
+	private Scope m_structScope;
+
 	//----------------------------------------------------------------
 	// Constructor for the Struct type. All Struct are 0 bits long
 	//----------------------------------------------------------------
@@ -30,6 +32,13 @@ abstract class StructType extends CompositeType
 	// Check to see if the type is a Type
 	//----------------------------------------------------------------
 	public abstract boolean isEquivalentTo(Type t);
+
+	//----------------------------------------------------------------
+	// Check 13
+	//----------------------------------------------------------------
+	public void addScope(Scope scope) {
+		m_structScope = scope;
+	}
 
 
 }

@@ -190,9 +190,6 @@ class MyParser extends parser
             }
         }
 
-        //VV: Passed in IntType arbitrarily as well so that the appropriate constructor is called and
-        // we can make VarSTO a modifiable L Value
-        //VarSTO sto = new VarSTO(id,new IntType());
         VarSTO sto = new VarSTO(id, type);
         m_symtab.insert(sto);
     }
@@ -252,6 +249,17 @@ class MyParser extends parser
     }
 
     //----------------------------------------------------------------
+    // Check 13
+    //----------------------------------------------------------------
+
+    //----------------------------------------------------------------
+    // Sets the structFlag in the symtab
+    //----------------------------------------------------------------
+    void setStructName(String structName) {
+        m_symtab.setStructName(structName);
+    }
+
+    //----------------------------------------------------------------
     //
     //----------------------------------------------------------------
     void DoStructdefDecl(String id)
@@ -269,8 +277,105 @@ class MyParser extends parser
     //----------------------------------------------------------------
     //
     //----------------------------------------------------------------
-    void DoFuncDecl_1(String id, Type returnType, Boolean returnByReference)
+    void doStructVarDecl(Type type, String id) {
+        // Check if this is a redeclaration in the struct's scope.
+        if (m_symtab.accessLocal(id) != null)
+        {
+            m_nNumErrors++;
+            m_errors.print(Formatter.toString(ErrorMsg.error13a_Struct, id));
+            return;
+        }
+
+        // Otherwise insert it into the struct's scope.
+        VarSTO sto = new VarSTO(id, type);
+        m_symtab.insert(sto);
+    }
+
+    //----------------------------------------------------------------
+    //
+    //----------------------------------------------------------------
+    Boolean checkForCtor(String id) {
+        if (m_symtab.accessLocal(id) == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    //----------------------------------------------------------------
+    // Creates a default ctor for the current struct
+    //----------------------------------------------------------------
+    void createDefaultCtor(String id) {
+        FuncSTO sto = new FuncSTO(id);
+        m_symtab.insert(sto);
+    }
+
+    //----------------------------------------------------------------
+    //
+    //----------------------------------------------------------------
+    void DoFuncDecl_1(String id, Type returnType, Boolean returnByReference, Boolean isCtorDtor)
     {
+        /*  check 13b checks */
+        String structName;
+        if ((structName = m_symtab.getStructName()) != null && isCtorDtor) {
+            // We are in a struct, check the ctor/dtor decl
+            String ctorDtorName = id;
+            Boolean isDtor = (ctorDtorName.charAt(0) == '~');
+            if (isDtor) {
+                // in a dtor, do the redeclare check
+                if (m_symtab.accessLocal(id) != null) {
+                    m_nNumErrors++;
+                    m_errors.print( Formatter.toString(ErrorMsg.error9_Decl, id) );
+                    return;
+                }
+
+                // if it's okay temporarily modify id for the check
+                ctorDtorName = ctorDtorName.substring(1);
+            }
+
+            if (!structName.equals(ctorDtorName)) {
+                m_nNumErrors++;
+                if (isDtor) {
+                    m_errors.print(Formatter.toString(ErrorMsg.error13b_Dtor, id, structName));
+                } else {
+                    m_errors.print(Formatter.toString(ErrorMsg.error13b_Ctor, id, structName));
+                }
+                return;
+            }
+
+            if (isDtor) {
+                // if we are a dtor and passed all checks, insert into symtab safely.
+                FuncSTO sto = new FuncSTO(id, returnType, returnByReference);
+                m_symtab.setFunc(sto);
+                m_symtab.insert(sto);
+                m_symtab.openScope();
+                return;
+            }
+        }
+
+        // 1. Get the function (could be a var also) associated with the passed id in the given scope
+        STO symtabObject = m_symtab.access(id);
+
+        // 2. Check if the there was a non-function value related to id in the symtable
+        if (symtabObject != null) {
+            if (!symtabObject.isFunc()) {
+                // Check if we are in a struct to know which error to throw
+                if (m_symtab.getStructName() != null) {
+                    // Throw 13a_struct error
+                    m_nNumErrors++;
+                    m_errors.print(Formatter.toString(ErrorMsg.error13a_Struct, id));
+                    // m_symtab.setFunc(null);
+                    return;
+                } else {
+                    // Throw regular redeclared_id error.
+                    m_nNumErrors++;
+                    m_errors.print(Formatter.toString(ErrorMsg.redeclared_id, id));
+                    // m_symtab.setFunc(null);
+                    return;
+                }
+            }
+        }
+
         FuncSTO sto = new FuncSTO(id, returnType, returnByReference);
         m_symtab.setFunc(sto);
     }
@@ -282,26 +387,13 @@ class MyParser extends parser
     {
         if (m_symtab.getFunc() == null)
         {
-            m_nNumErrors++;
-            m_errors.print ("internal: DoFormalParams says no proc!");
-        }
-
-        // 1. Get the function (could be a var also) associated with the passed id in the given scope
-        STO symtabObject = m_symtab.access(id);
-
-        // 2. Check if the there was a non-function value related to id in the symtable
-        if (symtabObject != null) {
-            if (!symtabObject.isFunc()) {
-                // If so throw a re-declared error.
-                m_nNumErrors++;
-                m_errors.print(Formatter.toString(ErrorMsg.redeclared_id, id));
-                m_symtab.setFunc(null);
-                return;
-            }
+            return;
+            // m_nNumErrors++;
+            // m_errors.print ("internal: DoFormalParams says no proc!");
         }
 
         // 3. now we can assume we have a candidate and existing function.
-        FuncSTO existingFunc = (FuncSTO) symtabObject;
+        FuncSTO existingFunc = (FuncSTO) m_symtab.access(id);
         FuncSTO candidateFunc = m_symtab.getFunc();
         candidateFunc.setParameters(params);
 

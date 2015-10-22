@@ -283,15 +283,26 @@ OptStatic ::=       T_STATIC
 StructdefDecl ::=   T_STRUCTDEF T_ID_U:_1 T_LBRACE
                     {:
                         ((MyParser) parser).DoBlockOpen();
+                        // tell the sym table that we are in a struct decl
+                        ((MyParser) parser).setStructName(_1);
                     :}
                     FieldVarsList
                     OptCtorDtorList
                     {:
-                        // Put logic here to create default ctor if needed
+                        // Check if we need a default ctor.
+                        if (!((MyParser) parser).checkForCtor(_1)) {
+                            ((MyParser) parser).createDefaultCtor(_1);
+                        }
                     :}
                     OptFieldFuncsList
                     {:
+                        // Everything in struct is now defined, now calculate size!
+
+                        // save the scope here
                         ((MyParser) parser).DoBlockClose();
+                        ((MyParser) parser).setStructName(null);
+
+                        // pass the scope into struct def, which passes it into a type, which is constrcuted into a sto
                         ((MyParser) parser).DoStructdefDecl (_1);
                     :}
                     T_RBRACE T_SEMI
@@ -303,7 +314,11 @@ FieldVarsList ::=   FieldVarDecl
     ;
 
 
-FieldVarDecl ::=    DecoratedType T_ID OptArrayList T_SEMI
+FieldVarDecl ::=    DecoratedType:_type T_ID:_name OptArrayList T_SEMI
+                    {:
+                        // Check if the variable has already been declared
+                        ((MyParser) parser).doStructVarDecl(_type, _name);
+                    :}
     ;
 
 
@@ -325,11 +340,10 @@ CtorDtorDecl ::=    CtorDef
 CtorDef ::=         T_ID_U:_3
                     {:
                         ((MyParser) parser).SaveLineNum ();
-                        ((MyParser) parser).DoFuncDecl_1(_3, new VoidType(), false);
+                        ((MyParser) parser).DoFuncDecl_1(_3, new VoidType(), false, true);
                     :}
                     T_LPAREN OptParamList:_4 T_RPAREN
                     {:
-                        // TODO: might not want to pass in id here. 
                         ((MyParser) parser).DoFormalParams(_4, _3);
                     :}
                     T_LBRACE OptStmtList T_RBRACE
@@ -342,7 +356,7 @@ CtorDef ::=         T_ID_U:_3
 DtorDef ::=         T_TILDE T_ID_U:_3
                     {:
                         ((MyParser) parser).SaveLineNum ();
-                        ((MyParser) parser).DoFuncDecl_1("~" + _3, new VoidType(), false);
+                        ((MyParser) parser).DoFuncDecl_1("~" + _3, new VoidType(), false, true);
                     :}
                     T_LPAREN T_RPAREN T_LBRACE OptStmtList T_RBRACE
                     {:
@@ -368,7 +382,7 @@ FieldFuncDecl ::=   FuncDef
 FuncDef ::=         T_FUNCTION T_COLON ReturnType:_1 OptRef:_2 T_ID:_3
                     {:
                         ((MyParser) parser).SaveLineNum ();
-                        ((MyParser) parser).DoFuncDecl_1(_3, _1, _2);
+                        ((MyParser) parser).DoFuncDecl_1(_3, _1, _2, false);
                     :}
                     T_LPAREN OptParamList:_4 T_RPAREN
                     {:
@@ -384,7 +398,7 @@ FuncDef ::=         T_FUNCTION T_COLON ReturnType:_1 OptRef:_2 T_ID:_3
 
 FuncDecl ::=        T_EXTERN T_FUNCTION T_COLON ReturnType:_1 T_ID:_3
                     {:
-                        ((MyParser) parser).DoFuncDecl_1(_3, _1, false);
+                        ((MyParser) parser).DoFuncDecl_1(_3, _1, false, false);
                     :}
                     T_LPAREN OptParamList:_4 T_RPAREN
                     {:

@@ -12,6 +12,7 @@ class SymbolTable
 	private int m_nLevel;
 	private Scope m_scopeGlobal;
 	private FuncSTO m_func = null;
+	private String m_structName = null;
 
 	//----------------------------------------------------------------
 	//
@@ -97,6 +98,14 @@ class SymbolTable
 	public int getLevel()
 	{
 		return m_nLevel;
+	}
+
+	public void setStructName(String structName) {
+		m_structName = structName;
+	}
+
+	public String getStructName() {
+		return m_structName;
 	}
 
 
