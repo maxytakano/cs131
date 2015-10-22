@@ -28,8 +28,8 @@ class BooleanType extends BasicType
     public boolean isAssignableTo(Type t) {return t.isBoolean();}
 
     //----------------------------------------------------------------
-    // Check to see if type is equivalent to float
+    // Check to see if type is equivalent to bool
     //----------------------------------------------------------------
-    public boolean isEquivalentTo(Type t) {return t.isFloat();}
+    public boolean isEquivalentTo(Type t) {return t.isBoolean();}
 
 }

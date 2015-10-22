@@ -271,24 +271,7 @@ class MyParser extends parser
     //----------------------------------------------------------------
     void DoFuncDecl_1(String id, Type returnType, Boolean returnByReference)
     {
-        // 1. Get the function associated with the passed id in the given scope
-        STO funcSTO = m_symtab.access(id);
-
-        // 2. Check if the there was a non-function value related to id in the sym-
-        // table.
-        if (funcSTO != null) {
-            if (!funcSTO.isFunc()) {
-                // If so throw a re-declared error.
-                m_nNumErrors++;
-                m_errors.print(Formatter.toString(ErrorMsg.redeclared_id, id));
-            }
-        }
-
-
-        // set m_symtab's candidate function and open the scope.
         FuncSTO sto = new FuncSTO(id, returnType, returnByReference);
-        // TODO: check if open scope here is correct.
-        // m_symtab.openScope();
         m_symtab.setFunc(sto);
     }
 
@@ -303,10 +286,24 @@ class MyParser extends parser
             m_errors.print ("internal: DoFormalParams says no proc!");
         }
 
+        // 1. Get the function (could be a var also) associated with the passed id in the given scope
+        STO symtabObject = m_symtab.access(id);
+
+        // 2. Check if the there was a non-function value related to id in the symtable
+        if (symtabObject != null) {
+            if (!symtabObject.isFunc()) {
+                // If so throw a re-declared error.
+                m_nNumErrors++;
+                m_errors.print(Formatter.toString(ErrorMsg.redeclared_id, id));
+                m_symtab.setFunc(null);
+                return;
+            }
+        }
+
+        // 3. now we can assume we have a candidate and existing function.
+        FuncSTO existingFunc = (FuncSTO) symtabObject;
         FuncSTO candidateFunc = m_symtab.getFunc();
         candidateFunc.setParameters(params);
-        // Already verified in DoFuncDecl_1 that existing symtab obj is a funcSTO
-        FuncSTO existingFunc = (FuncSTO) m_symtab.access(id);
 
         // 1. Null check to see if there is a existing function or not.
         if (existingFunc != null) {
@@ -315,6 +312,8 @@ class MyParser extends parser
                 // Matching parameters, can't overload.
                 m_nNumErrors++;
                 m_errors.print( Formatter.toString(ErrorMsg.error9_Decl, existingFunc.getName()) );
+                // Set the current function to null to halt further checks.
+                m_symtab.setFunc(null);
             } else {
                 // No matching parameters found, overload the function.
                 existingFunc.addOverload(candidateFunc);
@@ -334,6 +333,11 @@ class MyParser extends parser
     //----------------------------------------------------------------
     void DoFuncDecl_2()
     {
+        if (m_symtab.getFunc() == null)
+        {
+            // func param comparison failed.
+            return;
+        }
         FuncSTO curFunc = m_symtab.getFunc();
         // check 6c
         if (!curFunc.getHasTopReturn() && !(curFunc.getReturnType().isVoid())  ) {
@@ -603,6 +607,11 @@ class MyParser extends parser
 
     /* Phase 1 check 6a */
     void doReturnVoidCheck() {
+        // Check if the function failed overload test
+        if (m_symtab.getFunc() == null) {
+            return;
+        }
+
         Type returnType = m_symtab.getFunc().getReturnType();
         if (returnType != null) {
             m_nNumErrors++;
@@ -612,6 +621,11 @@ class MyParser extends parser
 
     /* Phase 1 check 6b */
     void doReturnTypeCheck(STO expr) {
+        // Check if the function failed overload test
+        if (m_symtab.getFunc() == null) {
+            return;
+        }
+
         Type exprType = expr.getType();
         FuncSTO curFunc = m_symtab.getFunc();
         Type returnType = curFunc.getReturnType();

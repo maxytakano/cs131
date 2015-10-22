@@ -452,7 +452,7 @@ ReturnType ::=      Type:_1
                     :}
     |               T_VOID
                     {:
-                        RESULT = new VoidType(); 
+                        RESULT = new VoidType();
                     :}
     ;
 
