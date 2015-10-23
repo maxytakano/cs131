@@ -11,7 +11,7 @@ abstract class NumericType extends BasicType
 	//----------------------------------------------------------------
 	public NumericType()
 	{
-		super("Numeric", 32);
+		super("Numeric", 4);
 	}
 
 	//----------------------------------------------------------------

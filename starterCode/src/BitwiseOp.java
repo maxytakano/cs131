@@ -50,13 +50,13 @@ abstract class BitwiseOp extends BinaryOp
 
                 switch(opName) {
                     case "&":
-                        result = aVal & aVal;
+                        result = aVal & bVal;
                         break;
                     case "^":
-                        result = aVal ^ aVal;
+                        result = aVal ^ bVal;
                         break;
                     case "|":
-                        result = aVal | aVal;
+                        result = aVal | bVal;
                         break;
                     default:
                         System.out.println("BitwiseOp: shouldn't be here");
