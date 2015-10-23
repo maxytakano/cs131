@@ -253,25 +253,27 @@ class MyParser extends parser
     //----------------------------------------------------------------
 
     //----------------------------------------------------------------
-    // Sets the structFlag in the symtab
+    // Sets the current structType in the symtab
     //----------------------------------------------------------------
-    void setStructName(String structName) {
-        m_symtab.setStructName(structName);
+    void setCurrentStructType(String id) {
+        Scope curScope = m_symtab.getScope();
+        StructType structType = new StructType(id, curScope);
+        m_symtab.setStructType(structType);
     }
 
     //----------------------------------------------------------------
     //
     //----------------------------------------------------------------
-    void DoStructdefDecl(String id, Scope scope) {
+    void DoStructdefDecl(String id) {
         if (m_symtab.accessLocal(id) != null)
         {
             m_nNumErrors++;
             m_errors.print(Formatter.toString(ErrorMsg.redeclared_id, id));
         }
 
-        StructType structType = new StructType(id, scope);
+        // StructType structType = new StructType(id, scope);
 
-        StructdefSTO sto = new StructdefSTO(id, structType);
+        StructdefSTO sto = new StructdefSTO(id, m_symtab.getStructType());
         m_symtab.insert(sto);
     }
 
@@ -315,9 +317,17 @@ class MyParser extends parser
     // Check 14
     //----------------------------------------------------------------
     void doCtorCall(Type structType, Vector<STO> params) {
+
         STO structSTO = m_symtab.access(structType.getName());
         STO structCtor = ((StructType)structSTO.getType()).getCtor();
+        // STO structCtor = m_symtab.getStructType().getCtor();
         DoFuncCall(structCtor, params);
+    }
+
+    STO getThis() {
+        // Create the R - value with the current struct type
+        ExprSTO thisSTO = new ExprSTO("this", m_symtab.getStructType(), false, false);
+        return thisSTO;
     }
 
 
@@ -327,8 +337,8 @@ class MyParser extends parser
     void DoFuncDecl_1(String id, Type returnType, Boolean returnByReference, Boolean isCtorDtor)
     {
         /*  check 13b checks */
-        String structName;
-        if ((structName = m_symtab.getStructName()) != null && isCtorDtor) {
+        Type structType;
+        if ((structType = m_symtab.getStructType()) != null && isCtorDtor) {
             // We are in a struct, check the ctor/dtor decl
             String ctorDtorName = id;
             Boolean isDtor = (ctorDtorName.charAt(0) == '~');
@@ -344,12 +354,12 @@ class MyParser extends parser
                 ctorDtorName = ctorDtorName.substring(1);
             }
 
-            if (!structName.equals(ctorDtorName)) {
+            if (!(structType.getName()).equals(ctorDtorName)) {
                 m_nNumErrors++;
                 if (isDtor) {
-                    m_errors.print(Formatter.toString(ErrorMsg.error13b_Dtor, id, structName));
+                    m_errors.print(Formatter.toString(ErrorMsg.error13b_Dtor, id, structType.getName()));
                 } else {
-                    m_errors.print(Formatter.toString(ErrorMsg.error13b_Ctor, id, structName));
+                    m_errors.print(Formatter.toString(ErrorMsg.error13b_Ctor, id, structType.getName()));
                 }
                 return;
             }
@@ -371,7 +381,7 @@ class MyParser extends parser
         if (symtabObject != null) {
             if (!symtabObject.isFunc()) {
                 // Check if we are in a struct to know which error to throw
-                if (m_symtab.getStructName() != null) {
+                if (m_symtab.getStructType() != null) {
                     // Throw 13a_struct error
                     m_nNumErrors++;
                     m_errors.print(Formatter.toString(ErrorMsg.error13a_Struct, id));

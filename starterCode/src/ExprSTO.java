@@ -23,6 +23,13 @@ class ExprSTO extends STO
         // fields as necessary
 	}
 
+	public ExprSTO(String strName, Type typ, boolean modifiable, boolean addressable)
+	{
+		super(strName, typ, modifiable, addressable);
+        // You may want to change the isModifiable and isAddressable
+        // fields as necessary
+	}
+
 	//----------------------------------------------------------------
 	//
 	//----------------------------------------------------------------

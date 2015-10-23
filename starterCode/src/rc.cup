@@ -256,12 +256,9 @@ VarDecl ::=         OptStatic:_1 DecoratedType:_2 T_ID:_3 OptArrayList:_4 OptIni
                     T_SEMI
     |               OptStatic:_1 StructType:_2 T_ID:_3 OptArrayList:_4 OptCtorCall:_5
                     {:
+                        // Always doing the ctor call, either with args or calling the
+                        // default ctor.
                         ((MyParser) parser).doCtorCall(_2, _5);
-                        // Check if this is a ctor call.
-                        // if (_5 != null) {
-                        //     System.out.println(_3);
-                        //     ((MyParser) parser).doCtorCall(_2, _3, _5);
-                        // }
                         ((MyParser) parser).DoVarDecl (_3, _2, null); // todo: 3rd param might not be null
                     :}
                     T_SEMI
@@ -290,7 +287,7 @@ StructdefDecl ::=   T_STRUCTDEF T_ID_U:_1 T_LBRACE
                     {:
                         ((MyParser) parser).DoBlockOpen();
                         // tell the sym table that we are in a struct decl
-                        ((MyParser) parser).setStructName(_1);
+                        ((MyParser) parser).setCurrentStructType(_1);
                     :}
                     FieldVarsList
                     OptCtorDtorList
@@ -303,15 +300,15 @@ StructdefDecl ::=   T_STRUCTDEF T_ID_U:_1 T_LBRACE
                     OptFieldFuncsList
                     {:
                         // Everything in struct is now defined, now calculate size!
-
-                        // ((MyParser) parser).DoBlockClose();
+                        ((MyParser) parser).DoBlockClose();
                         // save the scope here
-                        Scope resultScope = ((MyParser) parser).DoScopeCapture();
+                        // Scope resultScope = ((MyParser) parser).DoScopeCapture();
                         // Set the cur struct to null
-                        ((MyParser) parser).setStructName(null);
 
                         // pass the scope into struct def, which passes it into a type, which is constrcuted into a sto
-                        ((MyParser) parser).DoStructdefDecl (_1, resultScope);
+                        ((MyParser) parser).DoStructdefDecl (_1);
+                        ((MyParser) parser).setCurrentStructType(null);
+
                     :}
                     T_RBRACE T_SEMI
     ;
@@ -998,7 +995,8 @@ Designator3 ::=     T_LPAREN Expr:_2 T_RPAREN
                     :}
     |               T_THIS
                     {:
-                        RESULT = new ExprSTO ("this");              // fix me!
+                        // Return an R value (non-mod/addr expr) that contains the struct type
+                        RESULT = ((MyParser) parser).getThis();
                     :}
     |               T_COLONCOLON T_ID:_1
                     {:

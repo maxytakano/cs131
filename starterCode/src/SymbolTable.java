@@ -12,7 +12,7 @@ class SymbolTable
 	private int m_nLevel;
 	private Scope m_scopeGlobal;
 	private FuncSTO m_func = null;
-	private String m_structName = null;
+	private StructType m_structType = null;
 
 	//----------------------------------------------------------------
 	//
@@ -95,6 +95,14 @@ class SymbolTable
 	//----------------------------------------------------------------
 	//
 	//----------------------------------------------------------------
+	public Scope getScope() {
+		Scope scope = m_stkScopes.peek();
+		return scope;
+	}
+
+	//----------------------------------------------------------------
+	//
+	//----------------------------------------------------------------
 	public Scope captureScope()
 	{
 		Scope returnScope = m_stkScopes.pop();
@@ -110,12 +118,12 @@ class SymbolTable
 		return m_nLevel;
 	}
 
-	public void setStructName(String structName) {
-		m_structName = structName;
+	public void setStructType(StructType structType) {
+		m_structType = structType;
 	}
 
-	public String getStructName() {
-		return m_structName;
+	public StructType getStructType() {
+		return m_structType;
 	}
 
 
