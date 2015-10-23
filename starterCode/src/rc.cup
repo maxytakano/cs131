@@ -135,8 +135,6 @@ non terminal
     WriteStmt,
     WritePairList,
     WritePair,
-    OptCtorCall,
-    CtorCall,
     OptPointerList,
     PointerList,
     Pointer,
@@ -197,7 +195,9 @@ non terminal Vector
     OptParamList,
     ParamList,
     OptExprList,
-    ExprList
+    ExprList,
+    OptCtorCall,
+    CtorCall
     ;
 
 non terminal Boolean
@@ -256,6 +256,12 @@ VarDecl ::=         OptStatic:_1 DecoratedType:_2 T_ID:_3 OptArrayList:_4 OptIni
                     T_SEMI
     |               OptStatic:_1 StructType:_2 T_ID:_3 OptArrayList:_4 OptCtorCall:_5
                     {:
+                        ((MyParser) parser).doCtorCall(_2, _5);
+                        // Check if this is a ctor call.
+                        // if (_5 != null) {
+                        //     System.out.println(_3);
+                        //     ((MyParser) parser).doCtorCall(_2, _3, _5);
+                        // }
                         ((MyParser) parser).DoVarDecl (_3, _2, null); // todo: 3rd param might not be null
                     :}
                     T_SEMI
@@ -298,12 +304,14 @@ StructdefDecl ::=   T_STRUCTDEF T_ID_U:_1 T_LBRACE
                     {:
                         // Everything in struct is now defined, now calculate size!
 
+                        // ((MyParser) parser).DoBlockClose();
                         // save the scope here
-                        ((MyParser) parser).DoBlockClose();
+                        Scope resultScope = ((MyParser) parser).DoScopeCapture();
+                        // Set the cur struct to null
                         ((MyParser) parser).setStructName(null);
 
                         // pass the scope into struct def, which passes it into a type, which is constrcuted into a sto
-                        ((MyParser) parser).DoStructdefDecl (_1);
+                        ((MyParser) parser).DoStructdefDecl (_1, resultScope);
                     :}
                     T_RBRACE T_SEMI
     ;
@@ -578,12 +586,18 @@ OptInit ::=         T_ASSIGN Expr:_1
     ;
 
 
-OptCtorCall ::=     CtorCall
+OptCtorCall ::=     CtorCall:_1
+                    {:
+                        RESULT = _1;
+                    :}
     |               /* empty */
     ;
 
 
-CtorCall ::=        T_COLON T_LPAREN OptExprList T_RPAREN
+CtorCall ::=        T_COLON T_LPAREN OptExprList:_1 T_RPAREN
+                    {:
+                        RESULT = _1;
+                    :}
     ;
 
 

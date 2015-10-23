@@ -120,24 +120,32 @@ class FuncSTO extends STO
 	// Compares one FuncSTO's params to another, returns true if they
 	// are all identical. (All equivalent)
 	//----------------------------------------------------------------
-	private Boolean compareParams(Vector<STO> params1, Vector<STO> params2) {
-		int numParams1 = (params1 == null) ? 0 : params1.size();
-        int numParams2 = (params2 == null) ? 0: params2.size();
+	private Boolean compareParams(Vector<STO> params, Vector<STO> funcParams) {
+		// param2 is the function params.
+		int numParams = (params == null) ? 0 : params.size();
+        int numfuncParams = (funcParams == null) ? 0: funcParams.size();
 
-        if (numParams1 != numParams2) {
+        if (numParams != numfuncParams) {
         	return false;
         }
 
-        STO curParam1, curParam2;
-        Type paramType1, paramType2;
-		for (int i = 0; i < numParams1; i++) {
-			curParam1 = params1.get(i);
-			curParam2 = params2.get(i);
-			paramType1 = curParam1.getType();
-			paramType2 = curParam2.getType();
+        STO curParam, curFuncParam;
+        Type paramType, funcParamType;
+		for (int i = 0; i < numParams; i++) {
+			curParam = params.get(i);
+			curFuncParam = funcParams.get(i);
+			paramType = curParam.getType();
+			funcParamType = curFuncParam.getType();
 
-			if (!paramType1.isEquivalentTo(paramType2)) {
+			if (!paramType.isEquivalentTo(funcParamType)) {
 				return false;
+			}
+
+			// Check for non-mod l-value case
+			if (((VarSTO)curFuncParam).getPassByReference()) {
+				if (!curParam.isModLValue()) {
+					return false;
+				}
 			}
 		}
 

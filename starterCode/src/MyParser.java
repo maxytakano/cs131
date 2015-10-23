@@ -262,15 +262,16 @@ class MyParser extends parser
     //----------------------------------------------------------------
     //
     //----------------------------------------------------------------
-    void DoStructdefDecl(String id)
-    {
+    void DoStructdefDecl(String id, Scope scope) {
         if (m_symtab.accessLocal(id) != null)
         {
             m_nNumErrors++;
             m_errors.print(Formatter.toString(ErrorMsg.redeclared_id, id));
         }
 
-        StructdefSTO sto = new StructdefSTO(id);
+        StructType structType = new StructType(id, scope);
+
+        StructdefSTO sto = new StructdefSTO(id, structType);
         m_symtab.insert(sto);
     }
 
@@ -306,9 +307,19 @@ class MyParser extends parser
     // Creates a default ctor for the current struct
     //----------------------------------------------------------------
     void createDefaultCtor(String id) {
-        FuncSTO sto = new FuncSTO(id);
+        FuncSTO sto = new FuncSTO(id, new VoidType(), false);
         m_symtab.insert(sto);
     }
+
+    //----------------------------------------------------------------
+    // Check 14
+    //----------------------------------------------------------------
+    void doCtorCall(Type structType, Vector<STO> params) {
+        STO structSTO = m_symtab.access(structType.getName());
+        STO structCtor = ((StructType)structSTO.getType()).getCtor();
+        DoFuncCall(structCtor, params);
+    }
+
 
     //----------------------------------------------------------------
     //
@@ -450,11 +461,19 @@ class MyParser extends parser
     }
 
     //----------------------------------------------------------------
-    //
+    // closes the scope
     //----------------------------------------------------------------
     void DoBlockClose()
     {
         m_symtab.closeScope();
+    }
+
+    //----------------------------------------------------------------
+    // closes the scope, and returns it
+    //----------------------------------------------------------------
+    Scope DoScopeCapture()
+    {
+        return m_symtab.captureScope();
     }
 
     // ** Phase 1 Check 3a Check 3b **/
@@ -494,6 +513,10 @@ class MyParser extends parser
     //----------------------------------------------------------------
     STO DoFuncCall(STO sto, Vector<STO> args)
     {
+        if (sto.isError()) {
+            return sto;
+        }
+
         if (!sto.isFunc()) {
             m_nNumErrors++;
             m_errors.print(Formatter.toString(ErrorMsg.not_function, sto.getName()));
@@ -594,7 +617,23 @@ class MyParser extends parser
     {
         // Good place to do the struct checks
 
-        return sto;
+        Type type = sto.getType();
+        if (!type.isStruct()) {
+            String errormsg = Formatter.toString(ErrorMsg.error14t_StructExp, type.getName());
+            m_nNumErrors++;
+            m_errors.print(errormsg);
+            return new ErrorSTO(errormsg);
+        }
+
+        // Check for struct fields
+        if ( !((StructType) type).hasField(strID) ) {
+            String errormsg = Formatter.toString(ErrorMsg.error14f_StructExp, strID, type.getName());
+            m_nNumErrors++;
+            m_errors.print(errormsg);
+            return new ErrorSTO(errormsg);
+        }
+
+        return ((StructType) type).getField(strID);
     }
 
     //----------------------------------------------------------------
@@ -705,7 +744,7 @@ class MyParser extends parser
         }
 
         Type returnType = m_symtab.getFunc().getReturnType();
-        if (returnType != null) {
+        if (!returnType.isVoid()) {
             m_nNumErrors++;
             m_errors.print(ErrorMsg.error6a_Return_expr);
         }
