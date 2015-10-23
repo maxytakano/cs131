@@ -4,9 +4,13 @@
 // University of California, San Diego
 //---------------------------------------------------------------------
 
+import java.math.BigDecimal;
+
 class VarSTO extends STO
 {
 	private Boolean m_passByReference;
+
+	private BigDecimal		m_value;
 
 	//----------------------------------------------------------------
 	//
@@ -43,6 +47,28 @@ class VarSTO extends STO
 		// fields as necessary
 	}
 
+	public VarSTO(String strName, Type typ, int val)
+	{
+		super(strName, typ);
+		m_value = new BigDecimal(val);
+		// You may want to change the isModifiable and isAddressable
+		// fields as necessary
+	}
+
+	public VarSTO(String strName, Type typ, double val)
+	{
+		super(strName, typ);
+		m_value = new BigDecimal(val);
+		// You may want to change the isModifiable and isAddressable
+		// fields as necessary
+	}
+
+	public VarSTO(String strName, Type typ, BigDecimal val)
+	{
+		super(strName, typ);
+		m_value = val;
+	}
+
 	public void setPassByReference(boolean optref) {
 		m_passByReference = optref;
 	}
@@ -57,5 +83,29 @@ class VarSTO extends STO
 	public boolean isVar() 
 	{
 		return true;
+	}
+
+	//----------------------------------------------------------------
+	//
+	//----------------------------------------------------------------
+	public BigDecimal getValue() 
+	{
+		return m_value;
+	}
+
+	//----------------------------------------------------------------
+	//
+	//----------------------------------------------------------------
+	public int getIntValue() 
+	{
+		return m_value.intValue();
+	}
+
+	//----------------------------------------------------------------
+	//
+	//----------------------------------------------------------------
+	public float getFloatValue() 
+	{
+		return m_value.floatValue();
 	}
 }

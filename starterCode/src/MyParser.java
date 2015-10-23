@@ -7,6 +7,8 @@
 import java_cup.runtime.*;
 import java.util.Vector;
 import java.util.Iterator;
+import java.math.BigDecimal;
+import java.util.Stack;
 
 class MyParser extends parser
 {
@@ -190,11 +192,122 @@ class MyParser extends parser
             }
         }
 
-        //VV: Passed in IntType arbitrarily as well so that the appropriate constructor is called and
-        // we can make VarSTO a modifiable L Value
-        //VarSTO sto = new VarSTO(id,new IntType());
         VarSTO sto = new VarSTO(id, type);
         m_symtab.insert(sto);
+    }
+
+    void doForEachCheck(String lhs_id, Type lhs_type, boolean ref, STO rhs_array){
+        if(rhs_array.isError() || lhs_type.isError()){
+            return;
+        }
+
+        //make sure rhs is actually an array
+        if(!(rhs_array.getType().isArray())){
+            m_nNumErrors++;
+            m_errors.print(ErrorMsg.error12a_Foreach);
+            return;
+        }
+
+        VarSTO myRHS_Array = ((ArrayType) rhs_array.getType()).getNextLevel();
+
+        //if it's pass by value (ref == false) check if rhs is assignable to lhs
+        if(!ref){
+            if(!(myRHS_Array.getType().isAssignableTo(lhs_type))){
+                m_nNumErrors++;
+                m_errors.print(Formatter.toString(ErrorMsg.error12v_Foreach, 
+                                                    myRHS_Array.getType().getName(), lhs_id, lhs_type.getName()));
+                return;
+            }
+        }
+
+        //if it's pass by ref (ref == true) check if rhs type is assignable to lhs
+        if(ref){
+            if(!(myRHS_Array.getType().isEquivalentTo(lhs_type))){
+                m_nNumErrors++;
+                m_errors.print(Formatter.toString(ErrorMsg.error12r_Foreach, 
+                                                    myRHS_Array.getType().getName(), lhs_id, lhs_type.getName()));
+                return;
+            }
+        }
+
+        //if we're here, we can initialize our variable in the foreach
+        //don't forget to set the foreachwhile flag
+        DoVarDecl(lhs_id, lhs_type, myRHS_Array);
+    }
+
+    //----------------------------------------------------------------
+    //
+    //----------------------------------------------------------------
+    void DoVarDecl_4Params(String id, Type type, Vector<STO> arraySizes, STO optInit)
+    {
+        //rather than adding on more params to doVarDecl, I'm just gonna do this here
+        //for more modularity
+        //If arraySizes is null, we just want to call the default vardecl
+        if(arraySizes == null){
+            //optInit not null, so call the default doVarDecl.
+            DoVarDecl(id, type, optInit);
+            return;
+        }
+
+        //if we're here, we definitely have an an array.
+        if (m_symtab.accessLocal(id) != null)
+        {
+            m_nNumErrors++;
+            m_errors.print(Formatter.toString(ErrorMsg.redeclared_id, id));
+            return;
+        }
+
+        //array actually made in this helper method
+        STO sto = makeAnArray(id, type, arraySizes);
+        if(sto.isError()){
+            return;
+        }
+        
+        m_symtab.insert(sto);
+    }
+
+    STO makeAnArray(String id, Type type, Vector<STO> arraySizes){
+
+        if(type.isError()){
+            return new ErrorSTO(id);
+        }
+        if(arraySizes.isEmpty()){
+            // System.out.println ("Returning Base Case of type:  " + type);
+            return new VarSTO(id, type);
+        }
+        else{
+            //if it's an error, it's been printed. Any instantiation errors are
+            //constSTOs.
+            if(arraySizes.firstElement().isError()){
+                // m_nNumErrors++;
+                // // System.out.println("printing here makeAnArray");
+                // m_errors.print(arraySizes.firstElement().getName());
+                return arraySizes.firstElement();
+            }
+            //a[expr]; expr's errors haven't been printed yet, but they will be here
+            //any errors when making the array are printed here
+            ConstSTO myconst = ((ConstSTO)arraySizes.firstElement()); 
+            if(myconst.getType().isError()){
+                m_nNumErrors++;
+                // System.out.println("printing here 2 makeAnArray");
+                m_errors.print(myconst.getName());
+                return new ErrorSTO(myconst.getName());
+            }
+            //no errors, so we do the actual array making here.
+            int val = myconst.getIntValue();
+            ArrayType myArrayType = new ArrayType(type, val);
+            arraySizes.remove(0);
+            STO recursedSTO = makeAnArray(id, type, arraySizes);
+            if(recursedSTO.isError()){
+                return recursedSTO;
+            }
+            // System.out.println("Type: " + recursedSTO.getType() + " \n Name: " + recursedSTO.getName());
+            VarSTO myVarSTO = (VarSTO) recursedSTO;
+            myArrayType.setNextLevel(myVarSTO);
+            //the new varsto will be an non-mod lval, so addressable, but not modifiable
+            // System.out.println("returning recursion type: " + myArrayType.getName());
+            return new VarSTO(id, myArrayType, false, true);
+        }
     }
 
     //----------------------------------------------------------------
@@ -336,10 +449,23 @@ class MyParser extends parser
     //
     //----------------------------------------------------------------
     STO DoAssignExpr(STO stoDes, STO stoExpr)
-    {
+    {  
+        // System.out.println ("-------------------------------------------------");
+        // System.out.println ("stoExpr in DoAssignExpr: " + stoExpr);
+        // System.out.println ("name: " + stoExpr.getName());
+        // System.out.println ("type: " + stoExpr.getType());
+        // System.out.println ();
+
         if (stoExpr.isError()) {
             return stoExpr;
         }
+
+        // System.out.println ("-------------------------------------------------");
+        // System.out.println ("stoDes in DoAssignExpr: " + stoDes);
+        // System.out.println ("name: " + stoDes.getName());
+        // System.out.println ("type: " + stoDes.getType());
+        // System.out.println ("isModLValue: " + stoDes.isModLValue());
+        // System.out.println ();
 
         if (!stoDes.isModLValue())
         {
@@ -357,9 +483,20 @@ class MyParser extends parser
             return new ErrorSTO( errormsg );
         }
         else{
-            //we need to figure out how to do the types
-            // 10/15 : note, this probably shouldn't be returning at all
-            return new VarSTO(lhs.getName());
+            //keep same name as lhs (stoDes), keep same type as lhs (stoDes)
+            VarSTO newVar = new VarSTO(stoDes.getName(), stoDes.getType());
+            if(stoExpr.isConst()){
+                //if the rhs is a const, we can place the value in to varsto already
+                //get the bigdecimal
+                BigDecimal constVal = ((ConstSTO) stoExpr).getValue();
+                //put it into the varsto
+                newVar = new VarSTO(stoDes.getName(), stoDes.getType(), constVal);
+            }
+            else{
+                //we don't have a const at compile time to place into here
+                newVar = new VarSTO(stoDes.getName(), stoDes.getType());
+            }
+            return newVar;
         }
     }
 
@@ -384,7 +521,8 @@ class MyParser extends parser
             // # params error
             m_nNumErrors++;
             m_errors.print(Formatter.toString(ErrorMsg.error5n_Call, numArgs, numParams));
-            return new ErrorSTO(sto.getName());
+            // return new ErrorSTO(sto.getName());
+            return new ErrorSTO("temp");
         }
 
         // 2. check for corresponding param/arg errors
@@ -413,7 +551,7 @@ class MyParser extends parser
                     m_errors.print(Formatter.toString(ErrorMsg.error5r_Call, argType.getName(),
                         curParam.getName(), paramType.getName()));
                     errorFlag = true;
-                } else if ( !(curArg.isModLValue()) ) {
+                } else if ( !(curArg.isModLValue()) && !(curArg.getType().isArray()) ) {
                     m_nNumErrors++;
                     m_errors.print(Formatter.toString(ErrorMsg.error5c_Call, curParam.getName(), paramType.getName()));
                     errorFlag = true;
@@ -448,11 +586,68 @@ class MyParser extends parser
     //----------------------------------------------------------------
     //
     //----------------------------------------------------------------
-    STO DoDesignator2_Array(STO sto)
+    STO DoDesignator2_Array(STO sto, STO expr)
     {
+        // System.out.println("------------------------------------------------");
+        // System.out.println("printing sto name here: " + sto.getName() + " \n type: " + sto.getType());
+        // System.out.println("type name: " + sto.getType().getName());
+        // System.out.println("");
+        if(expr.isError()){
+            return expr;
+        }
+        //possible that sto could be a conststo with type error. this occurs during instantiation of arrray
+        if(sto.isError() || sto.getType().isError()){
+            return sto;
+        }
         // Good place to do the array checks
+        Type stoType = sto.getType();
+        // System.out.println("here: " + stoType.isArray());
+        //default to true since we don't have to check for pointers.
+        if(!(stoType.isArray()) && !(stoType.isPointer())){
+            m_nNumErrors++;
+             // System.out.println("printing sto name here: " + stoType.getName() + " type: " + stoType);
+            m_errors.print(Formatter.toString(ErrorMsg.error11t_ArrExp, stoType.getName()));
+            return new ErrorSTO(sto.getName());
+        }
 
-        return sto;
+        //expression must be of type int
+        if(!(expr.getType().isEquivalentTo(new IntType())))
+        {
+            m_nNumErrors++;
+            // System.out.println("printing here 2 DoDesignator2_Array");
+            m_errors.print(Formatter.toString(ErrorMsg.error11i_ArrExp, expr.getType().getName()));
+            return new ErrorSTO(sto.getName());
+        }
+
+        STO isValid;
+        //only do bounds check if stotype is of array. we don't need to do it for pointers
+        if(stoType.isArray()){
+            ArrayType myArry = (ArrayType) stoType;
+            //only do bounds check if we have an array and expr is constant
+            if(expr.isConst()){
+                isValid = arrayValidityHelper(expr);
+                if(!(isValid.isError())){
+                    int intval = ((ConstSTO)expr).getIntValue(); 
+                    if( intval >= myArry.getCurrentDim() || intval < 0){
+                        m_nNumErrors++;
+                        // System.out.println("printing here DoDesignator2_Array");
+                        m_errors.print(Formatter.toString(ErrorMsg.error11b_ArrExp, 
+                                                            ((ConstSTO)expr).getIntValue(), 
+                                                            myArry.getCurrentDim()));
+                        return new ErrorSTO(myArry.getName());
+                    }
+                }
+            }
+            VarSTO myNextArrayVal = ((ArrayType)sto.getType()).getNextLevel();
+
+            return myNextArrayVal;
+        }
+
+        //at this point, we need to return the proper VarSTO. specifcally, if it's completely
+        //dereferenced array, the varsto with basic type, else arraytype 
+        VarSTO myNextArrayVal = ((ArrayType)sto.getType()).getNextLevel();
+
+        return myNextArrayVal;
     }
 
     // ** Phase 0 ** //
@@ -530,13 +725,30 @@ class MyParser extends parser
         return result;
     }
 
+    //----------------------------------------------------------------
+    // performs unary sign. This is phase 0, but never implemented till now
+    //----------------------------------------------------------------
+    STO doUnarySign(STO a, UnaryOp o) {
+        //will not be performed on non-numerics
+        if (a.isError()) {
+            return a;
+        }
+        STO result = a;
+        if(o.getName() == "-"){
+            if(a.isConst()){
+                float signchange = ((ConstSTO)a).getFloatValue() * -1;
+                result = new ConstSTO(a.getName(), a.getType(), signchange);
+            }
+        }
+        return result;
+    }
+
     // ** Phase 1 check 4 **/
     void doConditionCheck(STO expr) {
         // do we need to do this check here, or can the expr not be an error here?
-        // if (expr.isError()) {
-        //     m_nNumErrors++;
-        //     m_errors.print(expr.getName);
-        // }
+        if (expr.isError()) {
+            return;
+        }
 
         Type exprType = expr.getType();
 
@@ -623,7 +835,63 @@ class MyParser extends parser
             m_errors.print(Formatter.toString(ErrorMsg.not_type, sto.getName()));
             return new ErrorType();
         }
+        
 
         return sto.getType();
+    }
+
+    //----------------------------------------------------------------
+    //
+    //----------------------------------------------------------------
+    public STO doArrayDeclCheck(STO expr) {
+        if(expr.isError()){
+            return expr;
+        }
+        //do all checks for valid array[expr] in this helper method
+        return arrayValidityHelper(expr);
+    }
+
+    //----------------------------------------------------------------
+    // helper method used by both doArrayDeclCheck and DoDesignator2_Array
+    // return -1 means error
+    //----------------------------------------------------------------
+    public STO arrayValidityHelper(STO expr){
+        //return if error
+        if (expr.isError()) {
+            return expr;
+        }
+
+        //not error, so get type
+        Type exprType = expr.getType();
+
+        //NOTE: WE ARE RETURNING CONSTSTOs with a type of ERRORTYPE. This way we can tell whether we've
+        //printed the error or not. If it's an errorsto, we have no way of knowing what's been printed
+        //I think this is what Eduardo was talking about. We don't print the error here,
+
+        //needs to be int, else error
+        if (!exprType.isInt()) {
+            // m_nNumErrors++;
+            String errorToPrint =  Formatter.toString(ErrorMsg.error10i_Array, exprType.getName());
+            // m_errors.print(errorToPrint);
+            return new ConstSTO(errorToPrint, new ErrorType());
+        }
+        //needs to be constant else error
+        if (!expr.isConst()){
+            // m_nNumErrors++;
+            String errorToPrint = ErrorMsg.error10c_Array ;
+            // m_errors.print(errorToPrint);
+            return new ConstSTO(errorToPrint, new ErrorType());
+        }
+        //known at compile time, so we can grab the value
+        int intValue = ((ConstSTO)expr).getIntValue();
+        //if value is less than or equal to 0, error
+        if(intValue <= 0){
+            // m_nNumErrors++;
+            String errorToPrint = Formatter.toString(ErrorMsg.error10z_Array, intValue);
+            // m_errors.print(errorToPrint);
+            return new ConstSTO(errorToPrint, new ErrorType(), intValue);
+        }
+
+        return expr;
     }
 }

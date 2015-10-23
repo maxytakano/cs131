@@ -29,7 +29,7 @@ class FuncSTO extends STO
 	//----------------------------------------------------------------
 	public FuncSTO(String strName, Type returnType)
 	{
-		super (strName);
+		super (strName, returnType);
 		setReturnType(returnType);
 		setHasTopReturn(false);
 		// You may want to change the isModifiable and isAddressable
@@ -41,7 +41,7 @@ class FuncSTO extends STO
 	//----------------------------------------------------------------
 	public FuncSTO(String strName, Type returnType, Boolean returnByReference)
 	{
-		super (strName);
+		super (strName, returnType);
 		setReturnType(returnType);
 		setReturnByReference(returnByReference);
 		setHasTopReturn(false);

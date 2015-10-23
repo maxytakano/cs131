@@ -140,18 +140,11 @@ non terminal
     OptPointerList,
     PointerList,
     Pointer,
-    OptArrayList,
-    ArrayList,
-    Array,
     //New stuff below here
     NewStmt,
     DeleteStmt,
     OptStmtList,
     StmtList
-    ;
-
-non terminal String
-    UnarySign
     ;
 
 non terminal BinaryOp
@@ -162,7 +155,8 @@ non terminal BinaryOp
     ;
 
 non terminal UnaryOp
-    IncDecOp
+    IncDecOp,
+    UnarySign
     ;
 
 non terminal STO
@@ -181,7 +175,8 @@ non terminal STO
     Designator3,
     ParamDecl,
     ConstExpr,
-    OptInit
+    OptInit,
+    Array
     ;
 
 non terminal Type
@@ -197,7 +192,9 @@ non terminal Vector
     OptParamList,
     ParamList,
     OptExprList,
-    ExprList
+    ExprList,
+    ArrayList,
+    OptArrayList
     ;
 
 non terminal Boolean
@@ -246,11 +243,12 @@ ExternDecl ::=      T_EXTERN DecoratedBasicType:_2 T_ID:_3 OptArrayList:_4
 
 VarDecl ::=         OptStatic:_1 DecoratedType:_2 T_ID:_3 OptArrayList:_4 OptInit:_5
                     {:
-                        ((MyParser) parser).DoVarDecl (_3, _2, _5);
+                        ((MyParser) parser).DoVarDecl_4Params(_3, _2, _4, _5);
                     :}
                     T_SEMI
     |               OptStatic:_1 T_AUTO T_ID:_3 T_ASSIGN Expr:_5
                     {:
+                        //WHY WOULD WE NOT PASS IN EXPR for the third argument?
                         ((MyParser) parser).DoVarDecl (_3, _5.getType(), null);
                     :}
                     T_SEMI
@@ -469,15 +467,31 @@ Pointer ::=         T_STAR
     ;
 
 
-OptArrayList ::=    ArrayList
+OptArrayList ::=    ArrayList:_1
+                    {:
+                        // RESULT = ((MyParser) parser).arrayInitErrorPrinter(_1);
+                        RESULT = _1; 
+                    :}
     |               /* empty */
     ;
 
-ArrayList ::=       Array
-    |               ArrayList Array
+ArrayList ::=       Array:_2
+                    {:
+                        RESULT = new Vector();
+                        RESULT.addElement(_2);
+                    :}
+    |               ArrayList:_1 Array:_2
+                    {:
+                        RESULT = _1;
+                        RESULT.addElement(_2);
+                    :}
     ;
 
-Array ::=           T_LBRACKET ConstExpr T_RBRACKET
+Array ::=           T_LBRACKET ConstExpr:_1 
+                    {:
+                        RESULT = ((MyParser) parser).doArrayDeclCheck(_1);
+                    :} 
+                    T_RBRACKET
     ;
 
 
@@ -585,10 +599,12 @@ WhileStmt ::=       T_WHILE Expr:_1 {: ((MyParser) parser).doConditionCheck(_1);
     ;
 
 
-ForeachStmt ::=     T_FOREACH T_LPAREN Type:_type OptRef T_ID:_3 T_COLON Expr:_expr T_RPAREN
+Stmt ::=     T_FOREACH T_LPAREN Type:_type OptRef:_ref T_ID:_3 T_COLON Expr:_expr T_RPAREN
                     {:
                         ((MyParser) parser).DoBlockOpen();
-                        ((MyParser) parser).DoVarDecl (_3, _type, _expr);
+                        //May have to replace with do foreach?
+                        ((MyParser) parser).doForEachCheck (_3, _type, _ref, _expr);
+                        // ((MyParser) parser).DoVarDecl (_3, _type, _expr);
                     :}
                     CodeBlock
                     {:
@@ -857,11 +873,11 @@ IncDecOp ::=        T_PLUSPLUS
 
 UnarySign ::=       T_MINUS
                     {:
-                        RESULT = "-";
+                        RESULT = new UnaryOp("-");
                     :}
     |               T_PLUS
                     {:
-                        RESULT = "+";
+                        RESULT = new UnaryOp("+");
                     :}
     ;
 
@@ -874,9 +890,9 @@ Designator ::=      T_STAR Designator:_1
                     {:
                         RESULT = _1;
                     :}
-    |               UnarySign Designator:_2
+    |               UnarySign:_1 Designator:_2
                     {:
-                        RESULT = _2;
+                        RESULT = ((MyParser) parser).doUnarySign(_2, _1);
                     :}
     |               T_NOT Designator:_1
                     {:
@@ -911,9 +927,9 @@ Designator2 ::=     Designator2:_1 T_DOT T_ID:_3
                     {:
                         RESULT = ((MyParser) parser).DoDesignator2_Dot (_1, _3);
                     :}
-    |               Designator2:_1 T_LBRACKET Expr T_RBRACKET
+    |               Designator2:_1 T_LBRACKET Expr:_2 T_RBRACKET
                     {:
-                        RESULT = ((MyParser) parser).DoDesignator2_Array (_1);
+                        RESULT = ((MyParser) parser).DoDesignator2_Array (_1, _2);
                     :}
     |               Designator2:_1 T_ARROW T_ID
                     {:
