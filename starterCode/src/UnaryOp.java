@@ -38,15 +38,21 @@ class UnaryOp extends Operator
         }
 
         //Check for if it's numeric first if not, return that error
-        //This method is found in STO
-        Type aType = a.getType();
-
-        if ( !(aType.isNumeric()) || !(aType.isPointer()) ) {
-            return new ErrorSTO( Formatter.toString(ErrorMsg.error2_Type, aType.getName(), getName()) );
+        //check to see if sto is a funcsto, if so, we need to grab it's return type instead
+        Type aType;
+        if(a.isFunc()){
+            aType = ((FuncSTO) a).getReturnType();
+        }else{
+            //This method is found in STO
+            aType = a.getType();
         }
 
         if(!(a.isModLValue())){
             return new ErrorSTO( Formatter.toString(ErrorMsg.error2_Lval, getName()));
+        }
+
+        if ( !(aType.isNumeric()) && !(aType.isPointer()) ) {
+            return new ErrorSTO( Formatter.toString(ErrorMsg.error2_Type, aType.getName(), getName()) );
         }
 
         StringBuilder expr_builder = new StringBuilder();
