@@ -281,7 +281,6 @@ class MyParser extends parser
             return new ErrorSTO(id);
         }
         if(arraySizes.isEmpty()){
-            // System.out.println ("Returning Base Case of type:  " + type);
             return new VarSTO(id, type);
         }
         else{
@@ -289,7 +288,6 @@ class MyParser extends parser
             //constSTOs.
             if(arraySizes.firstElement().isError()){
                 // m_nNumErrors++;
-                // // System.out.println("printing here makeAnArray");
                 // m_errors.print(arraySizes.firstElement().getName());
                 return arraySizes.firstElement();
             }
@@ -298,7 +296,6 @@ class MyParser extends parser
             ConstSTO myconst = ((ConstSTO)arraySizes.firstElement()); 
             if(myconst.getType().isError()){
                 m_nNumErrors++;
-                // System.out.println("printing here 2 makeAnArray");
                 m_errors.print(myconst.getName());
                 return new ErrorSTO(myconst.getName());
             }
@@ -310,11 +307,9 @@ class MyParser extends parser
             if(recursedSTO.isError()){
                 return recursedSTO;
             }
-            // System.out.println("Type: " + recursedSTO.getType() + " \n Name: " + recursedSTO.getName());
             VarSTO myVarSTO = (VarSTO) recursedSTO;
             myArrayType.setNextLevel(myVarSTO);
             //the new varsto will be an non-mod lval, so addressable, but not modifiable
-            // System.out.println("returning recursion type: " + myArrayType.getName());
             return new VarSTO(id, myArrayType, false, true);
         }
     }
@@ -659,26 +654,13 @@ class MyParser extends parser
     //
     //----------------------------------------------------------------
     STO DoAssignExpr(STO stoDes, STO stoExpr)
-    {  
-// System.out.println ("-------------------------------------------------");
-// System.out.println ("stoExpr in DoAssignExpr: " + stoExpr);
-// System.out.println ("name: " + stoExpr.getName());
-// System.out.println ("type: " + stoExpr.getType());
-// System.out.println ();
-
+    {
         if (stoExpr.isError()) {
             return stoExpr;
         }
         if(stoDes.isError()){
             return stoDes;
         }
-
-// System.out.println ("-------------------------------------------------");
-// System.out.println ("stoDes in DoAssignExpr: " + stoDes);
-// System.out.println ("name: " + stoDes.getName());
-// System.out.println ("type: " + stoDes.getType());
-// System.out.println ("isModLValue: " + stoDes.isModLValue());
-// System.out.println ();
 
         if (!stoDes.isModLValue())
         {
@@ -689,7 +671,7 @@ class MyParser extends parser
         }
         Type lhs = stoDes.getType();
         Type rhs = stoExpr.getType();
-        
+
         if(!(rhs.isAssignableTo(lhs))){
             String errormsg = Formatter.toString(ErrorMsg.error3b_Assign, rhs.getName(), lhs.getName());
             m_nNumErrors++;
@@ -724,7 +706,6 @@ class MyParser extends parser
             return sto;
         }
 
-        System.out.println(sto);
         if (!sto.isFunc()) {
             m_nNumErrors++;
             m_errors.print(Formatter.toString(ErrorMsg.not_function, sto.getName()));
@@ -857,10 +838,6 @@ class MyParser extends parser
     //----------------------------------------------------------------
     STO DoDesignator2_Array(STO sto, STO expr)
     {
-        // System.out.println("------------------------------------------------");
-        // System.out.println("printing sto name here: " + sto.getName() + " \n type: " + sto.getType());
-        // System.out.println("type name: " + sto.getType().getName());
-        // System.out.println("");
         if(expr.isError()){
             return expr;
         }
@@ -1418,24 +1395,16 @@ class MyParser extends parser
             }
             //at this point, we are dealing with a pointer to a struct. check if the rhs of the
             //arrow (t_id) is in the struct.
-            if(!((StructType)stoPointer.getNextLevel()).hasField(t_id)){
+            StructType structType = (StructType)stoPointer.getNextLevel();
+            if(!structType.hasField(t_id)){
                 m_nNumErrors++;
                 m_errors.print(Formatter.toString(ErrorMsg.error14f_StructExp, t_id, 
                                                     ((StructType)stoPointer.getNextLevel()).getName()));
                 return new ErrorSTO(sto.getName());
+            } else {
+            // We have a field, return it for use.
+                return structType.getField(t_id);
             }
-
-// System.out.println(sto);
-            //everything's right, just pass in our exprsto
-            // if(!((StructType)stoPointer.getNextLevel()).getField(t_id).isFunc()){
-            //     return new ExprSTO(t_id, 
-            //                         ((StructType)stoPointer.getNextLevel()).getField(t_id).getType(),
-            //                         true,
-            //                         true);
-            // }
-            // else{
-                return sto;
-            // }
         }
     }
 
