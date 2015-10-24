@@ -13,7 +13,7 @@ class NullPointerType extends PointerType
 	//----------------------------------------------------------------
 	public NullPointerType()
 	{
-		super("NullPointer", 0);
+		super("nullptr", 4);
 	}
 
 	//----------------------------------------------------------------
@@ -25,12 +25,22 @@ class NullPointerType extends PointerType
 	// Check to see if the type is assignable to an type
 	//----------------------------------------------------------------
 	//TODO check if the Reference Compiler allows for assigning to nullptrs
-	public boolean isAssignableTo(Type t) { return true; }
+	public boolean isAssignableTo(Type t) { 
+		if(t.isPointer()){
+			return true;
+		} 
+		return false;
+	}
 
 	//----------------------------------------------------------------
 	// Check to see if the type is a Type
 	//----------------------------------------------------------------
 	//TODO REPLACE WITH ACTUAL 
-	public boolean isEquivalentTo(Type t) {return false;}
+	public boolean isEquivalentTo(Type t) {
+		if(t.isPointer()){
+			return true;
+		}
+		return false;
+	}
 
 }

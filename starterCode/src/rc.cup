@@ -135,9 +135,6 @@ non terminal
     WriteStmt,
     WritePairList,
     WritePair,
-    OptPointerList,
-    PointerList,
-    Pointer,
     //New stuff below here
     NewStmt,
     DeleteStmt,
@@ -183,7 +180,8 @@ non terminal Type
     StructType,
     Type,
     DecoratedType,
-    ReturnType
+    ReturnType,
+    Pointer
     ;
 
 non terminal Vector
@@ -194,7 +192,9 @@ non terminal Vector
     OptCtorCall,
     CtorCall,
     ArrayList,
-    OptArrayList
+    OptArrayList,
+    OptPointerList,
+    PointerList
     ;
 
 non terminal Boolean
@@ -316,10 +316,10 @@ FieldVarsList ::=   FieldVarDecl
     ;
 
 
-FieldVarDecl ::=    DecoratedType:_type T_ID:_name OptArrayList T_SEMI
+FieldVarDecl ::=    DecoratedType:_type T_ID:_name OptArrayList:_array T_SEMI
                     {:
                         // Check if the variable has already been declared
-                        ((MyParser) parser).doStructVarDecl(_type, _name);
+                        ((MyParser) parser).doStructVarDecl(_type, _name, _array);
                     :}
     ;
 
@@ -428,14 +428,14 @@ DecoratedType ::=   DecoratedBasicType:_1
                     :}
     |               StructType:_1 PointerList:_2
                     {:
-                        RESULT = _1;    // gotta do something here!
+                        RESULT = ((MyParser) parser).makeAPointer(_1, _2);;    // gotta do something here!
                     :}
     ;
 
 
 DecoratedBasicType ::= BasicType:_1 OptPointerList:_2
                     {:
-                        RESULT = _1;    // gotta do something here!
+                        RESULT = ((MyParser) parser).makeAPointer(_1, _2);    // gotta do something here!
                     :}
     ;
 
@@ -473,16 +473,30 @@ ReturnType ::=      Type:_1
     ;
 
 
-OptPointerList ::=  PointerList
+OptPointerList ::=  PointerList:_1
+                    {:
+                        RESULT = _1;
+                    :}
     |               /* empty */
     ;
 
-PointerList ::=     Pointer
-    |               PointerList Pointer
+PointerList ::=     Pointer:_2
+                    {:
+                        RESULT = new Vector();
+                        RESULT.addElement(_2);
+                    :}
+    |               PointerList:_1 Pointer:_2
+                    {:
+                        RESULT = _1;
+                        RESULT.addElement(_2);
+                    :}
     ;
 
 
 Pointer ::=         T_STAR
+                    {:
+                        RESULT = new PointerType();
+                    :}
     ;
 
 
@@ -939,11 +953,11 @@ UnarySign ::=       T_MINUS
 
 Designator ::=      T_STAR Designator:_1
                     {:
-                        RESULT = _1;
+                        RESULT = ((MyParser) parser).checkPointerValidity(_1);
                     :}
     |               T_AMPERSAND Designator:_1
                     {:
-                        RESULT = _1;
+                        RESULT = ((MyParser) parser).getAddressOf(_1);
                     :}
     |               UnarySign:_1 Designator:_2
                     {:
@@ -988,9 +1002,9 @@ Designator2 ::=     Designator2:_1 T_DOT T_ID:_3
                     {:
                         RESULT = ((MyParser) parser).DoDesignator2_Array (_1, _2);
                     :}
-    |               Designator2:_1 T_ARROW T_ID
+    |               Designator2:_1 T_ARROW T_ID:_2
                     {:
-                        RESULT = _1;
+                        RESULT = ((MyParser) parser).checkArrowValidity (_1, _2);
                     :}
     |               Designator2:_1 IncDecOp:_2
                     {:

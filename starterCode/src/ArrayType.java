@@ -63,7 +63,6 @@ class ArrayType extends CompositeType
 	//----------------------------------------------------------------
 	// Get name of this array
 	//----------------------------------------------------------------
-	//this may have to be getType?
 	public String getName(){
 		String name = "" + baseType.getName() + "[" + getCurrentDim() + "]";
 		VarSTO arry = getNextLevel();
