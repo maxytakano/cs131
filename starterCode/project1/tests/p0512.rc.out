@@ -1,5 +1,5 @@
-Error, "/tmp/cs131_testrunner_mz.qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_80frMF/file.rc": 
   Incompatible type bool to binary operator +, numeric expected.
-Error, "/tmp/cs131_testrunner_mz.qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_80frMF/file.rc": 
   Value of type void not assignable to variable of type int.
 Compile: failure.

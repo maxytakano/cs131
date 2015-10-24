@@ -1,11 +1,11 @@
-Error, "/tmp/cs131_testrunner_VJ_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_X5frMF/file.rc": 
   Initialization value of constant named cb not known at compile time.
-Error, "/tmp/cs131_testrunner_VJ_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_X5frMF/file.rc": 
   Incompatible types to operator !=:
     float*,
     int*;
   both must be of equivalent pointer type.
-Error, "/tmp/cs131_testrunner_VJ_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_X5frMF/file.rc": 
   Incompatible types to operator ==:
     int*,
     float*;

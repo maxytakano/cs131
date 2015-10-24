@@ -592,7 +592,11 @@ ParamList ::=       ParamDecl:_2
 
 ParamDecl ::=       Type:_type OptRef:_ref T_ID:_name OptArrayList:_arrays
                     {:
-                        RESULT = ((MyParser) parser).doParamDecl(_name, _type, _arrays, _ref);
+                        if (_arrays == null) {
+                            RESULT = new VarSTO(_name, _type, _ref);
+                        } else {
+                            RESULT = ((MyParser) parser).makeAnArray(_name, _type, _arrays);
+                        }
                     :}
     ;
 
@@ -717,8 +721,9 @@ NewStmt ::=         T_NEW Designator:_1 OptCtorCall:_2 T_SEMI
                         if (_2 != null) {
                             ((MyParser) parser).doNewCtorStatement(_1, _2);
                         } else {
-                            ((MyParser) parser).doNewStatement(_1);
+                            ((MyParser) parser).doNewStatement(_1, _2);
                         }
+                        // ((MyParser) parser).doNewCtorCall(_1, _2);
                     :}
     ;
 

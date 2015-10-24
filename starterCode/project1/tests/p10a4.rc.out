@@ -1,9 +1,9 @@
-Error, "/tmp/cs131_testrunner_DE_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_c3frMF/file.rc": 
   Incompatible type int[5] to binary operator +, numeric expected.
-Error, "/tmp/cs131_testrunner_DE_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_c3frMF/file.rc": 
   Incompatible type float[1] to operator ++, equivalent to int, float, or pointer expected.
-Error, "/tmp/cs131_testrunner_DE_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_c3frMF/file.rc": 
   Incompatible type float[1] to operator --, equivalent to int, float, or pointer expected.
-Error, "/tmp/cs131_testrunner_DE_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_c3frMF/file.rc": 
   Incompatible type float[1] to unary operator !, equivalent to bool expected.
 Compile: failure.

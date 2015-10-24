@@ -1,11 +1,11 @@
-Error, "/tmp/cs131_testrunner_IA_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_q0frMF/file.rc": 
   Incompatible type bool to operator ++, equivalent to int, float, or pointer expected.
-Error, "/tmp/cs131_testrunner_IA_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_q0frMF/file.rc": 
   Incompatible type bool to operator ++, equivalent to int, float, or pointer expected.
-Error, "/tmp/cs131_testrunner_IA_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_q0frMF/file.rc": 
   Incompatible type bool to operator --, equivalent to int, float, or pointer expected.
-Error, "/tmp/cs131_testrunner_IA_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_q0frMF/file.rc": 
   Incompatible type bool to operator --, equivalent to int, float, or pointer expected.
-Error, "/tmp/cs131_testrunner_IA_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_q0frMF/file.rc": 
   Operand to ++ is not a modifiable L-value.
 Compile: failure.

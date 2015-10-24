@@ -1,5 +1,5 @@
-Error, "/tmp/cs131_testrunner_uI_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_74frMF/file.rc": 
   Value of type bool not assignable to variable of type int.
-Error, "/tmp/cs131_testrunner_uI_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_74frMF/file.rc": 
   Value of type bool not assignable to variable of type int.
 Compile: failure.

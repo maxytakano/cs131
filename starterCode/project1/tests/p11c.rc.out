@@ -1,5 +1,5 @@
-Error, "/tmp/cs131_testrunner_lF_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_z3frMF/file.rc": 
   Index value of 42 is outside legal range [0,10).
-Error, "/tmp/cs131_testrunner_lF_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_z3frMF/file.rc": 
   Index value of -42 is outside legal range [0,10).
 Compile: failure.

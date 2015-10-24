@@ -1,9 +1,9 @@
-Error, "/tmp/cs131_testrunner_eB_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_W0frMF/file.rc": 
   bool required for conditional test, float found.
-Error, "/tmp/cs131_testrunner_eB_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_W0frMF/file.rc": 
   bool required for conditional test, float found.
-Error, "/tmp/cs131_testrunner_eB_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_W0frMF/file.rc": 
   bool required for conditional test, float found.
-Error, "/tmp/cs131_testrunner_eB_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_W0frMF/file.rc": 
   bool required for conditional test, float found.
 Compile: failure.

@@ -1,11 +1,11 @@
-Error, "/tmp/cs131_testrunner_WA_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_E0frMF/file.rc": 
   Left-hand operand is not assignable (not a modifiable L-value).
-Error, "/tmp/cs131_testrunner_WA_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_E0frMF/file.rc": 
   Left-hand operand is not assignable (not a modifiable L-value).
-Error, "/tmp/cs131_testrunner_WA_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_E0frMF/file.rc": 
   Left-hand operand is not assignable (not a modifiable L-value).
-Error, "/tmp/cs131_testrunner_WA_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_E0frMF/file.rc": 
   Left-hand operand is not assignable (not a modifiable L-value).
-Error, "/tmp/cs131_testrunner_WA_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_E0frMF/file.rc": 
   Left-hand operand is not assignable (not a modifiable L-value).
 Compile: failure.

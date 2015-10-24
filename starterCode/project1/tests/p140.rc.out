@@ -1,13 +1,13 @@
-Error, "/tmp/cs131_testrunner_qH_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_A4frMF/file.rc": 
   Duplicate declaration of overloaded function foostruct.
-Error, "/tmp/cs131_testrunner_qH_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_A4frMF/file.rc": 
   Illegal call to overloaded function foostruct.
-Error, "/tmp/cs131_testrunner_qH_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_A4frMF/file.rc": 
   Argument of type MYS not assignable to value parameter bart, of type MYS*.
-Error, "/tmp/cs131_testrunner_qH_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_A4frMF/file.rc": 
   Argument of type MYS* not equivalent to reference parameter lisa, of type MYS.
-Error, "/tmp/cs131_testrunner_qH_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_A4frMF/file.rc": 
   Number of arguments (3) differs from number of parameters (2).
-Error, "/tmp/cs131_testrunner_qH_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_A4frMF/file.rc": 
   Number of arguments (3) differs from number of parameters (2).
 Compile: failure.

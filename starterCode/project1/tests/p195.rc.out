@@ -1,19 +1,19 @@
-Error, "/tmp/cs131_testrunner_wK_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_f6frMF/file.rc": 
   Argument of type bool[4] not assignable to value parameter p2, of type bool*.
-Error, "/tmp/cs131_testrunner_wK_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_f6frMF/file.rc": 
   Left-hand operand is not assignable (not a modifiable L-value).
-Error, "/tmp/cs131_testrunner_wK_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_f6frMF/file.rc": 
   Invalid operand to sizeof. Not a type or not addressable.
-Error, "/tmp/cs131_testrunner_wK_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_f6frMF/file.rc": 
   Invalid operand to sizeof. Not a type or not addressable.
-Error, "/tmp/cs131_testrunner_wK_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_f6frMF/file.rc": 
   Invalid operand to sizeof. Not a type or not addressable.
-Error, "/tmp/cs131_testrunner_wK_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_f6frMF/file.rc": 
   Index value of 4 is outside legal range [0,1).
-Error, "/tmp/cs131_testrunner_wK_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_f6frMF/file.rc": 
   Index value of 400 is outside legal range [0,1).
-Error, "/tmp/cs131_testrunner_wK_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_f6frMF/file.rc": 
   Index value of 400 is outside legal range [0,1).
-Error, "/tmp/cs131_testrunner_wK_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_f6frMF/file.rc": 
   Index value of 4000 is outside legal range [0,1).
 Compile: failure.

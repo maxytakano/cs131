@@ -1,13 +1,13 @@
-Error, "/tmp/cs131_testrunner_6B_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_W1frMF/file.rc": 
   Return required in function, none found.
-Error, "/tmp/cs131_testrunner_6B_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_W1frMF/file.rc": 
   Return in function requires a result expression, none found.
-Error, "/tmp/cs131_testrunner_6B_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_W1frMF/file.rc": 
   Return required in function, none found.
-Error, "/tmp/cs131_testrunner_6B_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_W1frMF/file.rc": 
   Return required in function, none found.
-Error, "/tmp/cs131_testrunner_6B_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_W1frMF/file.rc": 
   Return required in function, none found.
-Error, "/tmp/cs131_testrunner_6B_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_W1frMF/file.rc": 
   Return required in function, none found.
 Compile: failure.

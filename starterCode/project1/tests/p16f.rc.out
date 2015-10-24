@@ -1,25 +1,25 @@
-Error, "/tmp/cs131_testrunner_uJ_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_L5frMF/file.rc": 
   Type of new's operand must be of pointer type, int found.
-Error, "/tmp/cs131_testrunner_uJ_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_L5frMF/file.rc": 
   Type of delete's operand must be of pointer type, int found.
-Error, "/tmp/cs131_testrunner_uJ_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_L5frMF/file.rc": 
   Operand to "new" is not a modifiable L-value.
-Error, "/tmp/cs131_testrunner_uJ_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_L5frMF/file.rc": 
   Operand to "delete" is not a modifiable L-value.
-Error, "/tmp/cs131_testrunner_uJ_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_L5frMF/file.rc": 
   Operand to "new" is not a modifiable L-value.
-Error, "/tmp/cs131_testrunner_uJ_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_L5frMF/file.rc": 
   Operand to "delete" is not a modifiable L-value.
-Error, "/tmp/cs131_testrunner_uJ_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_L5frMF/file.rc": 
   Number of arguments (0) differs from number of parameters (1).
-Error, "/tmp/cs131_testrunner_uJ_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_L5frMF/file.rc": 
   Number of arguments (1) differs from number of parameters (0).
-Error, "/tmp/cs131_testrunner_uJ_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_L5frMF/file.rc": 
   Argument of type bool not assignable to value parameter x, of type float.
-Error, "/tmp/cs131_testrunner_uJ_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_L5frMF/file.rc": 
   Number of arguments (0) differs from number of parameters (1).
-Error, "/tmp/cs131_testrunner_uJ_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_L5frMF/file.rc": 
   Type of new's operand must be of pointer type, MYS_B found.
-Error, "/tmp/cs131_testrunner_uJ_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_L5frMF/file.rc": 
   Type of delete's operand must be of pointer type, MYS_B found.
 Compile: failure.

@@ -1,7 +1,7 @@
-Error, "/tmp/cs131_testrunner_ML_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_66frMF/file.rc": 
   Argument passed to reference parameter x (type int) is not a modifiable L-value.
-Error, "/tmp/cs131_testrunner_ML_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_66frMF/file.rc": 
   Non-addressable argument of type int to address-of operator.
-Error, "/tmp/cs131_testrunner_ML_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_66frMF/file.rc": 
   Invalid type cast. Type int[10] to type float is not supported.
 Compile: failure.

@@ -1,9 +1,9 @@
-Error, "/tmp/cs131_testrunner_mL_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_K6frMF/file.rc": 
   Left-hand operand is not assignable (not a modifiable L-value).
-Error, "/tmp/cs131_testrunner_mL_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_K6frMF/file.rc": 
   Argument passed to reference parameter y (type int) is not a modifiable L-value.
-Error, "/tmp/cs131_testrunner_mL_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_K6frMF/file.rc": 
   Non-addressable argument of type int to address-of operator.
-Error, "/tmp/cs131_testrunner_mL_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_K6frMF/file.rc": 
   Invalid type cast. Type STRUCT to type int is not supported.
 Compile: failure.

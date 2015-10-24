@@ -1,15 +1,15 @@
-Error, "/tmp/cs131_testrunner_wI_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_84frMF/file.rc": 
   Initialization value of type int** not assignable to constant/variable of type int*.
-Error, "/tmp/cs131_testrunner_wI_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_84frMF/file.rc": 
   Incompatible type int to unary dereference operator *, pointer expected.
-Error, "/tmp/cs131_testrunner_wI_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_84frMF/file.rc": 
   Incompatible type int to unary dereference operator *, pointer expected.
-Error, "/tmp/cs131_testrunner_wI_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_84frMF/file.rc": 
   Value of type int* not assignable to variable of type float*.
-Error, "/tmp/cs131_testrunner_wI_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_84frMF/file.rc": 
   Value of type int* not assignable to variable of type float*.
-Error, "/tmp/cs131_testrunner_wI_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_84frMF/file.rc": 
   Value of type int not assignable to variable of type float*.
-Error, "/tmp/cs131_testrunner_wI_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_84frMF/file.rc": 
   Incompatible type int to unary dereference operator *, pointer expected.
 Compile: failure.

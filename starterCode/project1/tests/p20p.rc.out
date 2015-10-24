@@ -1,15 +1,15 @@
-Error, "/tmp/cs131_testrunner_6L_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_j7frMF/file.rc": 
   Invalid type cast. Type nullptr to type int* is not supported.
-Error, "/tmp/cs131_testrunner_6L_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_j7frMF/file.rc": 
   Invalid type cast. Type MY to type bool* is not supported.
-Error, "/tmp/cs131_testrunner_6L_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_j7frMF/file.rc": 
   Arithmetic exception occurred during constant folding.
-Error, "/tmp/cs131_testrunner_6L_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_j7frMF/file.rc": 
   Value of index expression not known at compile time.
-Error, "/tmp/cs131_testrunner_6L_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_j7frMF/file.rc": 
   Value of index expression not known at compile time.
-Error, "/tmp/cs131_testrunner_6L_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_j7frMF/file.rc": 
   Value of index expression not known at compile time.
-Error, "/tmp/cs131_testrunner_6L_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_j7frMF/file.rc": 
   Return required in function, none found.
 Compile: failure.

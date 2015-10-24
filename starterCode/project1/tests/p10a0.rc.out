@@ -1,27 +1,27 @@
-Error, "/tmp/cs131_testrunner_vE_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_.2frMF/file.rc": 
   Initialization value of type float[10] not assignable to constant/variable of type float.
-Error, "/tmp/cs131_testrunner_vE_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_.2frMF/file.rc": 
   Initialization value of type float[10] not assignable to constant/variable of type bool.
-Error, "/tmp/cs131_testrunner_vE_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_.2frMF/file.rc": 
   Initialization value of type float[10] not assignable to constant/variable of type int.
-Error, "/tmp/cs131_testrunner_vE_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_.2frMF/file.rc": 
   Initialization value of type int[10] not assignable to constant/variable of type float.
-Error, "/tmp/cs131_testrunner_vE_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_.2frMF/file.rc": 
   Initialization value of type int[10] not assignable to constant/variable of type bool.
-Error, "/tmp/cs131_testrunner_vE_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_.2frMF/file.rc": 
   Initialization value of type int[10] not assignable to constant/variable of type int.
-Error, "/tmp/cs131_testrunner_vE_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_.2frMF/file.rc": 
   Initialization value of type bool[10] not assignable to constant/variable of type float.
-Error, "/tmp/cs131_testrunner_vE_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_.2frMF/file.rc": 
   Initialization value of type bool[10] not assignable to constant/variable of type bool.
-Error, "/tmp/cs131_testrunner_vE_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_.2frMF/file.rc": 
   Initialization value of type bool[10] not assignable to constant/variable of type int.
-Error, "/tmp/cs131_testrunner_vE_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_.2frMF/file.rc": 
   Left-hand operand is not assignable (not a modifiable L-value).
-Error, "/tmp/cs131_testrunner_vE_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_.2frMF/file.rc": 
   Left-hand operand is not assignable (not a modifiable L-value).
-Error, "/tmp/cs131_testrunner_vE_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_.2frMF/file.rc": 
   Left-hand operand is not assignable (not a modifiable L-value).
-Error, "/tmp/cs131_testrunner_vE_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_.2frMF/file.rc": 
   Left-hand operand is not assignable (not a modifiable L-value).
 Compile: failure.

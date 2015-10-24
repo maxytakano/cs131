@@ -1,3 +1,3 @@
-Error, "/tmp/cs131_testrunner_iE_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_42frMF/file.rc": 
   Index expression value (-10) in array declaration must be > 0.
 Compile: failure.

@@ -1,7 +1,7 @@
-Error, "/tmp/cs131_testrunner_SA_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_B0frMF/file.rc": 
   Incompatible type int[23] to operator ++, equivalent to int, float, or pointer expected.
-Error, "/tmp/cs131_testrunner_SA_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_B0frMF/file.rc": 
   Incompatible type bool to operator --, equivalent to int, float, or pointer expected.
-Error, "/tmp/cs131_testrunner_SA_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_B0frMF/file.rc": 
   Incompatible type bool to operator --, equivalent to int, float, or pointer expected.
 Compile: failure.

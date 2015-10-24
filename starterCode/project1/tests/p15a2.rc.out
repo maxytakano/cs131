@@ -1,7 +1,7 @@
-Error, "/tmp/cs131_testrunner_AI_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner__4frMF/file.rc": 
   Incompatible type int to unary dereference operator *, pointer expected.
-Error, "/tmp/cs131_testrunner_AI_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner__4frMF/file.rc": 
   Incompatible type bool to unary dereference operator *, pointer expected.
-Error, "/tmp/cs131_testrunner_AI_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner__4frMF/file.rc": 
   Incompatible type float to unary dereference operator *, pointer expected.
 Compile: failure.

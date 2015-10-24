@@ -1,5 +1,5 @@
-Error, "/tmp/cs131_testrunner_OH_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_M4frMF/file.rc": 
   undeclared identifier 'x'.
-Error, "/tmp/cs131_testrunner_OH_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_M4frMF/file.rc": 
   undeclared identifier 'y'.
 Compile: failure.

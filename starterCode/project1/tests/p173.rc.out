@@ -1,11 +1,11 @@
-Error, "/tmp/cs131_testrunner_CJ_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_P5frMF/file.rc": 
   Value of type int* not assignable to variable of type STRUCT*.
-Error, "/tmp/cs131_testrunner_CJ_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_P5frMF/file.rc": 
   Value of type bool* not assignable to variable of type int*.
-Error, "/tmp/cs131_testrunner_CJ_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_P5frMF/file.rc": 
   Value of type int** not assignable to variable of type int*.
-Error, "/tmp/cs131_testrunner_CJ_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_P5frMF/file.rc": 
   Value of type int not assignable to variable of type int*.
-Error, "/tmp/cs131_testrunner_CJ_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_P5frMF/file.rc": 
   Value of type int* not assignable to variable of type int.
 Compile: failure.

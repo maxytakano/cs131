@@ -1,5 +1,5 @@
-Error, "/tmp/cs131_testrunner_QC_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_j2frMF/file.rc": 
   Initialization value of constant named k not known at compile time.
-Error, "/tmp/cs131_testrunner_QC_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_j2frMF/file.rc": 
   Initialization value of constant named z not known at compile time.
 Compile: failure.

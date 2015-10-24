@@ -1,9 +1,9 @@
-Error, "/tmp/cs131_testrunner_RG_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_i4frMF/file.rc": 
   Field x declared second time in struct.
-Error, "/tmp/cs131_testrunner_RG_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_i4frMF/file.rc": 
   Field x declared second time in struct.
-Error, "/tmp/cs131_testrunner_RG_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_i4frMF/file.rc": 
   Field y declared second time in struct.
-Error, "/tmp/cs131_testrunner_RG_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_i4frMF/file.rc": 
   Duplicate declaration of overloaded function foo.
 Compile: failure.

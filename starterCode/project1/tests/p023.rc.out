@@ -1,19 +1,19 @@
-Error, "/tmp/cs131_testrunner_KA_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_s0frMF/file.rc": 
   Operand to ++ is not a modifiable L-value.
-Error, "/tmp/cs131_testrunner_KA_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_s0frMF/file.rc": 
   Operand to ++ is not a modifiable L-value.
-Error, "/tmp/cs131_testrunner_KA_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_s0frMF/file.rc": 
   Operand to -- is not a modifiable L-value.
-Error, "/tmp/cs131_testrunner_KA_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_s0frMF/file.rc": 
   Operand to -- is not a modifiable L-value.
-Error, "/tmp/cs131_testrunner_KA_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_s0frMF/file.rc": 
   Incompatible type bool to operator ++, equivalent to int, float, or pointer expected.
-Error, "/tmp/cs131_testrunner_KA_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_s0frMF/file.rc": 
   Incompatible type bool to operator --, equivalent to int, float, or pointer expected.
-Error, "/tmp/cs131_testrunner_KA_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_s0frMF/file.rc": 
   Operand to ++ is not a modifiable L-value.
-Error, "/tmp/cs131_testrunner_KA_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_s0frMF/file.rc": 
   Operand to -- is not a modifiable L-value.
-Error, "/tmp/cs131_testrunner_KA_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_s0frMF/file.rc": 
   Operand to -- is not a modifiable L-value.
 Compile: failure.

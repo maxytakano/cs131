@@ -1,27 +1,27 @@
-Error, "/tmp/cs131_testrunner_zE_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_a3frMF/file.rc": 
   Value of index expression not known at compile time.
-Error, "/tmp/cs131_testrunner_zE_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_a3frMF/file.rc": 
   Value of index expression not known at compile time.
-Error, "/tmp/cs131_testrunner_zE_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_a3frMF/file.rc": 
   Value of index expression not known at compile time.
-Error, "/tmp/cs131_testrunner_zE_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_a3frMF/file.rc": 
   Index expression value (0) in array declaration must be > 0.
-Error, "/tmp/cs131_testrunner_zE_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_a3frMF/file.rc": 
   Index expression value (-1) in array declaration must be > 0.
-Error, "/tmp/cs131_testrunner_zE_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_a3frMF/file.rc": 
   Index expression value (0) in array declaration must be > 0.
-Error, "/tmp/cs131_testrunner_zE_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_a3frMF/file.rc": 
   Incompatible type int to unary operator !, equivalent to bool expected.
-Error, "/tmp/cs131_testrunner_zE_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_a3frMF/file.rc": 
   Operand to ++ is not a modifiable L-value.
-Error, "/tmp/cs131_testrunner_zE_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_a3frMF/file.rc": 
   Left-hand operand is not assignable (not a modifiable L-value).
-Error, "/tmp/cs131_testrunner_zE_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_a3frMF/file.rc": 
   Index expression type (float) in array declaration not equivalent to int.
-Error, "/tmp/cs131_testrunner_zE_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_a3frMF/file.rc": 
   Index expression type (bool) in array declaration not equivalent to int.
-Error, "/tmp/cs131_testrunner_zE_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_a3frMF/file.rc": 
   Incompatible type bool to binary operator +, numeric expected.
-Error, "/tmp/cs131_testrunner_zE_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_a3frMF/file.rc": 
   redeclared identifier 'e'.
 Compile: failure.

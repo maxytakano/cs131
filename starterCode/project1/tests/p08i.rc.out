@@ -1,13 +1,13 @@
-Error, "/tmp/cs131_testrunner_CD_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_J2frMF/file.rc": 
   Initialization value of type float not assignable to constant/variable of type int.
-Error, "/tmp/cs131_testrunner_CD_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_J2frMF/file.rc": 
   Arithmetic exception occurred during constant folding.
-Error, "/tmp/cs131_testrunner_CD_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_J2frMF/file.rc": 
   Arithmetic exception occurred during constant folding.
-Error, "/tmp/cs131_testrunner_CD_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_J2frMF/file.rc": 
   Operand to ++ is not a modifiable L-value.
-Error, "/tmp/cs131_testrunner_CD_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_J2frMF/file.rc": 
   Left-hand operand is not assignable (not a modifiable L-value).
-Error, "/tmp/cs131_testrunner_CD_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_J2frMF/file.rc": 
   Initialization value of type bool not assignable to constant/variable of type int.
 Compile: failure.

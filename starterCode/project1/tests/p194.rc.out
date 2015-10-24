@@ -1,7 +1,7 @@
-Error, "/tmp/cs131_testrunner_tK_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_e6frMF/file.rc": 
   Invalid operand to sizeof. Not a type or not addressable.
-Error, "/tmp/cs131_testrunner_tK_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_e6frMF/file.rc": 
   Invalid operand to sizeof. Not a type or not addressable.
-Error, "/tmp/cs131_testrunner_tK_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_e6frMF/file.rc": 
   Invalid operand to sizeof. Not a type or not addressable.
 Compile: failure.

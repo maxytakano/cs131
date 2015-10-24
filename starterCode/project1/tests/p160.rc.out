@@ -1,13 +1,13 @@
-Error, "/tmp/cs131_testrunner_6I_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_p5frMF/file.rc": 
   Operand to "delete" is not a modifiable L-value.
-Error, "/tmp/cs131_testrunner_6I_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_p5frMF/file.rc": 
   Operand to "delete" is not a modifiable L-value.
-Error, "/tmp/cs131_testrunner_6I_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_p5frMF/file.rc": 
   Type of delete's operand must be of pointer type, int found.
-Error, "/tmp/cs131_testrunner_6I_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_p5frMF/file.rc": 
   Operand to "new" is not a modifiable L-value.
-Error, "/tmp/cs131_testrunner_6I_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_p5frMF/file.rc": 
   Operand to "new" is not a modifiable L-value.
-Error, "/tmp/cs131_testrunner_6I_qMF/file.rc": 
+Error, "/tmp/cs131_testrunner_p5frMF/file.rc": 
   Type of new's operand must be of pointer type, int found.
 Compile: failure.
