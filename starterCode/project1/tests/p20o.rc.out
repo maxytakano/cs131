@@ -1,13 +1,13 @@
-Error, "/tmp/cs131_testrunner_aCTaux/file.rc", line 6: 
+Error, "/tmp/cs131_testrunner_3L_qMF/file.rc": 
   Invalid type cast. Type nullptr to type int* is not supported.
-Error, "/tmp/cs131_testrunner_aCTaux/file.rc", line 7: 
+Error, "/tmp/cs131_testrunner_3L_qMF/file.rc": 
   Invalid type cast. Type nullptr to type float* is not supported.
-Error, "/tmp/cs131_testrunner_aCTaux/file.rc", line 8: 
+Error, "/tmp/cs131_testrunner_3L_qMF/file.rc": 
   Invalid type cast. Type nullptr to type bool* is not supported.
-Error, "/tmp/cs131_testrunner_aCTaux/file.rc", line 9: 
+Error, "/tmp/cs131_testrunner_3L_qMF/file.rc": 
   Invalid type cast. Type nullptr to type int is not supported.
-Error, "/tmp/cs131_testrunner_aCTaux/file.rc", line 10: 
+Error, "/tmp/cs131_testrunner_3L_qMF/file.rc": 
   Invalid type cast. Type nullptr to type float is not supported.
-Error, "/tmp/cs131_testrunner_aCTaux/file.rc", line 11: 
+Error, "/tmp/cs131_testrunner_3L_qMF/file.rc": 
   Invalid type cast. Type nullptr to type bool is not supported.
 Compile: failure.

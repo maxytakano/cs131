@@ -1,4 +1,4 @@
-Error, "/tmp/cs131_testrunner_6vTaux/file.rc", line 6: 
+Error, "/tmp/cs131_testrunner_BA_qMF/file.rc": 
   Incompatible types to operator: bool != int;
   both must be numeric, or both equivalent to bool.
 Compile: failure.

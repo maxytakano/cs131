@@ -1,3 +1,3 @@
-Error, "/tmp/cs131_testrunner_rATaux/file.rc", line 11: 
+Error, "/tmp/cs131_testrunner_YH_qMF/file.rc": 
   Referenced field f2 not found in type REC.
 Compile: failure.

@@ -1,17 +1,17 @@
-Error, "/tmp/cs131_testrunner_wATaux/file.rc", line 17: 
+Error, "/tmp/cs131_testrunner_9H_qMF/file.rc": 
   Number of arguments (2) differs from number of parameters (0).
-Error, "/tmp/cs131_testrunner_wATaux/file.rc", line 24: 
+Error, "/tmp/cs131_testrunner_9H_qMF/file.rc": 
   Number of arguments (0) differs from number of parameters (1).
-Error, "/tmp/cs131_testrunner_wATaux/file.rc", line 25: 
+Error, "/tmp/cs131_testrunner_9H_qMF/file.rc": 
   Number of arguments (0) differs from number of parameters (1).
-Error, "/tmp/cs131_testrunner_wATaux/file.rc", line 27: 
+Error, "/tmp/cs131_testrunner_9H_qMF/file.rc": 
   Argument of type bool not assignable to value parameter x, of type float.
-Error, "/tmp/cs131_testrunner_wATaux/file.rc", line 28: 
+Error, "/tmp/cs131_testrunner_9H_qMF/file.rc": 
   Number of arguments (0) differs from number of parameters (1).
-Error, "/tmp/cs131_testrunner_wATaux/file.rc", line 32: 
+Error, "/tmp/cs131_testrunner_9H_qMF/file.rc": 
   Illegal call to overloaded function MYS_C.
-Error, "/tmp/cs131_testrunner_wATaux/file.rc", line 34: 
+Error, "/tmp/cs131_testrunner_9H_qMF/file.rc": 
   Illegal call to overloaded function MYS_C.
-Error, "/tmp/cs131_testrunner_wATaux/file.rc", line 35: 
+Error, "/tmp/cs131_testrunner_9H_qMF/file.rc": 
   Illegal call to overloaded function MYS_C.
 Compile: failure.

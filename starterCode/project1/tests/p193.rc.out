@@ -1,17 +1,17 @@
-Error, "/tmp/cs131_testrunner_CBTaux/file.rc", line 12: 
+Error, "/tmp/cs131_testrunner_rK_qMF/file.rc": 
   Index value of 4 is outside legal range [0,1).
-Error, "/tmp/cs131_testrunner_CBTaux/file.rc", line 13: 
+Error, "/tmp/cs131_testrunner_rK_qMF/file.rc": 
   Index value of 8 is outside legal range [0,1).
-Error, "/tmp/cs131_testrunner_CBTaux/file.rc", line 14: 
+Error, "/tmp/cs131_testrunner_rK_qMF/file.rc": 
   Index value of 4 is outside legal range [0,1).
-Error, "/tmp/cs131_testrunner_CBTaux/file.rc", line 15: 
+Error, "/tmp/cs131_testrunner_rK_qMF/file.rc": 
   Index value of 12 is outside legal range [0,1).
-Error, "/tmp/cs131_testrunner_CBTaux/file.rc", line 16: 
+Error, "/tmp/cs131_testrunner_rK_qMF/file.rc": 
   Index value of 4 is outside legal range [0,1).
-Error, "/tmp/cs131_testrunner_CBTaux/file.rc", line 17: 
+Error, "/tmp/cs131_testrunner_rK_qMF/file.rc": 
   Index value of 4 is outside legal range [0,1).
-Error, "/tmp/cs131_testrunner_CBTaux/file.rc", line 18: 
+Error, "/tmp/cs131_testrunner_rK_qMF/file.rc": 
   Index value of 16 is outside legal range [0,1).
-Error, "/tmp/cs131_testrunner_CBTaux/file.rc", line 19: 
+Error, "/tmp/cs131_testrunner_rK_qMF/file.rc": 
   Index value of 8 is outside legal range [0,1).
 Compile: failure.

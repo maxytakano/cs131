@@ -1,3 +1,0 @@
-Error, "/tmp/cs131_testrunner_vETaux/file.rc", line 6: 
-  Type of return expression (int), not assignment compatible with function's return type (void).
-Compile: failure.

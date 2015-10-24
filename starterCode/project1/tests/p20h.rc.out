@@ -1,3 +1,3 @@
-Error, "/tmp/cs131_testrunner_5BTaux/file.rc", line 14: 
+Error, "/tmp/cs131_testrunner_KL_qMF/file.rc": 
   Invalid type cast. Type MYSTRUCT to type FOOSTRUCT* is not supported.
 Compile: failure.

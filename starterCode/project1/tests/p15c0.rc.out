@@ -1,5 +1,5 @@
-Error, "/tmp/cs131_testrunner_SATaux/file.rc", line 4: 
+Error, "/tmp/cs131_testrunner_SI_qMF/file.rc": 
   Initialization value of type int* not assignable to constant/variable of type bool*.
-Error, "/tmp/cs131_testrunner_SATaux/file.rc", line 5: 
+Error, "/tmp/cs131_testrunner_SI_qMF/file.rc": 
   Initialization value of type int[4] not assignable to constant/variable of type bool*.
 Compile: failure.

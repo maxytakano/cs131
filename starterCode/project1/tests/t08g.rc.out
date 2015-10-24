@@ -1,3 +1,0 @@
-Error, "/tmp/cs131_testrunner_eFTaux/file.rc", line 4: 
-  Incompatible type float to unary operator !, equivalent to bool expected.
-Compile: failure.

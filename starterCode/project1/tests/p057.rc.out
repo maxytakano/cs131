@@ -1,21 +1,21 @@
-Error, "/tmp/cs131_testrunner_YwTaux/file.rc", line 21: 
+Error, "/tmp/cs131_testrunner_yz.qMF/file.rc": 
   Argument of type bool not equivalent to reference parameter c, of type float.
-Error, "/tmp/cs131_testrunner_YwTaux/file.rc", line 22: 
+Error, "/tmp/cs131_testrunner_yz.qMF/file.rc": 
   Incompatible type bool to binary operator +, numeric expected.
-Error, "/tmp/cs131_testrunner_YwTaux/file.rc", line 23: 
+Error, "/tmp/cs131_testrunner_yz.qMF/file.rc": 
   Argument of type int not equivalent to reference parameter b, of type float.
-Error, "/tmp/cs131_testrunner_YwTaux/file.rc", line 24: 
+Error, "/tmp/cs131_testrunner_yz.qMF/file.rc": 
   Number of arguments (2) differs from number of parameters (3).
-Error, "/tmp/cs131_testrunner_YwTaux/file.rc", line 25: 
+Error, "/tmp/cs131_testrunner_yz.qMF/file.rc": 
   Argument of type int not equivalent to reference parameter c, of type float.
-Error, "/tmp/cs131_testrunner_YwTaux/file.rc", line 26: 
+Error, "/tmp/cs131_testrunner_yz.qMF/file.rc": 
   Argument of type bool not assignable to value parameter a, of type float.
-Error, "/tmp/cs131_testrunner_YwTaux/file.rc", line 26: 
+Error, "/tmp/cs131_testrunner_yz.qMF/file.rc": 
   Argument of type int not equivalent to reference parameter b, of type float.
-Error, "/tmp/cs131_testrunner_YwTaux/file.rc", line 26: 
+Error, "/tmp/cs131_testrunner_yz.qMF/file.rc": 
   Argument of type int not equivalent to reference parameter c, of type float.
-Error, "/tmp/cs131_testrunner_YwTaux/file.rc", line 27: 
+Error, "/tmp/cs131_testrunner_yz.qMF/file.rc": 
   Argument passed to reference parameter b (type float) is not a modifiable L-value.
-Error, "/tmp/cs131_testrunner_YwTaux/file.rc", line 27: 
+Error, "/tmp/cs131_testrunner_yz.qMF/file.rc": 
   Argument passed to reference parameter c (type float) is not a modifiable L-value.
 Compile: failure.

@@ -1,5 +1,5 @@
-Error, "/tmp/cs131_testrunner_nIaqMF/file.rc": 
+Error, "/tmp/cs131_testrunner_iC_qMF/file.rc": 
   Incompatible type bool to binary operator +, numeric expected.
-Error, "/tmp/cs131_testrunner_nIaqMF/file.rc": 
+Error, "/tmp/cs131_testrunner_iC_qMF/file.rc": 
   Incompatible type bool to binary operator &, equivalent to int expected.
 Compile: failure.

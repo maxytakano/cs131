@@ -1,7 +1,7 @@
-Error, "/tmp/cs131_testrunner_8BTaux/file.rc", line 9: 
+Error, "/tmp/cs131_testrunner_QL_qMF/file.rc": 
   Value of index expression not known at compile time.
-Error, "/tmp/cs131_testrunner_8BTaux/file.rc", line 10: 
+Error, "/tmp/cs131_testrunner_QL_qMF/file.rc": 
   Value of index expression not known at compile time.
-Error, "/tmp/cs131_testrunner_8BTaux/file.rc", line 11: 
+Error, "/tmp/cs131_testrunner_QL_qMF/file.rc": 
   Value of index expression not known at compile time.
 Compile: failure.

@@ -1,25 +1,25 @@
-Error, "/tmp/cs131_testrunner__xTaux/file.rc", line 10: 
+Error, "/tmp/cs131_testrunner_bD_qMF/file.rc": 
   Initialization value of constant named x6 not known at compile time.
-Error, "/tmp/cs131_testrunner__xTaux/file.rc", line 11: 
+Error, "/tmp/cs131_testrunner_bD_qMF/file.rc": 
   Initialization value of constant named x7 not known at compile time.
-Error, "/tmp/cs131_testrunner__xTaux/file.rc", line 12: 
+Error, "/tmp/cs131_testrunner_bD_qMF/file.rc": 
   Initialization value of constant named x8 not known at compile time.
-Error, "/tmp/cs131_testrunner__xTaux/file.rc", line 32: 
+Error, "/tmp/cs131_testrunner_bD_qMF/file.rc": 
   Initialization value of constant named fail1 not known at compile time.
-Error, "/tmp/cs131_testrunner__xTaux/file.rc", line 33: 
+Error, "/tmp/cs131_testrunner_bD_qMF/file.rc": 
   Initialization value of constant named fail2 not known at compile time.
-Error, "/tmp/cs131_testrunner__xTaux/file.rc", line 34: 
+Error, "/tmp/cs131_testrunner_bD_qMF/file.rc": 
   Initialization value of constant named fail3 not known at compile time.
-Error, "/tmp/cs131_testrunner__xTaux/file.rc", line 36: 
+Error, "/tmp/cs131_testrunner_bD_qMF/file.rc": 
   Initialization value of type float not assignable to constant/variable of type int.
-Error, "/tmp/cs131_testrunner__xTaux/file.rc", line 37: 
+Error, "/tmp/cs131_testrunner_bD_qMF/file.rc": 
   Initialization value of type int not assignable to constant/variable of type bool.
-Error, "/tmp/cs131_testrunner__xTaux/file.rc", line 38: 
+Error, "/tmp/cs131_testrunner_bD_qMF/file.rc": 
   Initialization value of type bool not assignable to constant/variable of type float.
-Error, "/tmp/cs131_testrunner__xTaux/file.rc", line 43: 
+Error, "/tmp/cs131_testrunner_bD_qMF/file.rc": 
   Initialization value of type float not assignable to constant/variable of type int.
-Error, "/tmp/cs131_testrunner__xTaux/file.rc", line 44: 
+Error, "/tmp/cs131_testrunner_bD_qMF/file.rc": 
   Initialization value of type int not assignable to constant/variable of type bool.
-Error, "/tmp/cs131_testrunner__xTaux/file.rc", line 45: 
+Error, "/tmp/cs131_testrunner_bD_qMF/file.rc": 
   Initialization value of type bool not assignable to constant/variable of type float.
 Compile: failure.

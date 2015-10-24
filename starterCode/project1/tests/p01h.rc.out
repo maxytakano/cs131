@@ -1,3 +1,3 @@
-Error, "/tmp/cs131_testrunner_WvTaux/file.rc", line 6: 
+Error, "/tmp/cs131_testrunner_qA_qMF/file.rc": 
   Value of type float not assignable to variable of type int.
 Compile: failure.

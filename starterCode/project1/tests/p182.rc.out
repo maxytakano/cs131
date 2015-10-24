@@ -1,5 +1,5 @@
-Error, "/tmp/cs131_testrunner_qBTaux/file.rc", line 8: 
+Error, "/tmp/cs131_testrunner_4J_qMF/file.rc": 
   Left-hand operand is not assignable (not a modifiable L-value).
-Error, "/tmp/cs131_testrunner_qBTaux/file.rc", line 13: 
+Error, "/tmp/cs131_testrunner_4J_qMF/file.rc": 
   Left-hand operand is not assignable (not a modifiable L-value).
 Compile: failure.

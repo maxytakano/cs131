@@ -1,7 +1,7 @@
-Error, "/tmp/cs131_testrunner_tyTaux/file.rc", line 6: 
+Error, "/tmp/cs131_testrunner_PD_qMF/file.rc": 
   Duplicate declaration of overloaded function foo.
-Error, "/tmp/cs131_testrunner_tyTaux/file.rc", line 11: 
+Error, "/tmp/cs131_testrunner_PD_qMF/file.rc": 
   Duplicate declaration of overloaded function foo.
-Error, "/tmp/cs131_testrunner_tyTaux/file.rc", line 21: 
+Error, "/tmp/cs131_testrunner_PD_qMF/file.rc": 
   Illegal call to overloaded function foo.
 Compile: failure.

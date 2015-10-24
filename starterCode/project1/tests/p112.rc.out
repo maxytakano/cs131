@@ -1,25 +1,25 @@
-Error, "/tmp/cs131_testrunner_0yTaux/file.rc", line 11: 
+Error, "/tmp/cs131_testrunner_TE_qMF/file.rc": 
   Index value of 5 is outside legal range [0,5).
-Error, "/tmp/cs131_testrunner_0yTaux/file.rc", line 17: 
+Error, "/tmp/cs131_testrunner_TE_qMF/file.rc": 
   Index value of 5 is outside legal range [0,5).
-Error, "/tmp/cs131_testrunner_0yTaux/file.rc", line 22: 
+Error, "/tmp/cs131_testrunner_TE_qMF/file.rc": 
   Index value of 5 is outside legal range [0,5).
-Error, "/tmp/cs131_testrunner_0yTaux/file.rc", line 26: 
+Error, "/tmp/cs131_testrunner_TE_qMF/file.rc": 
   Incompatible type int*[5][10] to unary dereference operator *, pointer expected.
-Error, "/tmp/cs131_testrunner_0yTaux/file.rc", line 27: 
+Error, "/tmp/cs131_testrunner_TE_qMF/file.rc": 
   Incompatible type int*[5][10] to unary dereference operator *, pointer expected.
-Error, "/tmp/cs131_testrunner_0yTaux/file.rc", line 28: 
+Error, "/tmp/cs131_testrunner_TE_qMF/file.rc": 
   Incompatible type int*[5][10] to unary dereference operator *, pointer expected.
-Error, "/tmp/cs131_testrunner_0yTaux/file.rc", line 29: 
+Error, "/tmp/cs131_testrunner_TE_qMF/file.rc": 
   Incompatible type int*[5][10] to unary dereference operator *, pointer expected.
-Error, "/tmp/cs131_testrunner_0yTaux/file.rc", line 30: 
+Error, "/tmp/cs131_testrunner_TE_qMF/file.rc": 
   Incompatible type int*[5][10] to unary dereference operator *, pointer expected.
-Error, "/tmp/cs131_testrunner_0yTaux/file.rc", line 46: 
+Error, "/tmp/cs131_testrunner_TE_qMF/file.rc": 
   Argument of type int not equivalent to reference parameter array, of type int[5].
-Error, "/tmp/cs131_testrunner_0yTaux/file.rc", line 47: 
+Error, "/tmp/cs131_testrunner_TE_qMF/file.rc": 
   Argument of type int not equivalent to reference parameter array, of type int[5].
-Error, "/tmp/cs131_testrunner_0yTaux/file.rc", line 48: 
+Error, "/tmp/cs131_testrunner_TE_qMF/file.rc": 
   Argument of type float[3] not equivalent to reference parameter array, of type int[5].
-Error, "/tmp/cs131_testrunner_0yTaux/file.rc", line 51: 
+Error, "/tmp/cs131_testrunner_TE_qMF/file.rc": 
   Left-hand operand is not assignable (not a modifiable L-value).
 Compile: failure.

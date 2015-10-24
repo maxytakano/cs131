@@ -1,7 +1,7 @@
-Error, "/tmp/cs131_testrunner_TxTaux/file.rc", line 9: 
+Error, "/tmp/cs131_testrunner_CC_qMF/file.rc": 
   Exit expression (type float) is not assignable to int.
-Error, "/tmp/cs131_testrunner_TxTaux/file.rc", line 16: 
+Error, "/tmp/cs131_testrunner_CC_qMF/file.rc": 
   Exit expression (type bool) is not assignable to int.
-Error, "/tmp/cs131_testrunner_TxTaux/file.rc", line 19: 
+Error, "/tmp/cs131_testrunner_CC_qMF/file.rc": 
   Exit expression (type bool) is not assignable to int.
 Compile: failure.

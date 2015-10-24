@@ -1,3 +1,0 @@
-Error, "/tmp/cs131_testrunner_rHTaux/file.rc", line 18: 
-  Value of type _MYS_2 not assignable to variable of type _MYS_1.
-Compile: failure.

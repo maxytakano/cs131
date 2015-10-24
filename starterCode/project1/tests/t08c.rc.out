@@ -1,3 +1,0 @@
-Error, "/tmp/cs131_testrunner_8ETaux/file.rc", line 2: 
-  Initialization value of constant named foo not known at compile time.
-Compile: failure.

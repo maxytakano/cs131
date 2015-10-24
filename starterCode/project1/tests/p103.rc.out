@@ -1,5 +1,5 @@
-Error, "/tmp/cs131_testrunner_GyTaux/file.rc", line 1: 
+Error, "/tmp/cs131_testrunner_eE_qMF/file.rc": 
   Index expression type (float) in array declaration not equivalent to int.
-Error, "/tmp/cs131_testrunner_GyTaux/file.rc", line 2: 
+Error, "/tmp/cs131_testrunner_eE_qMF/file.rc": 
   Index expression type (bool) in array declaration not equivalent to int.
 Compile: failure.

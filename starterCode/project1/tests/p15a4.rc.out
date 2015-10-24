@@ -1,9 +1,9 @@
-Error, "/tmp/cs131_testrunner_LATaux/file.rc", line 12: 
+Error, "/tmp/cs131_testrunner_EI_qMF/file.rc": 
   Incompatible type STRUCT to operator ->, pointer to struct expected.
-Error, "/tmp/cs131_testrunner_LATaux/file.rc", line 13: 
+Error, "/tmp/cs131_testrunner_EI_qMF/file.rc": 
   Incompatible type STRUCT to unary dereference operator *, pointer expected.
-Error, "/tmp/cs131_testrunner_LATaux/file.rc", line 14: 
+Error, "/tmp/cs131_testrunner_EI_qMF/file.rc": 
   Incompatible type int to operator ->, pointer to struct expected.
-Error, "/tmp/cs131_testrunner_LATaux/file.rc", line 15: 
+Error, "/tmp/cs131_testrunner_EI_qMF/file.rc": 
   Incompatible type int* to operator ->, pointer to struct expected.
 Compile: failure.

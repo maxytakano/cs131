@@ -1,7 +1,7 @@
-Error, "/tmp/cs131_testrunner_hATaux/file.rc", line 7: 
+Error, "/tmp/cs131_testrunner_DH_qMF/file.rc": 
   Type of expression referenced by "." (int) is not a struct.
-Error, "/tmp/cs131_testrunner_hATaux/file.rc", line 9: 
+Error, "/tmp/cs131_testrunner_DH_qMF/file.rc": 
   Referenced field SomeField not found in type MYSTRUCT.
-Error, "/tmp/cs131_testrunner_hATaux/file.rc", line 10: 
+Error, "/tmp/cs131_testrunner_DH_qMF/file.rc": 
   Referenced field SomeFunc not found in type MYSTRUCT.
 Compile: failure.

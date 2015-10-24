@@ -1,5 +1,5 @@
-Error, "/tmp/cs131_testrunner_NwTaux/file.rc", line 8: 
+Error, "/tmp/cs131_testrunner_lB_qMF/file.rc": 
   bool required for conditional test, int found.
-Error, "/tmp/cs131_testrunner_NwTaux/file.rc", line 13: 
+Error, "/tmp/cs131_testrunner_lB_qMF/file.rc": 
   bool required for conditional test, int found.
 Compile: failure.

@@ -1,17 +1,17 @@
-Error, "/tmp/cs131_testrunner_HxTaux/file.rc", line 11: 
+Error, "/tmp/cs131_testrunner_eC_qMF/file.rc": 
   Type of return expression (bool), not assignment compatible with function's return type (float).
-Error, "/tmp/cs131_testrunner_HxTaux/file.rc", line 19: 
+Error, "/tmp/cs131_testrunner_eC_qMF/file.rc": 
   Return expression is not a modifiable L-value for function that returns by reference.
-Error, "/tmp/cs131_testrunner_HxTaux/file.rc", line 20: 
+Error, "/tmp/cs131_testrunner_eC_qMF/file.rc": 
   Type of return expression (int) is not equivalent to the function's return type (float).
-Error, "/tmp/cs131_testrunner_HxTaux/file.rc", line 21: 
+Error, "/tmp/cs131_testrunner_eC_qMF/file.rc": 
   Type of return expression (int) is not equivalent to the function's return type (float).
-Error, "/tmp/cs131_testrunner_HxTaux/file.rc", line 29: 
+Error, "/tmp/cs131_testrunner_eC_qMF/file.rc": 
   Return required in function, none found.
-Error, "/tmp/cs131_testrunner_HxTaux/file.rc", line 35: 
+Error, "/tmp/cs131_testrunner_eC_qMF/file.rc": 
   Return in function requires a result expression, none found.
-Error, "/tmp/cs131_testrunner_HxTaux/file.rc", line 43: 
+Error, "/tmp/cs131_testrunner_eC_qMF/file.rc": 
   Return required in function, none found.
-Error, "/tmp/cs131_testrunner_HxTaux/file.rc", line 50: 
+Error, "/tmp/cs131_testrunner_eC_qMF/file.rc": 
   Return in function requires a result expression, none found.
 Compile: failure.

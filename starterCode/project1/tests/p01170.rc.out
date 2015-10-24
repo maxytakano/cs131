@@ -1,17 +1,17 @@
-Error, "/tmp/cs131_testrunner_9tTaux/file.rc", line 4: 
+Error, "/tmp/cs131_testrunner_xy_qMF/file.rc": 
   Incompatible type bool to binary operator %, equivalent to int expected.
-Error, "/tmp/cs131_testrunner_9tTaux/file.rc", line 5: 
+Error, "/tmp/cs131_testrunner_xy_qMF/file.rc": 
   Incompatible type bool to binary operator %, equivalent to int expected.
-Error, "/tmp/cs131_testrunner_9tTaux/file.rc", line 6: 
+Error, "/tmp/cs131_testrunner_xy_qMF/file.rc": 
   Incompatible type bool to binary operator %, equivalent to int expected.
-Error, "/tmp/cs131_testrunner_9tTaux/file.rc", line 8: 
+Error, "/tmp/cs131_testrunner_xy_qMF/file.rc": 
   Incompatible type float to binary operator %, equivalent to int expected.
-Error, "/tmp/cs131_testrunner_9tTaux/file.rc", line 9: 
+Error, "/tmp/cs131_testrunner_xy_qMF/file.rc": 
   Incompatible type float to binary operator %, equivalent to int expected.
-Error, "/tmp/cs131_testrunner_9tTaux/file.rc", line 10: 
+Error, "/tmp/cs131_testrunner_xy_qMF/file.rc": 
   Incompatible type float to binary operator %, equivalent to int expected.
-Error, "/tmp/cs131_testrunner_9tTaux/file.rc", line 12: 
+Error, "/tmp/cs131_testrunner_xy_qMF/file.rc": 
   Incompatible type float to binary operator %, equivalent to int expected.
-Error, "/tmp/cs131_testrunner_9tTaux/file.rc", line 13: 
+Error, "/tmp/cs131_testrunner_xy_qMF/file.rc": 
   Incompatible type bool to binary operator %, equivalent to int expected.
 Compile: failure.

@@ -1,3 +1,0 @@
-Error, "/tmp/cs131_testrunner_pITaux/file.rc", line 5: 
-  Type of return expression (int[10]) is not equivalent to the function's return type (int*).
-Compile: failure.

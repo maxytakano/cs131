@@ -1,11 +1,11 @@
-Error, "/tmp/cs131_testrunner_MATaux/file.rc", line 23: 
+Error, "/tmp/cs131_testrunner_GI_qMF/file.rc": 
   Value of type int not assignable to variable of type bool.
-Error, "/tmp/cs131_testrunner_MATaux/file.rc", line 26: 
+Error, "/tmp/cs131_testrunner_GI_qMF/file.rc": 
   Value of type int not assignable to variable of type bool.
-Error, "/tmp/cs131_testrunner_MATaux/file.rc", line 29: 
+Error, "/tmp/cs131_testrunner_GI_qMF/file.rc": 
   Value of type bool not assignable to variable of type int.
-Error, "/tmp/cs131_testrunner_MATaux/file.rc", line 32: 
+Error, "/tmp/cs131_testrunner_GI_qMF/file.rc": 
   Value of type YOURSTRUCT not assignable to variable of type MYSTRUCT.
-Error, "/tmp/cs131_testrunner_MATaux/file.rc", line 34: 
+Error, "/tmp/cs131_testrunner_GI_qMF/file.rc": 
   Value of type YOURSTRUCT* not assignable to variable of type MYSTRUCT*.
 Compile: failure.

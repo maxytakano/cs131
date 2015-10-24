@@ -1,5 +1,5 @@
-Error, "/tmp/cs131_testrunner_wxTaux/file.rc", line 4: 
+Error, "/tmp/cs131_testrunner_UB_qMF/file.rc": 
   Return required in function, none found.
-Error, "/tmp/cs131_testrunner_wxTaux/file.rc", line 13: 
+Error, "/tmp/cs131_testrunner_UB_qMF/file.rc": 
   Return required in function, none found.
 Compile: failure.

@@ -1,9 +1,9 @@
-Error, "/tmp/cs131_testrunner_HuTaux/file.rc", line 11: 
+Error, "/tmp/cs131_testrunner__y_qMF/file.rc": 
   Incompatible type float to unary operator !, equivalent to bool expected.
-Error, "/tmp/cs131_testrunner_HuTaux/file.rc", line 14: 
+Error, "/tmp/cs131_testrunner__y_qMF/file.rc": 
   Incompatible type int to unary operator !, equivalent to bool expected.
-Error, "/tmp/cs131_testrunner_HuTaux/file.rc", line 17: 
+Error, "/tmp/cs131_testrunner__y_qMF/file.rc": 
   Incompatible type float to binary operator ||, equivalent to bool expected.
-Error, "/tmp/cs131_testrunner_HuTaux/file.rc", line 20: 
+Error, "/tmp/cs131_testrunner__y_qMF/file.rc": 
   Incompatible type int to binary operator &&, equivalent to bool expected.
 Compile: failure.

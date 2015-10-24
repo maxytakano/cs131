@@ -1,61 +1,61 @@
-Error, "/tmp/cs131_testrunner_nBTaux/file.rc", line 9: 
+Error, "/tmp/cs131_testrunner_XJ_qMF/file.rc": 
   Incompatible types to operator ==:
     int*,
     bool*;
   both must be of equivalent pointer type.
-Error, "/tmp/cs131_testrunner_nBTaux/file.rc", line 10: 
+Error, "/tmp/cs131_testrunner_XJ_qMF/file.rc": 
   Incompatible types to operator ==:
     int*,
     int**;
   both must be of equivalent pointer type.
-Error, "/tmp/cs131_testrunner_nBTaux/file.rc", line 11: 
+Error, "/tmp/cs131_testrunner_XJ_qMF/file.rc": 
   Incompatible types to operator ==:
     int*,
     int;
   both must be of equivalent pointer type.
-Error, "/tmp/cs131_testrunner_nBTaux/file.rc", line 12: 
+Error, "/tmp/cs131_testrunner_XJ_qMF/file.rc": 
   Incompatible types to operator ==:
     int*,
     int;
   both must be of equivalent pointer type.
-Error, "/tmp/cs131_testrunner_nBTaux/file.rc", line 15: 
+Error, "/tmp/cs131_testrunner_XJ_qMF/file.rc": 
   Incompatible types to operator ==:
     nullptr,
     int;
   both must be of equivalent pointer type.
-Error, "/tmp/cs131_testrunner_nBTaux/file.rc", line 18: 
+Error, "/tmp/cs131_testrunner_XJ_qMF/file.rc": 
   Incompatible types to operator !=:
     int*,
     bool*;
   both must be of equivalent pointer type.
-Error, "/tmp/cs131_testrunner_nBTaux/file.rc", line 19: 
+Error, "/tmp/cs131_testrunner_XJ_qMF/file.rc": 
   Incompatible types to operator !=:
     int*,
     int**;
   both must be of equivalent pointer type.
-Error, "/tmp/cs131_testrunner_nBTaux/file.rc", line 20: 
+Error, "/tmp/cs131_testrunner_XJ_qMF/file.rc": 
   Incompatible types to operator !=:
     int*,
     int;
   both must be of equivalent pointer type.
-Error, "/tmp/cs131_testrunner_nBTaux/file.rc", line 21: 
+Error, "/tmp/cs131_testrunner_XJ_qMF/file.rc": 
   Incompatible types to operator !=:
     int*,
     int;
   both must be of equivalent pointer type.
-Error, "/tmp/cs131_testrunner_nBTaux/file.rc", line 24: 
+Error, "/tmp/cs131_testrunner_XJ_qMF/file.rc": 
   Incompatible types to operator !=:
     nullptr,
     int;
   both must be of equivalent pointer type.
-Error, "/tmp/cs131_testrunner_nBTaux/file.rc", line 28: 
+Error, "/tmp/cs131_testrunner_XJ_qMF/file.rc": 
   Operand to ++ is not a modifiable L-value.
-Error, "/tmp/cs131_testrunner_nBTaux/file.rc", line 29: 
+Error, "/tmp/cs131_testrunner_XJ_qMF/file.rc": 
   Operand to -- is not a modifiable L-value.
-Error, "/tmp/cs131_testrunner_nBTaux/file.rc", line 32: 
+Error, "/tmp/cs131_testrunner_XJ_qMF/file.rc": 
   Non-addressable argument of type int to address-of operator.
-Error, "/tmp/cs131_testrunner_nBTaux/file.rc", line 33: 
+Error, "/tmp/cs131_testrunner_XJ_qMF/file.rc": 
   Non-addressable argument of type int to address-of operator.
-Error, "/tmp/cs131_testrunner_nBTaux/file.rc", line 37: 
+Error, "/tmp/cs131_testrunner_XJ_qMF/file.rc": 
   Return required in function, none found.
 Compile: failure.

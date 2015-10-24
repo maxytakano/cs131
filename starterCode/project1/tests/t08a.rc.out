@@ -1,3 +1,0 @@
-Error, "/tmp/cs131_testrunner_4ETaux/file.rc", line 2: 
-  Initialization value of type bool not assignable to constant/variable of type int.
-Compile: failure.

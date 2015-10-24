@@ -1,9 +1,9 @@
-Error, "/tmp/cs131_testrunner_GwTaux/file.rc", line 6: 
+Error, "/tmp/cs131_testrunner_eB_qMF/file.rc": 
   bool required for conditional test, float found.
-Error, "/tmp/cs131_testrunner_GwTaux/file.rc", line 11: 
+Error, "/tmp/cs131_testrunner_eB_qMF/file.rc": 
   bool required for conditional test, float found.
-Error, "/tmp/cs131_testrunner_GwTaux/file.rc", line 16: 
+Error, "/tmp/cs131_testrunner_eB_qMF/file.rc": 
   bool required for conditional test, float found.
-Error, "/tmp/cs131_testrunner_GwTaux/file.rc", line 21: 
+Error, "/tmp/cs131_testrunner_eB_qMF/file.rc": 
   bool required for conditional test, float found.
 Compile: failure.

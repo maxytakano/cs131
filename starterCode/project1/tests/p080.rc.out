@@ -1,5 +1,5 @@
-Error, "/tmp/cs131_testrunner_VxTaux/file.rc", line 4: 
+Error, "/tmp/cs131_testrunner_GC_qMF/file.rc": 
   Arithmetic exception occurred during constant folding.
-Error, "/tmp/cs131_testrunner_VxTaux/file.rc", line 7: 
+Error, "/tmp/cs131_testrunner_GC_qMF/file.rc": 
   Arithmetic exception occurred during constant folding.
 Compile: failure.

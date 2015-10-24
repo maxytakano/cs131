@@ -1,13 +1,13 @@
-Error, "/tmp/cs131_testrunner_CxTaux/file.rc", line 5: 
+Error, "/tmp/cs131_testrunner_6B_qMF/file.rc": 
   Return required in function, none found.
-Error, "/tmp/cs131_testrunner_CxTaux/file.rc", line 15: 
+Error, "/tmp/cs131_testrunner_6B_qMF/file.rc": 
   Return in function requires a result expression, none found.
-Error, "/tmp/cs131_testrunner_CxTaux/file.rc", line 21: 
+Error, "/tmp/cs131_testrunner_6B_qMF/file.rc": 
   Return required in function, none found.
-Error, "/tmp/cs131_testrunner_CxTaux/file.rc", line 35: 
+Error, "/tmp/cs131_testrunner_6B_qMF/file.rc": 
   Return required in function, none found.
-Error, "/tmp/cs131_testrunner_CxTaux/file.rc", line 54: 
+Error, "/tmp/cs131_testrunner_6B_qMF/file.rc": 
   Return required in function, none found.
-Error, "/tmp/cs131_testrunner_CxTaux/file.rc", line 59: 
+Error, "/tmp/cs131_testrunner_6B_qMF/file.rc": 
   Return required in function, none found.
 Compile: failure.

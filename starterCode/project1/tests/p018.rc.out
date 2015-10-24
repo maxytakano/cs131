@@ -1,17 +1,17 @@
-Error, "/tmp/cs131_testrunner_qvTaux/file.rc", line 2: 
+Error, "/tmp/cs131_testrunner_Wz_qMF/file.rc": 
   Incompatible type float to binary operator &, equivalent to int expected.
-Error, "/tmp/cs131_testrunner_qvTaux/file.rc", line 5: 
+Error, "/tmp/cs131_testrunner_Wz_qMF/file.rc": 
   Incompatible type float to binary operator |, equivalent to int expected.
-Error, "/tmp/cs131_testrunner_qvTaux/file.rc", line 8: 
+Error, "/tmp/cs131_testrunner_Wz_qMF/file.rc": 
   Incompatible type bool to binary operator ^, equivalent to int expected.
-Error, "/tmp/cs131_testrunner_qvTaux/file.rc", line 15: 
+Error, "/tmp/cs131_testrunner_Wz_qMF/file.rc": 
   Incompatible type bool to binary operator |, equivalent to int expected.
-Error, "/tmp/cs131_testrunner_qvTaux/file.rc", line 15: 
+Error, "/tmp/cs131_testrunner_Wz_qMF/file.rc": 
   Incompatible type bool to binary operator &, equivalent to int expected.
-Error, "/tmp/cs131_testrunner_qvTaux/file.rc", line 22: 
+Error, "/tmp/cs131_testrunner_Wz_qMF/file.rc": 
   Incompatible type bool to binary operator %, equivalent to int expected.
-Error, "/tmp/cs131_testrunner_qvTaux/file.rc", line 25: 
+Error, "/tmp/cs131_testrunner_Wz_qMF/file.rc": 
   Incompatible type bool to binary operator %, equivalent to int expected.
-Error, "/tmp/cs131_testrunner_qvTaux/file.rc", line 28: 
+Error, "/tmp/cs131_testrunner_Wz_qMF/file.rc": 
   Incompatible type bool to binary operator %, equivalent to int expected.
 Compile: failure.

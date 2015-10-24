@@ -8,7 +8,6 @@ import java_cup.runtime.*;
 import java.util.Vector;
 import java.util.Iterator;
 import java.math.BigDecimal;
-import java.util.Stack;
 
 class MyParser extends parser
 {
@@ -548,12 +547,28 @@ class MyParser extends parser
                 existingFunc.addOverload(candidateFunc);
                 // TODO: check if open scope here is correct.
                 m_symtab.openScope();
+                insertParams(candidateFunc.getParameters());
             }
         } else {
             // 3. If there is no existing function, insert a new entry to symtab.
             m_symtab.insert(candidateFunc);
             // TODO: check if open scope here is correct.
             m_symtab.openScope();
+            insertParams(candidateFunc.getParameters());
+        }
+    }
+
+    //----------------------------------------------------------------
+    // Inserts a vector of params into the symtab
+    //----------------------------------------------------------------
+    void insertParams(Vector<STO> params) {
+        if (params == null) {
+            return;
+        }
+
+        for (int i = 0; i < params.size(); i++) {
+            params.get(i).getName();
+            m_symtab.insert(params.get(i));
         }
     }
 
@@ -564,6 +579,7 @@ class MyParser extends parser
     {
         if (m_symtab.getFunc() == null)
         {
+            m_symtab.closeScope();
             // func param comparison failed.
             return;
         }
@@ -663,6 +679,7 @@ class MyParser extends parser
     //----------------------------------------------------------------
     STO DoFuncCall(STO sto, Vector<STO> args)
     {
+        // Check if the function is an error
         if (sto.isError()) {
             return sto;
         }
@@ -723,6 +740,11 @@ class MyParser extends parser
             curParam = params.get(i);
             argType = curArg.getType();
             paramType = curParam.getType();
+
+            if (curArg.isError()) {
+                errorFlag = true;
+                continue;
+            }
 
             if (!((VarSTO)curParam).getPassByReference()) {
                 // if param is declared pass-by-value, make sure the argument is assignable to it
@@ -973,10 +995,22 @@ class MyParser extends parser
             m_nNumErrors++;
             m_errors.print(ErrorMsg.error6a_Return_expr);
         }
+
+        /* Phase 1 check 6c */
+        int curlevel = m_symtab.getLevel();
+        if (curlevel == 2) {
+            // global level is 1, just inside function is level 2
+            m_symtab.getFunc().setHasTopReturn(true);
+        }
     }
 
     /* Phase 1 check 6b */
     void doReturnTypeCheck(STO expr) {
+        if (expr.isError()) {
+            m_symtab.setFunc(null);
+            return;
+        }
+
         // Check if the function failed overload test
         if (m_symtab.getFunc() == null) {
             return;

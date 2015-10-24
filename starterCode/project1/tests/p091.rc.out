@@ -1,7 +1,7 @@
-Error, "/tmp/cs131_testrunner_syTaux/file.rc", line 73: 
+Error, "/tmp/cs131_testrunner_ND_qMF/file.rc": 
   Illegal call to overloaded function foo.
-Error, "/tmp/cs131_testrunner_syTaux/file.rc", line 75: 
+Error, "/tmp/cs131_testrunner_ND_qMF/file.rc": 
   Illegal call to overloaded function foo.
-Error, "/tmp/cs131_testrunner_syTaux/file.rc", line 78: 
+Error, "/tmp/cs131_testrunner_ND_qMF/file.rc": 
   Illegal call to overloaded function foobar.
 Compile: failure.

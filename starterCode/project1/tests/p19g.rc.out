@@ -1,21 +1,21 @@
-Error, "/tmp/cs131_testrunner_MBTaux/file.rc", line 11: 
+Error, "/tmp/cs131_testrunner_SK_qMF/file.rc": 
   Arithmetic exception occurred during constant folding.
-Error, "/tmp/cs131_testrunner_MBTaux/file.rc", line 12: 
+Error, "/tmp/cs131_testrunner_SK_qMF/file.rc": 
   Arithmetic exception occurred during constant folding.
-Error, "/tmp/cs131_testrunner_MBTaux/file.rc", line 16: 
+Error, "/tmp/cs131_testrunner_SK_qMF/file.rc": 
   Arithmetic exception occurred during constant folding.
-Error, "/tmp/cs131_testrunner_MBTaux/file.rc", line 17: 
+Error, "/tmp/cs131_testrunner_SK_qMF/file.rc": 
   Arithmetic exception occurred during constant folding.
-Error, "/tmp/cs131_testrunner_MBTaux/file.rc", line 18: 
+Error, "/tmp/cs131_testrunner_SK_qMF/file.rc": 
   Arithmetic exception occurred during constant folding.
-Error, "/tmp/cs131_testrunner_MBTaux/file.rc", line 19: 
+Error, "/tmp/cs131_testrunner_SK_qMF/file.rc": 
   Arithmetic exception occurred during constant folding.
-Error, "/tmp/cs131_testrunner_MBTaux/file.rc", line 20: 
+Error, "/tmp/cs131_testrunner_SK_qMF/file.rc": 
   Arithmetic exception occurred during constant folding.
-Error, "/tmp/cs131_testrunner_MBTaux/file.rc", line 21: 
+Error, "/tmp/cs131_testrunner_SK_qMF/file.rc": 
   Arithmetic exception occurred during constant folding.
-Error, "/tmp/cs131_testrunner_MBTaux/file.rc", line 22: 
+Error, "/tmp/cs131_testrunner_SK_qMF/file.rc": 
   Arithmetic exception occurred during constant folding.
-Error, "/tmp/cs131_testrunner_MBTaux/file.rc", line 23: 
+Error, "/tmp/cs131_testrunner_SK_qMF/file.rc": 
   Arithmetic exception occurred during constant folding.
 Compile: failure.

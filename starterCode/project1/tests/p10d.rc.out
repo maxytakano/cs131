@@ -1,3 +1,3 @@
-Error, "/tmp/cs131_testrunner_VyTaux/file.rc", line 5: 
+Error, "/tmp/cs131_testrunner_JE_qMF/file.rc": 
   Value of index expression not known at compile time.
 Compile: failure.

@@ -248,7 +248,6 @@ VarDecl ::=         OptStatic:_1 DecoratedType:_2 T_ID:_3 OptArrayList:_4 OptIni
                     T_SEMI
     |               OptStatic:_1 T_AUTO T_ID:_3 T_ASSIGN Expr:_5
                     {:
-                        //WHY WOULD WE NOT PASS IN EXPR for the third argument?
                         ((MyParser) parser).DoVarDecl (_3, _5.getType(), null);
                     :}
                     T_SEMI

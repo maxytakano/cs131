@@ -1,5 +1,5 @@
-Error, "/tmp/cs131_testrunner_LwTaux/file.rc", line 7: 
+Error, "/tmp/cs131_testrunner_jB_qMF/file.rc": 
   bool required for conditional test, float found.
-Error, "/tmp/cs131_testrunner_LwTaux/file.rc", line 8: 
+Error, "/tmp/cs131_testrunner_jB_qMF/file.rc": 
   Value of type float not assignable to variable of type int.
 Compile: failure.

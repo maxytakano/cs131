@@ -1,3 +1,3 @@
-Error, "/tmp/cs131_testrunner_HyTaux/file.rc", line 1: 
+Error, "/tmp/cs131_testrunner_gE_qMF/file.rc": 
   Index expression type (float) in array declaration not equivalent to int.
 Compile: failure.

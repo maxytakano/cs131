@@ -1,45 +1,45 @@
-Error, "/tmp/cs131_testrunner_.zTaux/file.rc", line 6: 
+Error, "/tmp/cs131_testrunner_jH_qMF/file.rc": 
   Field x declared second time in struct.
-Error, "/tmp/cs131_testrunner_.zTaux/file.rc", line 8: 
+Error, "/tmp/cs131_testrunner_jH_qMF/file.rc": 
   Field x declared second time in struct.
-Error, "/tmp/cs131_testrunner_.zTaux/file.rc", line 10: 
+Error, "/tmp/cs131_testrunner_jH_qMF/file.rc": 
   Referenced field a not found in current struct.
-Error, "/tmp/cs131_testrunner_.zTaux/file.rc", line 15: 
+Error, "/tmp/cs131_testrunner_jH_qMF/file.rc": 
   Referenced field a not found in current struct.
-Error, "/tmp/cs131_testrunner_.zTaux/file.rc", line 16: 
+Error, "/tmp/cs131_testrunner_jH_qMF/file.rc": 
   Value of type float not assignable to variable of type int.
-Error, "/tmp/cs131_testrunner_.zTaux/file.rc", line 24: 
+Error, "/tmp/cs131_testrunner_jH_qMF/file.rc": 
   Return required in function, none found.
-Error, "/tmp/cs131_testrunner_.zTaux/file.rc", line 38: 
+Error, "/tmp/cs131_testrunner_jH_qMF/file.rc": 
   Field x declared second time in struct.
-Error, "/tmp/cs131_testrunner_.zTaux/file.rc", line 40: 
+Error, "/tmp/cs131_testrunner_jH_qMF/file.rc": 
   Referenced field a not found in current struct.
-Error, "/tmp/cs131_testrunner_.zTaux/file.rc", line 45: 
+Error, "/tmp/cs131_testrunner_jH_qMF/file.rc": 
   Referenced field a not found in current struct.
-Error, "/tmp/cs131_testrunner_.zTaux/file.rc", line 46: 
+Error, "/tmp/cs131_testrunner_jH_qMF/file.rc": 
   Value of type float not assignable to variable of type int.
-Error, "/tmp/cs131_testrunner_.zTaux/file.rc", line 71: 
+Error, "/tmp/cs131_testrunner_jH_qMF/file.rc": 
   Illegal call to overloaded function MYS1.
-Error, "/tmp/cs131_testrunner_.zTaux/file.rc", line 72: 
+Error, "/tmp/cs131_testrunner_jH_qMF/file.rc": 
   Illegal call to overloaded function MYS2.
-Error, "/tmp/cs131_testrunner_.zTaux/file.rc", line 84: 
+Error, "/tmp/cs131_testrunner_jH_qMF/file.rc": 
   Value of type float not assignable to variable of type int.
-Error, "/tmp/cs131_testrunner_.zTaux/file.rc", line 85: 
+Error, "/tmp/cs131_testrunner_jH_qMF/file.rc": 
   Value of type float not assignable to variable of type int.
-Error, "/tmp/cs131_testrunner_.zTaux/file.rc", line 86: 
+Error, "/tmp/cs131_testrunner_jH_qMF/file.rc": 
   Value of type float not assignable to variable of type int.
-Error, "/tmp/cs131_testrunner_.zTaux/file.rc", line 92: 
+Error, "/tmp/cs131_testrunner_jH_qMF/file.rc": 
   Referenced field a not found in type MYS1.
-Error, "/tmp/cs131_testrunner_.zTaux/file.rc", line 93: 
+Error, "/tmp/cs131_testrunner_jH_qMF/file.rc": 
   Referenced field a not found in type MYS1.
-Error, "/tmp/cs131_testrunner_.zTaux/file.rc", line 94: 
+Error, "/tmp/cs131_testrunner_jH_qMF/file.rc": 
   Referenced field a not found in type MYS1.
-Error, "/tmp/cs131_testrunner_.zTaux/file.rc", line 102: 
+Error, "/tmp/cs131_testrunner_jH_qMF/file.rc": 
   Value of type float not assignable to variable of type int.
-Error, "/tmp/cs131_testrunner_.zTaux/file.rc", line 107: 
+Error, "/tmp/cs131_testrunner_jH_qMF/file.rc": 
   Value of type void not assignable to variable of type int.
-Error, "/tmp/cs131_testrunner_.zTaux/file.rc", line 108: 
+Error, "/tmp/cs131_testrunner_jH_qMF/file.rc": 
   Value of type void not assignable to variable of type int.
-Error, "/tmp/cs131_testrunner_.zTaux/file.rc", line 111: 
+Error, "/tmp/cs131_testrunner_jH_qMF/file.rc": 
   Value of type void not assignable to variable of type int.
 Compile: failure.

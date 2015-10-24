@@ -1,21 +1,21 @@
-Error, "/tmp/cs131_testrunner_ryTaux/file.rc", line 11: 
+Error, "/tmp/cs131_testrunner_LD_qMF/file.rc": 
   Duplicate declaration of overloaded function foo.
-Error, "/tmp/cs131_testrunner_ryTaux/file.rc", line 16: 
+Error, "/tmp/cs131_testrunner_LD_qMF/file.rc": 
   Duplicate declaration of overloaded function foo.
-Error, "/tmp/cs131_testrunner_ryTaux/file.rc", line 20: 
+Error, "/tmp/cs131_testrunner_LD_qMF/file.rc": 
   Duplicate declaration of overloaded function foo.
-Error, "/tmp/cs131_testrunner_ryTaux/file.rc", line 39: 
+Error, "/tmp/cs131_testrunner_LD_qMF/file.rc": 
   Duplicate declaration of overloaded function bar.
-Error, "/tmp/cs131_testrunner_ryTaux/file.rc", line 44: 
+Error, "/tmp/cs131_testrunner_LD_qMF/file.rc": 
   Duplicate declaration of overloaded function bar.
-Error, "/tmp/cs131_testrunner_ryTaux/file.rc", line 49: 
+Error, "/tmp/cs131_testrunner_LD_qMF/file.rc": 
   Duplicate declaration of overloaded function bar.
-Error, "/tmp/cs131_testrunner_ryTaux/file.rc", line 56: 
+Error, "/tmp/cs131_testrunner_LD_qMF/file.rc": 
   Duplicate declaration of overloaded function foobar.
-Error, "/tmp/cs131_testrunner_ryTaux/file.rc", line 60: 
+Error, "/tmp/cs131_testrunner_LD_qMF/file.rc": 
   Duplicate declaration of overloaded function foobar.
-Error, "/tmp/cs131_testrunner_ryTaux/file.rc", line 65: 
+Error, "/tmp/cs131_testrunner_LD_qMF/file.rc": 
   Duplicate declaration of overloaded function foobar.
-Error, "/tmp/cs131_testrunner_ryTaux/file.rc", line 70: 
+Error, "/tmp/cs131_testrunner_LD_qMF/file.rc": 
   Duplicate declaration of overloaded function foobar.
 Compile: failure.

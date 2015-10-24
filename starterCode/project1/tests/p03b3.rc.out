@@ -1,7 +1,7 @@
-Error, "/tmp/cs131_testrunner_wwTaux/file.rc", line 4: 
+Error, "/tmp/cs131_testrunner_5A_qMF/file.rc": 
   Value of type float not assignable to variable of type int.
-Error, "/tmp/cs131_testrunner_wwTaux/file.rc", line 7: 
+Error, "/tmp/cs131_testrunner_5A_qMF/file.rc": 
   Value of type int not assignable to variable of type bool.
-Error, "/tmp/cs131_testrunner_wwTaux/file.rc", line 8: 
+Error, "/tmp/cs131_testrunner_5A_qMF/file.rc": 
   Value of type bool not assignable to variable of type int.
 Compile: failure.

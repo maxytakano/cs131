@@ -1,9 +1,9 @@
-Error, "/tmp/cs131_testrunner_oATaux/file.rc", line 16: 
+Error, "/tmp/cs131_testrunner_SH_qMF/file.rc": 
   Value of type int not assignable to variable of type bool.
-Error, "/tmp/cs131_testrunner_oATaux/file.rc", line 20: 
+Error, "/tmp/cs131_testrunner_SH_qMF/file.rc": 
   undeclared identifier 'x'.
-Error, "/tmp/cs131_testrunner_oATaux/file.rc", line 26: 
+Error, "/tmp/cs131_testrunner_SH_qMF/file.rc": 
   Value of type bool not assignable to variable of type int.
-Error, "/tmp/cs131_testrunner_oATaux/file.rc", line 29: 
+Error, "/tmp/cs131_testrunner_SH_qMF/file.rc": 
   Value of type int not assignable to variable of type bool.
 Compile: failure.

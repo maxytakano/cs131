@@ -1,1 +1,3 @@
-Error, "/tmp/cs131
+Error, "/tmp/cs131_testrunner_8z.qMF/file.rc": 
+  Argument of type float not assignable to value parameter a, of type int.
+Compile: failure.

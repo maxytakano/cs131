@@ -1,19 +1,19 @@
-Error, "/tmp/cs131_testrunner_jBTaux/file.rc", line 14: 
+Error, "/tmp/cs131_testrunner_NJ_qMF/file.rc": 
   Incompatible types to operator !=:
     int*,
     int;
   both must be of equivalent pointer type.
-Error, "/tmp/cs131_testrunner_jBTaux/file.rc", line 15: 
+Error, "/tmp/cs131_testrunner_NJ_qMF/file.rc": 
   Incompatible types to operator !=:
     int,
     int*;
   both must be of equivalent pointer type.
-Error, "/tmp/cs131_testrunner_jBTaux/file.rc", line 16: 
+Error, "/tmp/cs131_testrunner_NJ_qMF/file.rc": 
   Incompatible types to operator !=:
     int*,
     float*;
   both must be of equivalent pointer type.
-Error, "/tmp/cs131_testrunner_jBTaux/file.rc", line 17: 
+Error, "/tmp/cs131_testrunner_NJ_qMF/file.rc": 
   Incompatible types to operator !=:
     STFU*,
     STFU;

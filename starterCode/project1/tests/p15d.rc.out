@@ -1,38 +1,38 @@
-Error, "/tmp/cs131_testrunner_XATaux/file.rc", line 22: 
+Error, "/tmp/cs131_testrunner_2I_qMF/file.rc": 
   Value of type bool** not assignable to variable of type int**.
-Error, "/tmp/cs131_testrunner_XATaux/file.rc", line 23: 
+Error, "/tmp/cs131_testrunner_2I_qMF/file.rc": 
   Value of type bool* not assignable to variable of type int*.
-Error, "/tmp/cs131_testrunner_XATaux/file.rc", line 24: 
+Error, "/tmp/cs131_testrunner_2I_qMF/file.rc": 
   Value of type int** not assignable to variable of type bool**.
-Error, "/tmp/cs131_testrunner_XATaux/file.rc", line 26: 
+Error, "/tmp/cs131_testrunner_2I_qMF/file.rc": 
   Value of type bool** not assignable to variable of type int**.
-Error, "/tmp/cs131_testrunner_XATaux/file.rc", line 30: 
+Error, "/tmp/cs131_testrunner_2I_qMF/file.rc": 
   Value of type int** not assignable to variable of type float**.
-Error, "/tmp/cs131_testrunner_XATaux/file.rc", line 31: 
+Error, "/tmp/cs131_testrunner_2I_qMF/file.rc": 
   Value of type int* not assignable to variable of type float*.
-Error, "/tmp/cs131_testrunner_XATaux/file.rc", line 32: 
+Error, "/tmp/cs131_testrunner_2I_qMF/file.rc": 
   Value of type float** not assignable to variable of type int**.
-Error, "/tmp/cs131_testrunner_XATaux/file.rc", line 34: 
+Error, "/tmp/cs131_testrunner_2I_qMF/file.rc": 
   Incompatible types to operator ==:
     float***,
     bool**;
   both must be of equivalent pointer type.
-Error, "/tmp/cs131_testrunner_XATaux/file.rc", line 35: 
+Error, "/tmp/cs131_testrunner_2I_qMF/file.rc": 
   Incompatible types to operator !=:
     float***,
     bool**;
   both must be of equivalent pointer type.
-Error, "/tmp/cs131_testrunner_XATaux/file.rc", line 39: 
+Error, "/tmp/cs131_testrunner_2I_qMF/file.rc": 
   Incompatible types to operator ==:
     float**,
     bool**;
   both must be of equivalent pointer type.
-Error, "/tmp/cs131_testrunner_XATaux/file.rc", line 43: 
+Error, "/tmp/cs131_testrunner_2I_qMF/file.rc": 
   Incompatible types to operator ==:
     int**,
     int*;
   both must be of equivalent pointer type.
-Error, "/tmp/cs131_testrunner_XATaux/file.rc", line 44: 
+Error, "/tmp/cs131_testrunner_2I_qMF/file.rc": 
   Incompatible types to operator ==:
     float**,
     int**;
