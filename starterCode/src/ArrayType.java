@@ -18,8 +18,12 @@ class ArrayType extends CompositeType
 	private VarSTO nextLevel = null;
 	//The base type of this array, bool, float, int, etc. 
 	private Type baseType = null;
+
+	//!! not using
 	//the dimensions of the current array
-	private Vector<Integer> dims;
+	// private Vector<Integer> dims;
+	//!! not using
+
 	//current dimension of this array
 	private int currentDim = 0;
 
@@ -80,29 +84,37 @@ class ArrayType extends CompositeType
 	//----------------------------------------------------------------
 	public boolean isEquivalentTo(Type t)
 	{
-		if(!(t.isArray())){
-			return false;
-		}
-		ArrayType tempT = (ArrayType)t;
+		// old
+		// if(!(t.isArray())){
+		// 	return false;
+		// }
+		// ArrayType tempT = (ArrayType)t;
 
-		if(!(tempT.getBaseType().isEquivalentTo(getBaseType()))){
-			return false;
-		}
+		// if(!(tempT.getBaseType().isEquivalentTo(getBaseType()))){
+		// 	return false;
+		// }
 
-		//clone it so that we have a copy and aren't messing with the original
-		Vector<Integer> otherDims = (Vector<Integer>)tempT.getDims().clone();
-		if(otherDims.size() != dims.size()){
-			return false;
-		}
+		// //clone it so that we have a copy and aren't messing with the original
+		// Vector<Integer> otherDims = (Vector<Integer>)tempT.getDims().clone();
+		// if(otherDims.size() != dims.size()){
+		// 	return false;
+		// }
 
-		for (int i = 0; i < dims.size(); i++){
-			if(otherDims.get(i) != dims.get(i)){
-				return false;
+		// for (int i = 0; i < dims.size(); i++){
+		// 	if(otherDims.get(i) != dims.get(i)){
+		// 		return false;
+		// 	}
+		// }
+
+		// //base types are the same, and dimensions are the same, so equivalent
+		// return true;
+
+		if (t.isArray()) {
+			if (t.getName().equals(getName())) {
+				return true;
 			}
 		}
-
-		//base types are the same, and dimensions are the same, so equivalent
-		return true;
+		return false;
 	}
 
 	//----------------------------------------------------------------
@@ -112,16 +124,32 @@ class ArrayType extends CompositeType
 		return baseType;
 	}
 
-	public Vector<Integer> getDims(){
-		return dims;
-	}
-	
+	// public Vector<Integer> getDims(){
+	// 	return dims;
+	// }
+
 	public VarSTO getNextLevel(){
 		return nextLevel;
 	}
 
 	public int getCurrentDim(){
 		return currentDim;
+	}
+
+	public int getSize() {
+		int i = getCurrentDim();
+		Type t = getNextLevel().getType();
+		while (t.isArray()) {
+			i *= ((ArrayType) t).getCurrentDim();
+			t = ((ArrayType) t).getNextLevel().getType();
+		}
+
+		if (baseType.isPointer()) {
+			return i * ((PointerType) baseType).getBaseType().getSize();
+		} else {
+			return i * baseType.getSize();
+		}
+
 	}
 
 	//----------------------------------------------------------------
@@ -138,5 +166,5 @@ class ArrayType extends CompositeType
 	public void setCurrentDim(int dim){
 		currentDim = dim;
 	}
-	
+
 }

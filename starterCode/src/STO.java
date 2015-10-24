@@ -33,12 +33,12 @@ abstract class STO
 	//----------------------------------------------------------------
 	//
 	//----------------------------------------------------------------
-	public STO(String strName, Type typ, boolean addressable, boolean modifiable)
+	public STO(String strName, Type typ, boolean modifiable, boolean addressable)
 	{
 		setName(strName);
 		setType(typ);
-		setIsAddressable(addressable);
 		setIsModifiable(modifiable);
+		setIsAddressable(addressable);
 	}
 
 	//----------------------------------------------------------------

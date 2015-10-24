@@ -420,6 +420,7 @@ class MyParser extends parser
         VarSTO sto;
         if(arraySizes == null){
             sto = new VarSTO(id, type);
+            m_symtab.getStructType().addSize(sto.getType().getSize());
         }
         else{
             sto = (VarSTO)makeAnArray(id, type, arraySizes);
@@ -476,6 +477,8 @@ class MyParser extends parser
         ExprSTO thisSTO = new ExprSTO("this", m_symtab.getStructType(), false, false);
         return thisSTO;
     }
+
+    // helper for param decl
 
 
     //----------------------------------------------------------------
@@ -1320,33 +1323,78 @@ class MyParser extends parser
     //----------------------------------------------------------------
     // Get the size of a variable/constant object.
     //----------------------------------------------------------------
-    public int getObjSize(STO sto) {
+    public STO getObjSize(STO sto) {
         if (sto.isError()) {
-            return 0;
+            return sto;
         }
 
         if (!sto.getIsAddressable()) {
             // object is not addressable, throw error
             m_nNumErrors++;
             m_errors.print(ErrorMsg.error19_Sizeof);
-            return 0;
+            return new ErrorSTO(ErrorMsg.error19_Sizeof);
         }
 
+        // System.out.println(sto.getName());
+        // System.out.println(sto.getType());
+        // System.out.println(sto.getType().getSize());
+        // int finalSize;
+        Type type = sto.getType();
+        if (type.isPointer()) {
+            return getTypeSize( ((PointerType) type).getBaseType(), null);
+        } else {
+            return new ConstSTO("var size", new IntType(), type.getSize(), false, false);
+        }
+
+
+
+        // else if (type.isArray()) {
+
+
+        //     System.out.println("2");
+        //     System.out.println(type.getSize());
+
+        //     return new ConstSTO("var size", new IntType(), type.getSize(), false, false);
+
+        // } else {
+        //     return new ConstSTO("var size", new IntType(), type.getSize(), false, false);
+        // }
+
         // Passed checks, calculate and return size.
-        return sto.getType().getSize();
+        // return new ConstSTO("var size", new IntType(), finalSize, false, false);
     }
 
     //----------------------------------------------------------------
-    // Get the size of a type.
+    // Get the size of a type/array type.
     //----------------------------------------------------------------
-    public int getTypeSize(Type type) {
+    public STO getTypeSize(Type type, Vector<STO> arrayList) {
         if (type.isError()) {
-            // possibly throw the error here?
-            return 0;
+            return new ErrorSTO(type.getName());
+        }
+
+        if (type.isPointer()) {
+            return getTypeSize( ((PointerType)type).getBaseType(), arrayList);
+            // return new ConstSTO("type size", new IntType(), size);
+
+            // return getTypeSize( ((PointerType)type).getBaseType(), null);
+        }
+
+        if (arrayList != null) {
+            int i = 1;
+            for (STO sto: arrayList){
+                if(sto.getType().isError()){
+                    return sto;
+                }
+                i *= ((ConstSTO)sto).getIntValue();
+            }
+            i *= type.getSize();
+            return new ConstSTO("type size", new IntType(), i, false, false);
+            // return i;
         }
 
         // Passed checks, calculate and return size.
-        return type.getSize();
+        return new ConstSTO("type size", new IntType(), type.getSize(), false, false);
+        // return type.getSize();
     }
 
     //                              BY: VIVEK
@@ -1390,7 +1438,6 @@ class MyParser extends parser
             return t;
         }
         if(pointers.isEmpty()){
-            // System.out.println ("Returning Base Case of type:  " + t);
             return t;
         }
         else{

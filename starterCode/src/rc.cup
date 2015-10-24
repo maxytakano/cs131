@@ -595,7 +595,9 @@ ParamDecl ::=       Type:_type OptRef:_ref T_ID:_name OptArrayList:_arrays
                         if (_arrays == null) {
                             RESULT = new VarSTO(_name, _type, _ref);
                         } else {
-                            RESULT = ((MyParser) parser).makeAnArray(_name, _type, _arrays);
+                            VarSTO arraySTO = (VarSTO)((MyParser) parser).makeAnArray(_name, _type, _arrays);
+                            arraySTO.setPassByReference(true);
+                            RESULT = arraySTO;
                         }
                     :}
     ;
@@ -980,13 +982,16 @@ Designator ::=      T_STAR Designator:_1
                     :}
     |               T_SIZEOF T_LPAREN Designator:_2 T_RPAREN
                     {:
-                        int size = ((MyParser) parser).getObjSize(_2);
-                        RESULT = new ConstSTO("var size", new IntType(), size);
+                        RESULT = ((MyParser) parser).getObjSize(_2);
+
+                        // int size = ((MyParser) parser).getObjSize(_2);
+                        // RESULT = new ConstSTO("var size", new IntType(), size);
                     :}
-    |               T_SIZEOF T_LPAREN Type:_2 OptArrayList T_RPAREN
+    |               T_SIZEOF T_LPAREN Type:_2 OptArrayList:_3 T_RPAREN
                     {:
-                        int size = ((MyParser) parser).getTypeSize(_2);
-                        RESULT = new ConstSTO("type size", new IntType(), size);
+                        RESULT = ((MyParser) parser).getTypeSize(_2, _3);
+                        // int size = ((MyParser) parser).getTypeSize(_2, _3);
+                        // RESULT = new ConstSTO("type size", new IntType(), size);
                     :}
     |               T_LPAREN DecoratedType T_RPAREN Designator:_2
                     {:
@@ -1038,27 +1043,28 @@ Designator3 ::=     T_LPAREN Expr:_2 T_RPAREN
                     :}
     |               T_INT_LITERAL:_1
                     {:
-                        RESULT = new ConstSTO (_1, new IntType(), Integer.parseInt(_1));    // fixed?
+                        RESULT = new ConstSTO (_1, new IntType(), Integer.parseInt(_1), false, false);    // fixed?
                     :}
     |               T_FLOAT_LITERAL:_1
                     {:
-                        RESULT = new ConstSTO (_1, new FloatType(), Float.parseFloat(_1));  // fixed?
+                        RESULT = new ConstSTO (_1, new FloatType(), Float.parseFloat(_1), false, false);  // fixed?
                     :}
     |               T_STR_LITERAL:_1
                     {:
-                        RESULT = new ConstSTO (_1);
+                        // Jank ctor (assume type is null)
+                        RESULT = new ConstSTO (_1, false, false);
                     :}
     |               T_TRUE
                     {:
-                        RESULT = new ConstSTO ("true", new BooleanType(), 1);    // fixed?
+                        RESULT = new ConstSTO ("true", new BooleanType(), 1, false, false);    // fixed?
                     :}
     |               T_FALSE
                     {:
-                        RESULT = new ConstSTO ("false", new BooleanType(), 0);   // fixed?
+                        RESULT = new ConstSTO ("false", new BooleanType(), 0, false, false);   // fixed?
                     :}
     |               T_NULLPTR
                     {:
-                        RESULT = new ExprSTO ("nullptr", new NullPointerType());     // fixed?
+                        RESULT = new ExprSTO ("nullptr", new NullPointerType(), true, true);     // fixed?
                     :}
     |               T_THIS
                     {:

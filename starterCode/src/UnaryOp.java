@@ -42,18 +42,34 @@ class UnaryOp extends Operator
         Type aType;
         if(a.isFunc()){
             aType = ((FuncSTO) a).getReturnType();
+
+            if(!(a.isModLValue())){
+                return new ErrorSTO( Formatter.toString(ErrorMsg.error2_Lval, getName()));
+            }
+
+            if ( !(aType.isNumeric()) && !(aType.isPointer()) ) {
+                return new ErrorSTO( Formatter.toString(ErrorMsg.error2_Type, aType.getName(), getName()) );
+            }
         }else{
             //This method is found in STO
             aType = a.getType();
+
+            if ( !(aType.isNumeric()) && !(aType.isPointer()) ) {
+                return new ErrorSTO( Formatter.toString(ErrorMsg.error2_Type, aType.getName(), getName()) );
+            }
+
+            if(!(a.isModLValue())){
+                return new ErrorSTO( Formatter.toString(ErrorMsg.error2_Lval, getName()));
+            }
         }
 
-        if(!(a.isModLValue())){
-            return new ErrorSTO( Formatter.toString(ErrorMsg.error2_Lval, getName()));
-        }
+        // if(!(a.isModLValue())){
+        //     return new ErrorSTO( Formatter.toString(ErrorMsg.error2_Lval, getName()));
+        // }
 
-        if ( !(aType.isNumeric()) && !(aType.isPointer()) ) {
-            return new ErrorSTO( Formatter.toString(ErrorMsg.error2_Type, aType.getName(), getName()) );
-        }
+        // if ( !(aType.isNumeric()) && !(aType.isPointer()) ) {
+        //     return new ErrorSTO( Formatter.toString(ErrorMsg.error2_Type, aType.getName(), getName()) );
+        // }
 
         StringBuilder expr_builder = new StringBuilder();
         expr_builder.append(a.getName()).append(getName());

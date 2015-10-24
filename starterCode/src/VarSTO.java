@@ -27,6 +27,7 @@ class VarSTO extends STO
 		//we want VarSTOs to always be modifiable L Values, so we
 		//pass is true and true for addressable and modifiable
 		super(strName, typ, true, true);
+		setPassByReference(false);
 		// You may want to change the isModifiable and isAddressable
 		// fields as necessary
 	}
@@ -43,6 +44,7 @@ class VarSTO extends STO
 		//we want VarSTOs to always be modifiable L Values, so we
 		//pass is true and true for addressable and modifiable
 		super(strName, typ, modifiable, addressable);
+		setPassByReference(false);
 		// You may want to change the isModifiable and isAddressable
 		// fields as necessary
 	}

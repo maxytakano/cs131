@@ -96,6 +96,7 @@ class FuncSTO extends STO
 	// params to the passed in params.
 	//----------------------------------------------------------------
 	public boolean hasParamMatch(Vector<STO> params) {
+		System.out.println("whoa");
 		// 1. Check if passed params match this function's params
 		if (compareParams(params, m_parameters)) {
 			return true;
@@ -142,7 +143,10 @@ class FuncSTO extends STO
 			}
 
 			// Check for non-mod l-value case
+			System.out.println("nelllyy");
+
 			if (((VarSTO)curFuncParam).getPassByReference()) {
+				System.out.println(curParam.getType());
 				if (!curParam.isModLValue() && !(curParam.getType().isArray())) {
 					return false;
 				}

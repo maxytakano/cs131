@@ -84,4 +84,9 @@ class StructType extends CompositeType
 		return m_structScope.access(id);
 	}
 
+	public void addSize(int size) {
+		int curSize = getSize();
+		setSize(curSize + size);
+	}
+
 }
