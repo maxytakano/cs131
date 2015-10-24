@@ -587,11 +587,7 @@ ParamList ::=       ParamDecl:_2
 
 ParamDecl ::=       Type:_type OptRef:_ref T_ID:_name OptArrayList:_arrays
                     {:
-                        if (_arrays == null) {
-                            RESULT = new VarSTO(_name, _type, _ref);
-                        } else {
-                            RESULT = ((MyParser) parser).makeAnArray(_name, _type, _arrays);
-                        }
+                        RESULT = ((MyParser) parser).doParamDecl(_name, _type, _arrays, _ref);
                     :}
     ;
 

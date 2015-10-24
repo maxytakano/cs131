@@ -44,12 +44,6 @@ class PointerType extends CompositeType
 	// Check to see if the type is assignable to an type
 	//----------------------------------------------------------------
 	public boolean isAssignableTo(Type t) {
-// System.out.println("-------------------------------------------");
-// System.out.println("type t in pointertype: " + t.getName());
-// System.out.println("this type in PointerType: " + getName());
-// System.out.println("tnext: " + ((PointerType)t).getNextLevel());
-// System.out.println("thisnext: " + getNextLevel());
-// System.out.println();
 		if(t.isError()){
 			return false;
 		}
@@ -67,7 +61,7 @@ class PointerType extends CompositeType
 			return false;
 		}
 		if( !(((PointerType) t).getNextLevel().isPointer()) && !(getNextLevel().isPointer()) ){
-			return ((PointerType) t).getNextLevel().isAssignableTo(nextLevel);
+			return nextLevel.isEquivalentTo(((PointerType) t).getNextLevel());
 		}
 		else{
 			return nextLevel.isAssignableTo(((PointerType) t).getNextLevel());
@@ -96,7 +90,6 @@ class PointerType extends CompositeType
 			PointerType myType = (PointerType)pointer;
 			name += "*";
 			pointer = myType.getNextLevel();
-			// System.out.println("here: " + arry);
 		}
 		return name;
 	}

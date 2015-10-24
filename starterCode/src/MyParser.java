@@ -186,14 +186,8 @@ class MyParser extends parser
                 return;
             }
             Type initType = optInit.getType();
-            // user decided to initialize the variable, type check it
-// System.out.println("-------------------------------------------");
-// System.out.println("id: " + id);
-// System.out.println("optInit: " + optInit);
-// System.out.println("optInit name: " + optInit.getName());
-// System.out.println("optInit type: " + optInit.getType());
-// System.out.println("type: " + type);
-// System.out.println();
+            // user decided to initialize the variable, type check it\
+
             if (!initType.isAssignableTo(type)) {
                 m_nNumErrors++;
                 m_errors.print(Formatter.toString(ErrorMsg.error8_Assign, initType.getName(), type.getName()));
@@ -570,6 +564,22 @@ class MyParser extends parser
     }
 
     //----------------------------------------------------------------
+    // method to instantiate the parameters
+    //----------------------------------------------------------------
+    STO doParamDecl(String name, Type type, Vector<STO> arrays, boolean ref){
+        if(arrays == null){
+            return new VarSTO(name, type, ref);
+        }
+        else{
+            //if an array is passed in as a parameter, it MUST be passed by reference
+            VarSTO arrySTO = (VarSTO) makeAnArray(name, type, arrays);
+            arrySTO.setPassByReference(true);
+            return arrySTO;
+        }
+
+    }
+
+    //----------------------------------------------------------------
     // Inserts a vector of params into the symtab
     //----------------------------------------------------------------
     void insertParams(Vector<STO> params) {
@@ -847,11 +857,9 @@ class MyParser extends parser
         }
         // Good place to do the array checks
         Type stoType = sto.getType();
-        // System.out.println("here: " + stoType.isArray());
         //default to true since we don't have to check for pointers.
         if(!(stoType.isArray()) && !(stoType.isPointer())){
             m_nNumErrors++;
-             // System.out.println("printing sto name here: " + stoType.getName() + " type: " + stoType);
             m_errors.print(Formatter.toString(ErrorMsg.error11t_ArrExp, stoType.getName()));
             return new ErrorSTO(sto.getName());
         }
@@ -860,7 +868,6 @@ class MyParser extends parser
         if(!(expr.getType().isEquivalentTo(new IntType())))
         {
             m_nNumErrors++;
-            // System.out.println("printing here 2 DoDesignator2_Array");
             m_errors.print(Formatter.toString(ErrorMsg.error11i_ArrExp, expr.getType().getName()));
             return new ErrorSTO(sto.getName());
         }
@@ -876,7 +883,6 @@ class MyParser extends parser
                     int intval = ((ConstSTO)expr).getIntValue(); 
                     if( intval >= myArry.getCurrentDim() || intval < 0){
                         m_nNumErrors++;
-                        // System.out.println("printing here DoDesignator2_Array");
                         m_errors.print(Formatter.toString(ErrorMsg.error11b_ArrExp, 
                                                             ((ConstSTO)expr).getIntValue(), 
                                                             myArry.getCurrentDim()));
@@ -893,13 +899,8 @@ class MyParser extends parser
             m_errors.print(ErrorMsg.error15_Nullptr);
             return new ErrorSTO(sto.getName());
         }
+
         return new VarSTO(sto.getName(), ((PointerType) stoType).getNextLevel());
-
-        //at this point, we need to return the proper VarSTO. specifcally, if it's completely
-        //dereferenced array, the varsto with basic type, else arraytype 
-        // VarSTO myNextArrayVal = ((ArrayType)sto.getType()).getNextLevel();
-
-        // return myNextArrayVal;
     }
 
     // ** Phase 0 ** //
@@ -1165,25 +1166,19 @@ class MyParser extends parser
 
         //needs to be int, else error
         if (!exprType.isInt()) {
-            // m_nNumErrors++;
             String errorToPrint =  Formatter.toString(ErrorMsg.error10i_Array, exprType.getName());
-            // m_errors.print(errorToPrint);
             return new ConstSTO(errorToPrint, new ErrorType());
         }
         //needs to be constant else error
         if (!expr.isConst()){
-            // m_nNumErrors++;
             String errorToPrint = ErrorMsg.error10c_Array ;
-            // m_errors.print(errorToPrint);
             return new ConstSTO(errorToPrint, new ErrorType());
         }
         //known at compile time, so we can grab the value
         int intValue = ((ConstSTO)expr).getIntValue();
         //if value is less than or equal to 0, error
         if(intValue <= 0){
-            // m_nNumErrors++;
             String errorToPrint = Formatter.toString(ErrorMsg.error10z_Array, intValue);
-            // m_errors.print(errorToPrint);
             return new ConstSTO(errorToPrint, new ErrorType(), intValue);
         }
 
@@ -1340,7 +1335,6 @@ class MyParser extends parser
             return t;
         }
         if(pointers.isEmpty()){
-            // System.out.println ("Returning Base Case of type:  " + t);
             return t;
         }
         else{
@@ -1355,10 +1349,8 @@ class MyParser extends parser
             if(recursedType.isError()){
                 return recursedType;
             }
-            // System.out.println("Type: " + recursedSTO.getType() + " \n Name: " + recursedSTO.getName());
             myPointerType.setNextLevel(recursedType);
             //the new varsto will be an non-mod lval, so addressable, but not modifiable
-            // System.out.println("returning recursion type: " + myArrayType.getName());
             return myPointerType;
         }
     }
@@ -1409,9 +1401,18 @@ class MyParser extends parser
     }
 
     STO getAddressOf(STO expr) {
-        PointerType addressof = new PointerType(expr.getType());
+        PointerType addressof;
+        if(expr.getType().isPointer()){
+            addressof = new PointerType(((PointerType)expr.getType()).getBaseType());
+        }
+        else{
+            addressof = new PointerType(expr.getType());
+        }
+
+        //set the next level of the addressof pointer
         addressof.setNextLevel(expr.getType());
-        ExprSTO myExpr = new ExprSTO(expr.getName(), addressof);
+
+        ExprSTO myExpr = new ExprSTO(expr.getName(), addressof,  false, false);
 
         return myExpr;
     }

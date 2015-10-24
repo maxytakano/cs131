@@ -51,7 +51,7 @@ class ArrayType extends CompositeType
 	//----------------------------------------------------------------
 	public boolean isAssignableTo(Type t){
 		if(baseType != null){
-			if (nextLevel == null && t.isAssignableTo(baseType)){
+			if (nextLevel == null && baseType.isAssignableTo(t)){
 				return true;
 			}
 		} else {
@@ -70,7 +70,6 @@ class ArrayType extends CompositeType
 			ArrayType myType = (ArrayType)arry.getType();
 			name += "[" + myType.getCurrentDim() + "]";
 			arry = myType.getNextLevel();
-			// System.out.println("here: " + arry);
 		}
 		return name;
 	}
