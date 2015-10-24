@@ -624,16 +624,20 @@ OptElse ::=         T_ELSE CodeBlock
     ;
 
 
-WhileStmt ::=       T_WHILE Expr:_1 {: ((MyParser) parser).doConditionCheck(_1); :} CodeBlock
+WhileStmt ::=       T_WHILE Expr:_1 
+                    {: 
+                        ((MyParser) parser).setForEachWhileFlag();
+                        ((MyParser) parser).doConditionCheck(_1); 
+                    :} 
+                    CodeBlock
     ;
 
 
 Stmt ::=     T_FOREACH T_LPAREN Type:_type OptRef:_ref T_ID:_3 T_COLON Expr:_expr T_RPAREN
                     {:
+                        ((MyParser) parser).setForEachWhileFlag();
                         ((MyParser) parser).DoBlockOpen();
-                        //May have to replace with do foreach?
                         ((MyParser) parser).doForEachCheck (_3, _type, _ref, _expr);
-                        // ((MyParser) parser).DoVarDecl (_3, _type, _expr);
                     :}
                     CodeBlock
                     {:
@@ -642,11 +646,19 @@ Stmt ::=     T_FOREACH T_LPAREN Type:_type OptRef:_ref T_ID:_3 T_COLON Expr:_exp
     ;
 
 
-BreakStmt ::=       T_BREAK T_SEMI
+BreakStmt ::=       T_BREAK
+                    {:
+                        ((MyParser) parser).breakContinueCheck(1);
+                    :} 
+                    T_SEMI
     ;
 
 
-ContinueStmt ::=    T_CONTINUE T_SEMI
+ContinueStmt ::=    T_CONTINUE 
+                    {:
+                        ((MyParser) parser).breakContinueCheck(2);
+                    :} 
+                    T_SEMI
     ;
 
 
