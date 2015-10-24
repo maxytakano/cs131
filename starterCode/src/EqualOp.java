@@ -88,6 +88,19 @@ class EqualOp extends ComparisonOp
             }
 
             return expr;
+        } else if ( aType.isPointer() || aType.isNullPointer() || bType.isPointer() || bType.isNullPointer() ) {
+            STO expr;
+            if ( aType.isPointer() && bType.isPointer() ) {
+                expr = new ExprSTO("put expr string here", new BooleanType());
+            } else if ( bType.isPointer() || bType.isNullPointer() ) {
+                expr = new ExprSTO("put expr string here", new BooleanType());
+            } else if ( aType.isNullPointer() && bType.isPointer() ) {
+                expr = new ExprSTO("put expr string here", new BooleanType());
+            } else {
+                return new ErrorSTO( Formatter.toString(ErrorMsg.error17_Expr, getName(), aType.getName(), bType.getName()) );
+            }
+
+            return expr;
         } else {
             return new ErrorSTO( Formatter.toString(ErrorMsg.error1b_Expr, aType.getName(), getName(), bType.getName()) );
         }

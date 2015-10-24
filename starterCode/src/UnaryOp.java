@@ -31,8 +31,6 @@ class UnaryOp extends Operator
     // method for checking operands
     //----------------------------------------------------------------
     public STO checkOperand(STO a){
-        /// operand types must be numeric, and the resulting type is int
-        // when both ops are int, or float otherwise.
 
         // double check this
         if (a.isError()) {
@@ -43,9 +41,9 @@ class UnaryOp extends Operator
         //This method is found in STO
         Type aType = a.getType();
 
-        if ( !(aType.isNumeric()) ) {
+        if ( !(aType.isNumeric()) || !(aType.isPointer()) ) {
             return new ErrorSTO( Formatter.toString(ErrorMsg.error2_Type, aType.getName(), getName()) );
-        }  
+        }
 
         if(!(a.isModLValue())){
             return new ErrorSTO( Formatter.toString(ErrorMsg.error2_Lval, getName()));
@@ -61,8 +59,11 @@ class UnaryOp extends Operator
 
         if(aType.isInt()) {
             expr = new ExprSTO(expr_builder.toString(), new IntType());
-        } else {
+        } else if(aType.isFloat()) {
             expr = new ExprSTO(expr_builder.toString(), new FloatType());
+        } else {
+            // its a pointer.
+            expr = new ExprSTO(expr_builder.toString(), new PointerType());
         }
 
         return expr;

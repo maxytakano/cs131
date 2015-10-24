@@ -693,11 +693,21 @@ WriteStmt ::=       T_COUT T_OSTREAM WritePairList T_SEMI
     ;
 
 //THIS COULD BE THE WRONG LOCATION
-NewStmt ::= T_NEW Designator OptCtorCall T_SEMI
+NewStmt ::=         T_NEW Designator:_1 OptCtorCall:_2 T_SEMI
+                    {:
+                        if (_2 != null) {
+                            ((MyParser) parser).doNewCtorStatement(_1, _2);
+                        } else {
+                            ((MyParser) parser).doNewStatement(_1);
+                        }
+                    :}
     ;
 
 //THIS COULD BE THE WRONG LOCATION
-DeleteStmt ::= T_DELETE Designator T_SEMI
+DeleteStmt ::=      T_DELETE Designator:_1 T_SEMI
+                    {:
+                        ((MyParser) parser).doDeleteStatement(_1);
+                    :}
     ;
 
 
@@ -946,11 +956,13 @@ Designator ::=      T_STAR Designator:_1
                     :}
     |               T_SIZEOF T_LPAREN Designator:_2 T_RPAREN
                     {:
-                        RESULT = new ConstSTO("sizeof variable - fix me", null, 0);
+                        int size = ((MyParser) parser).getObjSize(_2);
+                        RESULT = new ConstSTO("var size", new IntType(), size);
                     :}
     |               T_SIZEOF T_LPAREN Type:_2 OptArrayList T_RPAREN
                     {:
-                        RESULT = new ConstSTO("sizeof type - fix me", null, 0);
+                        int size = ((MyParser) parser).getTypeSize(_2);
+                        RESULT = new ConstSTO("type size", new IntType(), size);
                     :}
     |               T_LPAREN DecoratedType T_RPAREN Designator:_2
                     {:

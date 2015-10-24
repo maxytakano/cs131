@@ -1127,7 +1127,6 @@ class MyParser extends parser
             m_errors.print(Formatter.toString(ErrorMsg.not_type, sto.getName()));
             return new ErrorType();
         }
-        
 
         return sto.getType();
     }
@@ -1186,4 +1185,141 @@ class MyParser extends parser
 
         return expr;
     }
+
+    //----------------------------------------------------------------
+    // Check 16 New/Delete Statement
+    //----------------------------------------------------------------
+
+    //----------------------------------------------------------------
+    // New Statement checks
+    //----------------------------------------------------------------
+    public void doNewStatement(STO sto) {
+        if (sto.isError()) {
+            return;
+        }
+
+        if (!sto.isModLValue()) {
+            m_nNumErrors++;
+            m_errors.print(ErrorMsg.error16_New_var);
+            return;
+        }
+
+        Type type = sto.getType();
+        if (!type.isPointer()) {
+            m_nNumErrors++;
+            m_errors.print( Formatter.toString(ErrorMsg.error16_New, type.getName()) );
+            return;
+        }
+    }
+
+    //----------------------------------------------------------------
+    // New Ctor Statement checks
+    //----------------------------------------------------------------
+    public void doNewCtorStatement(STO sto, Vector<STO> params) {
+        if (sto.isError()) {
+            return;
+        }
+
+        Type type = sto.getType();
+        if (!type.isPointer()) {
+            m_nNumErrors++;
+            m_errors.print( Formatter.toString(ErrorMsg.error16b_NonStructCtorCall, type.getName()) );
+            return;
+        }
+
+        // If it's a pointer, check that it's pointing to a structType
+        if ( !((PointerType) type).getNextLevel().isStruct() ) {
+            m_nNumErrors++;
+            m_errors.print( Formatter.toString(ErrorMsg.error16b_NonStructCtorCall, type.getName()) );
+            return;
+        }
+    }
+
+    //----------------------------------------------------------------
+    // Delete Statement checks
+    //----------------------------------------------------------------
+    public void doDeleteStatement(STO sto) {
+        if (sto.isError()) {
+            return;
+        }
+
+        if (!sto.isModLValue()) {
+            m_nNumErrors++;
+            m_errors.print(ErrorMsg.error16_Delete_var);
+            return;
+        }
+
+        Type type = sto.getType();
+        if (!type.isPointer()) {
+            m_nNumErrors++;
+            m_errors.print( Formatter.toString(ErrorMsg.error16_Delete, type.getName()) );
+            return;
+        }
+    }
+
+
+    //----------------------------------------------------------------
+    // Check 19 Sizeof
+    //----------------------------------------------------------------
+
+    //----------------------------------------------------------------
+    // Get the size of a variable/constant object.
+    //----------------------------------------------------------------
+    public int getObjSize(STO sto) {
+        if (sto.isError()) {
+            return 0;
+        }
+
+        if (!sto.getIsAddressable()) {
+            // object is not addressable, throw error
+            m_nNumErrors++;
+            m_errors.print(ErrorMsg.error19_Sizeof);
+            return 0;
+        }
+
+        // Passed checks, calculate and return size.
+        return sto.getType().getSize();
+    }
+
+    //----------------------------------------------------------------
+    // Get the size of a type.
+    //----------------------------------------------------------------
+    public int getTypeSize(Type type) {
+        if (type.isError()) {
+            // possibly throw the error here?
+            return 0;
+        }
+
+        // Passed checks, calculate and return size.
+        return type.getSize();
+    }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
