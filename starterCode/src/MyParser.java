@@ -195,6 +195,7 @@ class MyParser extends parser
 // System.out.println("type: " + type);
 // System.out.println();
             if (!initType.isAssignableTo(type)) {
+                                System.out.println("IN vaR DECL: TYPE: " + initType.getName());
                 m_nNumErrors++;
                 m_errors.print(Formatter.toString(ErrorMsg.error8_Assign, initType.getName(), type.getName()));
                 return;
@@ -281,7 +282,7 @@ class MyParser extends parser
             return new ErrorSTO(id);
         }
         if(arraySizes.isEmpty()){
-            return new VarSTO(id, type);
+            return new VarSTO(id, type, true, true);
         }
         else{
             //if it's an error, it's been printed. Any instantiation errors are
@@ -358,6 +359,7 @@ class MyParser extends parser
             Type initType = constExpr.getType();
             // user decided to initialize the variable, type check it
             if (!initType.isAssignableTo(type)) {
+                System.out.println("IN CONST DECL: TYPE: " + initType.getName());
                 m_nNumErrors++;
                 m_errors.print(Formatter.toString(ErrorMsg.error8_Assign, initType.getName(), type.getName()));
                 return;
@@ -676,12 +678,18 @@ class MyParser extends parser
     //----------------------------------------------------------------
     STO DoAssignExpr(STO stoDes, STO stoExpr)
     {
+        // System.out.println("in assign expre");
         if (stoExpr.isError()) {
             return stoExpr;
         }
         if(stoDes.isError()){
             return stoDes;
         }
+
+        // System.out.println("stodes: " + stoDes.getType());
+        // System.out.println("stoexpr: " + stoExpr.getType());
+
+        
 
         if (!stoDes.isModLValue())
         {
@@ -1079,7 +1087,7 @@ class MyParser extends parser
         Type returnType = curFunc.getReturnType();
 
         if (!curFunc.isReturnByReference()) {
-            if (!exprType.isAssignableTo(returnType)) {
+            if (!exprType.isAssignableTo(returnType)) {                
                 // return expr not assignable to return type
                 m_nNumErrors++;
                 m_errors.print( Formatter.toString(ErrorMsg.error6a_Return_type, exprType.getName(),
@@ -1354,7 +1362,7 @@ class MyParser extends parser
     //----------------------------------------------------------------
     STO checkPointerValidity(STO sto){
         if(sto.isError()){
-            return new ErrorSTO(sto.getName());
+            return new ExprSTO("error", new NullPointerType());
         }
 
         if(sto.getType().isNullPointer()){
@@ -1363,7 +1371,6 @@ class MyParser extends parser
             return new ErrorSTO(sto.getName());
         }
         else{
-            //if it's an error, it's been printed. 
             if(!(sto.getType().isPointer())){
                 m_nNumErrors++;
                 m_errors.print(Formatter.toString(ErrorMsg.error15_Receiver, sto.getType().getName()));
@@ -1464,6 +1471,26 @@ class MyParser extends parser
         ExprSTO myExpr = new ExprSTO(expr.getName(), addressof);
 
         return myExpr;
+    }
+
+    STO typeCasting(STO sto, Type type){
+        if(!(sto.getType().isBasic()) && !(sto.getType().isPointer())){
+            m_nNumErrors++;
+                m_errors.print(Formatter.toString(ErrorMsg.error20_Cast, sto.getType().getName(), type.getName()));
+                return new ErrorSTO(sto.getName());
+        }
+        if(sto.getType().isNullPointer()){
+            m_nNumErrors++;
+                m_errors.print(Formatter.toString(ErrorMsg.error20_Cast, sto.getType().getName(), type.getName()));
+                return new ErrorSTO(sto.getName());
+        }
+        if(sto.isConst()){
+            BigDecimal myVal = ((ConstSTO) sto).getValue();
+            return new ConstSTO(sto.getName(), type, myVal);
+        }
+        else{
+            return new ExprSTO(sto.getName(), type);
+        }
     }
 }
 

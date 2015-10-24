@@ -44,6 +44,9 @@ class PointerType extends CompositeType
 	// Check to see if the type is assignable to an type
 	//----------------------------------------------------------------
 	public boolean isAssignableTo(Type t) {
+		if(t == null){
+			return false;
+		}
 		if(t.isError()){
 			return false;
 		}

@@ -595,7 +595,9 @@ ParamDecl ::=       Type:_type OptRef:_ref T_ID:_name OptArrayList:_arrays
                         if (_arrays == null) {
                             RESULT = new VarSTO(_name, _type, _ref);
                         } else {
-                            RESULT = ((MyParser) parser).makeAnArray(_name, _type, _arrays);
+                            VarSTO arraySto = (VarSTO)((MyParser) parser).makeAnArray(_name, _type, _arrays);
+                            arraySto.setPassByReference(true);
+                            RESULT = arraySto;
                         }
                     :}
     ;
@@ -988,9 +990,9 @@ Designator ::=      T_STAR Designator:_1
                         int size = ((MyParser) parser).getTypeSize(_2);
                         RESULT = new ConstSTO("type size", new IntType(), size);
                     :}
-    |               T_LPAREN DecoratedType T_RPAREN Designator:_2
+    |               T_LPAREN DecoratedType:_1 T_RPAREN Designator:_2
                     {:
-                        RESULT = _2;
+                        RESULT = ((MyParser) parser).typeCasting(_2, _1);
                     :}
     |               IncDecOp:_1 Designator:_2
                     {:
