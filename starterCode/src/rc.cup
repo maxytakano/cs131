@@ -654,10 +654,10 @@ BreakStmt ::=       T_BREAK
     ;
 
 
-ContinueStmt ::=    T_CONTINUE 
+ContinueStmt ::=    T_CONTINUE
                     {:
                         ((MyParser) parser).breakContinueCheck(2);
-                    :} 
+                    :}
                     T_SEMI
     ;
 
@@ -673,10 +673,14 @@ ExitStmt ::=        T_EXIT T_LPAREN Expr:_1
 ReturnStmt ::=      T_RETURN T_SEMI
                     {:
                         ((MyParser) parser).doReturnVoidCheck();
+                        // Always try to set the hastopfunction flag
+                        ((MyParser) parser).setFunctionReturn();
                     :}
     |               T_RETURN Expr:_1 T_SEMI
                     {:
                         ((MyParser) parser).doReturnTypeCheck(_1);
+                        // Always try to set the hastopfunction flag
+                        ((MyParser) parser).setFunctionReturn();
                     :}
     ;
 

@@ -264,7 +264,7 @@ class MyParser extends parser
         if(sto.isError()){
             return;
         }
-        
+
         m_symtab.insert(sto);
     }
 
@@ -454,12 +454,13 @@ class MyParser extends parser
     //----------------------------------------------------------------
     void DoFuncDecl_1(String id, Type returnType, Boolean returnByReference, Boolean isCtorDtor)
     {
-        /*  check 13b checks */
+        /*  check 13b CTOR/DTOR DECL in a struct checks */
         Type structType;
+        // Check if we are in a struct's ctor or dtor
         if ((structType = m_symtab.getStructType()) != null && isCtorDtor) {
-            // We are in a struct, check the ctor/dtor decl
             String ctorDtorName = id;
             Boolean isDtor = (ctorDtorName.charAt(0) == '~');
+
             if (isDtor) {
                 // in a dtor, do the redeclare check
                 if (m_symtab.accessLocal(id) != null) {
@@ -468,10 +469,11 @@ class MyParser extends parser
                     return;
                 }
 
-                // if it's okay temporarily modify id for the check
+                // Modify the dtor's name (removing '~') for the not same namecheck
                 ctorDtorName = ctorDtorName.substring(1);
             }
 
+            // Check if the ctor/dtor is the not the same name as the struct.
             if (!(structType.getName()).equals(ctorDtorName)) {
                 m_nNumErrors++;
                 if (isDtor) {
@@ -524,12 +526,9 @@ class MyParser extends parser
     //----------------------------------------------------------------
     void DoFormalParams(Vector<STO> params, String id)
     {
-        // System.out.println("Maxy pads");
         if (m_symtab.getFunc() == null)
         {
             return;
-            // m_nNumErrors++;
-            // m_errors.print ("internal: DoFormalParams says no proc!");
         }
 
         // 3. now we can assume we have a candidate and existing function.
@@ -583,7 +582,6 @@ class MyParser extends parser
     {
         if (m_symtab.getFunc() == null)
         {
-            m_symtab.closeScope();
             // func param comparison failed.
             return;
         }
@@ -1032,17 +1030,17 @@ class MyParser extends parser
         }
 
         /* Phase 1 check 6c */
-        int curlevel = m_symtab.getLevel();
-        if (curlevel == 2) {
-            // global level is 1, just inside function is level 2
-            m_symtab.getFunc().setHasTopReturn(true);
-        }
+        // int curlevel = m_symtab.getLevel();
+        // if (curlevel == 2) {
+        //     // global level is 1, just inside function is level 2
+        //     m_symtab.getFunc().setHasTopReturn(true);
+        // }
     }
 
     /* Phase 1 check 6b */
     void doReturnTypeCheck(STO expr) {
         if (expr.isError()) {
-            m_symtab.setFunc(null);
+            // m_symtab.setFunc(null);
             return;
         }
 
@@ -1076,6 +1074,15 @@ class MyParser extends parser
         }
 
         /* Phase 1 check 6c */
+        // int curlevel = m_symtab.getLevel();
+        // if (curlevel == 2) {
+        //     // global level is 1, just inside function is level 2
+        //     m_symtab.getFunc().setHasTopReturn(true);
+        // }
+    }
+
+    void setFunctionReturn() {
+        /* Phase 1 check 6c */
         int curlevel = m_symtab.getLevel();
         if (curlevel == 2) {
             // global level is 1, just inside function is level 2
@@ -1088,9 +1095,12 @@ class MyParser extends parser
     //
     //----------------------------------------------------------------
     void doExitCheck(STO expr) {
+        if (expr.isError()) {
+            return;
+        }
         Type exprType = expr.getType();
 
-        if(exprType.isAssignableTo(new IntType())) {
+        if(!exprType.isAssignableTo(new IntType())) {
 
             m_nNumErrors++;
             m_errors.print( Formatter.toString(ErrorMsg.error7_Exit, exprType.getName()));

@@ -50,6 +50,11 @@ class ModOp extends ArithmeticOp
                 aVal = ((ConstSTO) a).getIntValue();
                 bVal = ((ConstSTO) b).getIntValue();
 
+                if (bVal == 0) {
+                    // divide by 0 error
+                    return new ErrorSTO(ErrorMsg.error8_Arithmetic);
+                }
+
                 result = aVal % bVal;
 
                 // both are const, return a const expr.
