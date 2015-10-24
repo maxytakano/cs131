@@ -20,6 +20,8 @@ class MyParser extends parser
     private boolean m_bSyntaxError = true;
     private int m_nSavedLineNum;
 
+    private int m_foreachwhileflag;
+
     private SymbolTable m_symtab;
 
     //----------------------------------------------------------------
@@ -32,6 +34,7 @@ class MyParser extends parser
         m_errors = errors;
         m_debugMode = debugMode;
         m_nNumErrors = 0;
+        m_foreachwhileflag = -1;
     }
 
     //----------------------------------------------------------------
@@ -522,6 +525,7 @@ class MyParser extends parser
     //----------------------------------------------------------------
     void DoFormalParams(Vector<STO> params, String id)
     {
+        // System.out.println("Maxy pads");
         if (m_symtab.getFunc() == null)
         {
             return;
@@ -592,6 +596,27 @@ class MyParser extends parser
     void DoBlockClose()
     {
         m_symtab.closeScope();
+        if(m_symtab.getLevel() <= m_foreachwhileflag){
+            m_foreachwhileflag = -1;
+        }
+    }
+
+    //----------------------------------------------------------------
+    // check to see if break and continue statements are within scope of
+    // a foreach stmt (or while loop)
+    //----------------------------------------------------------------
+    void breakContinueCheck(int a)
+    {
+        //if it's -1, it's not inside a foreach or while loop
+        if(m_foreachwhileflag == -1){
+            m_nNumErrors++;
+            if(a == 1){
+                m_errors.print(ErrorMsg.error12_Break);
+            }
+            else if(a == 2){
+                m_errors.print(ErrorMsg.error12_Continue);
+            }
+        }
     }
 
     //----------------------------------------------------------------
@@ -945,6 +970,16 @@ class MyParser extends parser
         }
         return result;
     }
+
+    //----------------------------------------------------------------
+    // performs unary sign. This is phase 0, but never implemented till now
+    //----------------------------------------------------------------
+    void setForEachWhileFlag(){
+        if(m_foreachwhileflag  == -1){
+            m_foreachwhileflag = m_symtab.getLevel();
+        }
+    }
+
 
     // ** Phase 1 check 4 **/
     void doConditionCheck(STO expr) {
