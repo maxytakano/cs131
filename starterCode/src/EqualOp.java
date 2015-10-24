@@ -45,14 +45,9 @@ class EqualOp extends ComparisonOp
                 bVal = ((ConstSTO) b).getFloatValue();
 
                 int booleanInt = (aVal == bVal) ? 1 : 0;
-                //VIVEK PRINTED HERE
-                // System.out.println("------------------------------------------------------------------");
-                // System.out.println("(in EqualOp) Operator: " + getName());
-                // System.out.println("int result of const folding EqualOp: " + booleanInt);
-                // System.out.println();
-                
+
                 BigDecimal result = new BigDecimal(booleanInt);
-                
+
                 expr = new ConstSTO(expr_builder.toString(), new BooleanType(), result);
             } else {
                 // if any are var return a expr.
@@ -66,18 +61,11 @@ class EqualOp extends ComparisonOp
             STO expr;
             if (a.isConst() && b.isConst()) {
                 // both are const, return a const expr.
-                //there can only be one operator, == and the types are bools
                 boolean aVal, bVal;
                 aVal = ((ConstSTO) a).getBoolValue();
                 bVal = ((ConstSTO) b).getBoolValue();
 
                 int booleanInt = (aVal == bVal) ? 1 : 0;
-
-                //VIVEK PRINTED HERE
-                // System.out.println("------------------------------------------------------------------");
-                // System.out.println("(in EqualOp) Operator: " + getName());
-                // System.out.println("int result of const folding EqualOp: " + booleanInt);
-                // System.out.println();
 
                 BigDecimal result = new BigDecimal(booleanInt);
 
@@ -90,9 +78,9 @@ class EqualOp extends ComparisonOp
             return expr;
         } else if ( aType.isPointer() || aType.isNullPointer() || bType.isPointer() || bType.isNullPointer() ) {
             STO expr;
-            if ( aType.isPointer() && bType.isPointer() ) {
+            if ( aType.isEquivalentTo(bType) ) {
                 expr = new ExprSTO("put expr string here", new BooleanType());
-            } else if ( bType.isPointer() || bType.isNullPointer() ) {
+            } else if ( aType.isPointer() && bType.isNullPointer() ) {
                 expr = new ExprSTO("put expr string here", new BooleanType());
             } else if ( aType.isNullPointer() && bType.isPointer() ) {
                 expr = new ExprSTO("put expr string here", new BooleanType());

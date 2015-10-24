@@ -41,7 +41,7 @@ class UnaryOp extends Operator
         //This method is found in STO
         Type aType = a.getType();
 
-        if ( !(aType.isNumeric()) || !(aType.isPointer()) ) {
+        if ( !(aType.isNumeric()) && !(aType.isPointer()) ) {
             return new ErrorSTO( Formatter.toString(ErrorMsg.error2_Type, aType.getName(), getName()) );
         }
 

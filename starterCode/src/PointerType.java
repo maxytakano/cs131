@@ -78,7 +78,7 @@ class PointerType extends CompositeType
 	// Check to see if the type is a Type
 	//----------------------------------------------------------------
 	public boolean isEquivalentTo(Type t) {
-		if(t.isArray()){
+		if(t.isPointer()){
 			if(t.getName().equals(getName())){
 				return true;
 			}

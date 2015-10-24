@@ -304,7 +304,7 @@ StructdefDecl ::=   T_STRUCTDEF T_ID_U:_1 T_LBRACE
 
                         // pass the scope into struct def, which passes it into a type, which is constrcuted into a sto
                         ((MyParser) parser).DoStructdefDecl (_1);
-                        ((MyParser) parser).setCurrentStructType(null);
+                        ((MyParser) parser).clearStructType();
 
                     :}
                     T_RBRACE T_SEMI
@@ -428,6 +428,11 @@ DecoratedType ::=   DecoratedBasicType:_1
                     :}
     |               StructType:_1 PointerList:_2
                     {:
+                        // check for recursive declaration
+                        // if ( ((MyParser) parser).doRecursiveStructCheck(_1) ) {
+
+                        // }
+
                         RESULT = ((MyParser) parser).makeAPointer(_1, _2);;    // gotta do something here!
                     :}
     ;

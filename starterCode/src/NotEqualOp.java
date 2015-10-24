@@ -22,12 +22,12 @@ class NotEqualOp extends ComparisonOp
     // override relation ops
     public STO checkOperands(STO a, STO b) {
         // double check this
-        // if (a.isError()) {
-        //     return a;
-        // }
-        // if (b.isError()) {
-        //     return b;
-        // }
+        if (a.isError()) {
+            return a;
+        }
+        if (b.isError()) {
+            return b;
+        }
 
         Type aType = a.getType();
         Type bType = b.getType();
@@ -44,11 +44,6 @@ class NotEqualOp extends ComparisonOp
                 bVal = ((ConstSTO) b).getFloatValue();
 
                 int booleanInt = (aVal != bVal) ? 1 : 0;
-                //VIVEK PRINTED HERE
-                // System.out.println("------------------------------------------------------------------");
-                // System.out.println("(in NotEqualOp) Operator: " + getName());
-                // System.out.println("int result of const folding NotEqualOp: " + booleanInt);
-                // System.out.println();
                 BigDecimal result = new BigDecimal(booleanInt);
 
                 expr = new ConstSTO(expr_builder.toString(), new BooleanType(), result);
@@ -70,17 +65,25 @@ class NotEqualOp extends ComparisonOp
 
                 int booleanInt = (aVal != bVal) ? 1 : 0;
 
-                //VIVEK PRINTED HERE
-                // System.out.println("------------------------------------------------------------------");
-                // System.out.println("(in NotEqualOp) Operator: " + getName());
-                // System.out.println("int result of const folding NotEqualOp: " + booleanInt);
-                // System.out.println();
                 BigDecimal result = new BigDecimal(booleanInt);
 
                 expr = new ConstSTO(expr_builder.toString(), new BooleanType(), result);
             } else {
                 // if any are var return a expr.
                 expr = new ExprSTO(expr_builder.toString(), new BooleanType());
+            }
+
+            return expr;
+        } else if ( aType.isPointer() || aType.isNullPointer() || bType.isPointer() || bType.isNullPointer() ) {
+            STO expr;
+            if ( aType.isEquivalentTo(bType) ) {
+                expr = new ExprSTO("put expr string here", new BooleanType());
+            } else if ( aType.isPointer() && bType.isNullPointer() ) {
+                expr = new ExprSTO("put expr string here", new BooleanType());
+            } else if ( aType.isNullPointer() && bType.isPointer() ) {
+                expr = new ExprSTO("put expr string here", new BooleanType());
+            } else {
+                return new ErrorSTO( Formatter.toString(ErrorMsg.error17_Expr, getName(), aType.getName(), bType.getName()) );
             }
 
             return expr;

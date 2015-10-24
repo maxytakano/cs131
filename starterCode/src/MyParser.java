@@ -382,6 +382,13 @@ class MyParser extends parser
     }
 
     //----------------------------------------------------------------
+    // Clears the structType in the symtab
+    //----------------------------------------------------------------
+    void clearStructType() {
+        m_symtab.setStructType(null);
+    }
+
+    //----------------------------------------------------------------
     //
     //----------------------------------------------------------------
     void DoStructdefDecl(String id) {
@@ -1111,11 +1118,25 @@ class MyParser extends parser
         }
     }
 
+    // Boolean doRecursiveStructCheck(Type type) {
+
+    // }
+
     //----------------------------------------------------------------
     //
     //----------------------------------------------------------------
     Type DoStructType_ID(String strID)
     {
+        if (m_symtab.getStructType() != null) {
+            // If we are in a struct, check if we are doing a recursive declaration.
+            if (m_symtab.getStructType().getName().equals(strID)) {
+
+                // skip the rest of these checks and return.
+                return m_symtab.getStructType();
+            } 
+            // probably need else here, check the global scope for other existing structs
+        }
+
         STO sto;
 
         if ((sto = m_symtab.access(strID)) == null)
