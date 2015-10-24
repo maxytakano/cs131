@@ -1,3 +1,0 @@
-Error, "/tmp/cs131_testrunner_MHTaux/file.rc", line 5: 
-  Incompatible type bool* to operator ->, pointer to struct expected.
-Compile: failure.

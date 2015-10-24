@@ -1,3 +1,0 @@
-Error, "/tmp/cs131_testrunner_lGTaux/file.rc", line 20: 
-  Type of index expression in array reference (bool) not equivalent to int.
-Compile: failure.

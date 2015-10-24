@@ -1,3 +1,0 @@
-Error, "/tmp/cs131_testrunner_SITaux/file.rc", line 4: 
-  Value of type int** not assignable to variable of type int*.
-Compile: failure.

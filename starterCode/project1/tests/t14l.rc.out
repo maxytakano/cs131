@@ -1,3 +1,0 @@
-Error, "/tmp/cs131_testrunner_gHTaux/file.rc", line 11: 
-  Type of return expression (int), not assignment compatible with function's return type (_MYS).
-Compile: failure.

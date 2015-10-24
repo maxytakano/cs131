@@ -1,3 +1,0 @@
-Error, "/tmp/cs131_testrunner_AFTaux/file.rc", line 1: 
-  Index expression type (bool) in array declaration not equivalent to int.
-Compile: failure.

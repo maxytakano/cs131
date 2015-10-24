@@ -1,3 +1,0 @@
-Error, "/tmp/cs131_testrunner_wGTaux/file.rc", line 16: 
-  Argument of type float[10] not equivalent to reference parameter f, of type float*.
-Compile: failure.

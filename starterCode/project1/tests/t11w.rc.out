@@ -1,3 +1,0 @@
-Error, "/tmp/cs131_testrunner_yGTaux/file.rc", line 9: 
-  Argument of type float[2] not equivalent to reference parameter f, of type float*.
-Compile: failure.
