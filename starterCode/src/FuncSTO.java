@@ -144,7 +144,6 @@ class FuncSTO extends STO
 			}
 
 			// Check for non-mod l-value case
-
 			if (((VarSTO)curFuncParam).getPassByReference()) {
 				if (!curParam.isModLValue() && !(curParam.getType().isArray())) {
 					return false;
