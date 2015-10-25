@@ -422,10 +422,12 @@ class MyParser extends parser
         VarSTO sto;
         if(arraySizes == null){
             sto = new VarSTO(id, type);
-            m_symtab.getStructType().addSize(sto.getType().getSize());
+            // m_symtab.getStructType().addSize(sto.getType().getSize());
+            m_symtab.getStructType().addSize( ((ConstSTO)getObjSize(sto)).getIntValue() );
         }
         else{
             sto = (VarSTO)makeAnArray(id, type, arraySizes);
+            m_symtab.getStructType().addSize( ((ConstSTO)getObjSize(sto)).getIntValue() );
         }
         m_symtab.insert(sto);
     }
@@ -524,6 +526,7 @@ class MyParser extends parser
                 m_symtab.setFunc(sto);
                 m_symtab.insert(sto);
                 m_symtab.openScope();
+                m_symtab.getFunc().setInnerLevel(m_symtab.getLevel());
                 return;
             }
         }
@@ -585,6 +588,7 @@ class MyParser extends parser
                 // TODO: check if open scope here is correct.
                 m_symtab.openScope();
                 insertParams(candidateFunc.getParameters());
+                m_symtab.getFunc().getOverloadMatch(params).setInnerLevel(m_symtab.getLevel());
             }
         } else {
             // 3. If there is no existing function, insert a new entry to symtab.
@@ -592,6 +596,7 @@ class MyParser extends parser
             // TODO: check if open scope here is correct.
             m_symtab.openScope();
             insertParams(candidateFunc.getParameters());
+            m_symtab.getFunc().setInnerLevel(m_symtab.getLevel());
         }
     }
 
@@ -620,6 +625,7 @@ class MyParser extends parser
             return;
         }
         FuncSTO curFunc = m_symtab.getFunc();
+
         // check 6c
         if (!curFunc.getHasTopReturn() && !(curFunc.getReturnType().isVoid())  ) {
             m_nNumErrors++;
@@ -1065,6 +1071,7 @@ class MyParser extends parser
             m_errors.print(ErrorMsg.error6a_Return_expr);
         }
 
+        // ignore this
         /* Phase 1 check 6c */
         // int curlevel = m_symtab.getLevel();
         // if (curlevel == 2) {
@@ -1090,7 +1097,7 @@ class MyParser extends parser
         Type returnType = curFunc.getReturnType();
 
         if (!curFunc.isReturnByReference()) {
-            if (!exprType.isAssignableTo(returnType)) {                
+            if (!exprType.isAssignableTo(returnType)) {
                 // return expr not assignable to return type
                 m_nNumErrors++;
                 m_errors.print( Formatter.toString(ErrorMsg.error6a_Return_type, exprType.getName(),
@@ -1109,6 +1116,7 @@ class MyParser extends parser
             }
         }
 
+        // ignore this
         /* Phase 1 check 6c */
         // int curlevel = m_symtab.getLevel();
         // if (curlevel == 2) {
@@ -1120,8 +1128,10 @@ class MyParser extends parser
     void setFunctionReturn() {
         /* Phase 1 check 6c */
         int curlevel = m_symtab.getLevel();
-        if (curlevel == 2) {
-            // global level is 1, just inside function is level 2
+        // if (curlevel == 2) {
+        // compare current level, to the current func's inner level (directly inside)
+        if (curlevel == m_symtab.getFunc().getInnerLevel()) {   // extension to work at any nesting (maybe)
+            
             m_symtab.getFunc().setHasTopReturn(true);
         }
     }

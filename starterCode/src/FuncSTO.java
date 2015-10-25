@@ -13,6 +13,8 @@ class FuncSTO extends STO
 	private Boolean m_hasTopReturn;
 	// This is a list of overloaded functions associated with this func
 	private Vector<FuncSTO> overloadedFuncs;
+	// Level of scope directly inside this function.
+	private int m_innerLevel;
 
 	//----------------------------------------------------------------
 	//
@@ -221,6 +223,14 @@ class FuncSTO extends STO
 
 	public Boolean getHasTopReturn() {
 		return m_hasTopReturn;
+	}
+
+	public void setInnerLevel(int level) {
+		m_innerLevel = level;
+	}
+
+	public int getInnerLevel() {
+		return m_innerLevel;
 	}
 }
 
