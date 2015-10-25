@@ -183,6 +183,7 @@ class MyParser extends parser
 
         if (optInit != null) {
             if (optInit.isError()) {
+                m_symtab.insert(new VarSTO(id, type));
                 return;
             }
             Type initType = optInit.getType();
@@ -198,6 +199,7 @@ class MyParser extends parser
                                 // System.out.println("IN vaR DECL: TYPE: " + initType.getName());
                 m_nNumErrors++;
                 m_errors.print(Formatter.toString(ErrorMsg.error8_Assign, initType.getName(), type.getName()));
+                m_symtab.insert(new VarSTO(id, type));
                 return;
             }
         }
@@ -345,14 +347,16 @@ class MyParser extends parser
             // TODO: either set to 0 or throw an error.
             // value of constExpr not known, throw an error
             m_nNumErrors++;
-            m_errors.print(Formatter.toString(ErrorMsg.error8_CompileTime, id));
+            // m_errors.print(Formatter.toString(ErrorMsg.error8_CompileTime, id));
             return;
         } else if (constExpr.isError()) {
+            // m_symtab.insert(new ConstSTO(id, type));
             return;
         } else if (!constExpr.isConst()) {
             // value of constExpr not known, throw an error
             m_nNumErrors++;
             m_errors.print(Formatter.toString(ErrorMsg.error8_CompileTime, id));
+            // m_symtab.insert(new ConstSTO(id, type));
             return;
         } else {
             // check assignment
@@ -362,6 +366,7 @@ class MyParser extends parser
                 // System.out.println("IN CONST DECL: TYPE: " + initType.getName());
                 m_nNumErrors++;
                 m_errors.print(Formatter.toString(ErrorMsg.error8_Assign, initType.getName(), type.getName()));
+                // m_symtab.insert(new ConstSTO(id, type));
                 return;
             }
         }
