@@ -718,7 +718,6 @@ class MyParser extends parser
     //----------------------------------------------------------------
     STO DoAssignExpr(STO stoDes, STO stoExpr)
     {
-        // System.out.println("in assign expre");
         if (stoExpr.isError()) {
             return stoExpr;
         }
@@ -726,14 +725,8 @@ class MyParser extends parser
             return stoDes;
         }
 
-        // System.out.println("stodes: " + stoDes.getType());
-        // System.out.println("stoexpr: " + stoExpr.getType());
-
-        
-
         if (!stoDes.isModLValue())
         {
-            // Good place to do the assign checks
             m_nNumErrors++;
             m_errors.print(ErrorMsg.error3a_Assign);
             return new ErrorSTO(ErrorMsg.error3a_Assign);
@@ -839,7 +832,7 @@ class MyParser extends parser
 
             if (!((VarSTO)curParam).getPassByReference()) {
                 // if param is declared pass-by-value, make sure the argument is assignable to it
-                if ( !(argType.isAssignableTo(paramType)) ) {
+                if ( !(argType.isAssignableTo(paramType))) {
                     m_nNumErrors++;
                     m_errors.print(Formatter.toString(ErrorMsg.error5a_Call, argType.getName(),
                         curParam.getName(), paramType.getName()));
@@ -1449,7 +1442,7 @@ class MyParser extends parser
     //----------------------------------------------------------------
     STO checkPointerValidity(STO sto){
         if(sto.isError()){
-            return new ExprSTO("error", new NullPointerType());
+            return new ErrorSTO(sto.getName());
         }
 
         if(sto.getType().isNullPointer()){

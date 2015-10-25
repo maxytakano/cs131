@@ -597,7 +597,7 @@ ParamDecl ::=       Type:_type OptRef:_ref T_ID:_name OptArrayList:_arrays
                             RESULT = new VarSTO(_name, _type, _ref);
                         } else {
                             VarSTO arraySTO = (VarSTO)((MyParser) parser).makeAnArray(_name, _type, _arrays);
-                            arraySTO.setPassByReference(true);
+                            arraySTO.setPassByReference(_ref);
                             RESULT = arraySTO;
                         }
                     :}
