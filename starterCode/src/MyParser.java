@@ -537,7 +537,6 @@ class MyParser extends parser
                 m_symtab.setFunc(sto);
                 m_symtab.insert(sto);
                 m_symtab.openScope();
-                // System.out.println("idDtor if: " + m_symtab.getLevel());
                 m_symtab.getFunc().setInnerLevel(m_symtab.getLevel());
                 return;
             }
@@ -632,7 +631,6 @@ class MyParser extends parser
                 existingFunc.addOverload(candidateFunc);
                 // TODO: check if open scope here is correct.
                 m_symtab.openScope();
-                // System.out.println("overloadfunction : " + m_symtab.getLevel());
                 insertParams(candidateFunc.getParameters());
                 m_symtab.getFunc().getOverloadMatch(params).setInnerLevel(m_symtab.getLevel());
             }
@@ -641,7 +639,6 @@ class MyParser extends parser
             m_symtab.insert(candidateFunc);
             // TODO: check if open scope here is correct.
             m_symtab.openScope();
-            // System.out.println("normal func insert: " + m_symtab.getLevel());
             insertParams(candidateFunc.getParameters());
             m_symtab.getFunc().setInnerLevel(m_symtab.getLevel());
         }
@@ -679,7 +676,6 @@ class MyParser extends parser
             m_errors.print(ErrorMsg.error6c_Return_missing);
         }
         m_symtab.closeScope();
-        // System.out.println("do funcdecl 2 end: " + m_symtab.getLevel());
         m_symtab.setFunc(null);
     }
 
@@ -690,7 +686,6 @@ class MyParser extends parser
     {
         // Open a scope.
         m_symtab.openScope();
-        // System.out.println("do block open: " + m_symtab.getLevel());
     }
 
     //----------------------------------------------------------------
@@ -703,7 +698,6 @@ class MyParser extends parser
         if(m_symtab.getLevel() <= m_foreachwhileflag){
             m_foreachwhileflag = -1;
         }
-        // System.out.println("do block close: " + m_symtab.getLevel());
 
     }
 
@@ -739,6 +733,7 @@ class MyParser extends parser
     //----------------------------------------------------------------
     STO DoAssignExpr(STO stoDes, STO stoExpr)
     {
+
         if (stoExpr.isError()) {
             return stoExpr;
         }
@@ -754,6 +749,7 @@ class MyParser extends parser
         }
         Type lhs = stoDes.getType();
         Type rhs = stoExpr.getType();
+
 
         if(!(rhs.isAssignableTo(lhs))){
             String errormsg = Formatter.toString(ErrorMsg.error3b_Assign, rhs.getName(), lhs.getName());
@@ -1121,24 +1117,12 @@ class MyParser extends parser
 
     /* Phase 1 check 6a */
     void doReturnVoidCheck() {
-        // Check if the function failed overload test
-        // if (m_symtab.getFunc() == null) {
-        //     return;
-        // }
 
         Type returnType = m_symtab.getFunc().getReturnType();
         if (!returnType.isVoid()) {
             m_nNumErrors++;
             m_errors.print(ErrorMsg.error6a_Return_expr);
         }
-
-        // ignore this
-        /* Phase 1 check 6c */
-        // int curlevel = m_symtab.getLevel();
-        // if (curlevel == 2) {
-        //     // global level is 1, just inside function is level 2
-        //     m_symtab.getFunc().setHasTopReturn(true);
-        // }
     }
 
     /* Phase 1 check 6b */
@@ -1147,12 +1131,6 @@ class MyParser extends parser
             // m_symtab.setFunc(null);
             return;
         }
-
-        // Check if the function failed overload test
-        // if (m_symtab.getFunc() == null) {
-        //     System.out.println("bouncing");
-        //     return;
-        // }
 
         Type exprType = expr.getType();
         FuncSTO curFunc = m_symtab.getFunc();
@@ -1177,14 +1155,6 @@ class MyParser extends parser
                 m_errors.print(ErrorMsg.error6b_Return_modlval);
             }
         }
-
-        // ignore this
-        /* Phase 1 check 6c */
-        // int curlevel = m_symtab.getLevel();
-        // if (curlevel == 2) {
-        //     // global level is 1, just inside function is level 2
-        //     m_symtab.getFunc().setHasTopReturn(true);
-        // }
     }
 
     void setFunctionReturn() {
@@ -1444,18 +1414,6 @@ class MyParser extends parser
             return new ConstSTO("var size", new IntType(), type.getSize(), false, false);
         }
 
-
-
-        // else if (type.isArray()) {
-
-        //     return new ConstSTO("var size", new IntType(), type.getSize(), false, false);
-
-        // } else {
-        //     return new ConstSTO("var size", new IntType(), type.getSize(), false, false);
-        // }
-
-        // Passed checks, calculate and return size.
-        // return new ConstSTO("var size", new IntType(), finalSize, false, false);
     }
 
     //----------------------------------------------------------------
@@ -1597,6 +1555,7 @@ class MyParser extends parser
     }
 
     STO getAddressOf(STO expr) {
+        
         if(!expr.getIsAddressable()){
             m_nNumErrors++;
                 m_errors.print(Formatter.toString(ErrorMsg.error18_AddressOf, expr.getType().getName()));

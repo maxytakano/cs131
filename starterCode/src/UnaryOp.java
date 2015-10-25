@@ -31,12 +31,10 @@ class UnaryOp extends Operator
     // method for checking operands
     //----------------------------------------------------------------
     public STO checkOperand(STO a){
-
         // double check this
         if (a.isError()) {
             return a;
         }
-
         //Check for if it's numeric first if not, return that error
         //check to see if sto is a funcsto, if so, we need to grab it's return type instead
         Type aType;
@@ -63,14 +61,6 @@ class UnaryOp extends Operator
             }
         }
 
-        // if(!(a.isModLValue())){
-        //     return new ErrorSTO( Formatter.toString(ErrorMsg.error2_Lval, getName()));
-        // }
-
-        // if ( !(aType.isNumeric()) && !(aType.isPointer()) ) {
-        //     return new ErrorSTO( Formatter.toString(ErrorMsg.error2_Type, aType.getName(), getName()) );
-        // }
-
         StringBuilder expr_builder = new StringBuilder();
         expr_builder.append(a.getName()).append(getName());
 
@@ -85,7 +75,8 @@ class UnaryOp extends Operator
             expr = new ExprSTO(expr_builder.toString(), new FloatType());
         } else {
             // its a pointer.
-            expr = new ExprSTO(expr_builder.toString(), new PointerType());
+            PointerType myPTR = new PointerType(((PointerType)aType).getNextLevel());
+            expr = new ExprSTO(expr_builder.toString(), myPTR);
         }
 
         return expr;

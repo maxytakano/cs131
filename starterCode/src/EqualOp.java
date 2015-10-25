@@ -32,6 +32,7 @@ class EqualOp extends ComparisonOp
         Type aType = a.getType();
         Type bType = b.getType();
 
+
         if ( aType.isNumeric() && bType.isNumeric() ) {
             StringBuilder expr_builder = new StringBuilder();
             expr_builder.append(a.getName()).append(getName()).append(b.getName());
