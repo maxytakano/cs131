@@ -175,7 +175,6 @@ class MyParser extends parser
     //----------------------------------------------------------------
     void DoVarDecl(String id, Type type, STO optInit)
     {
-        // System.out.println(id + " / " + type + " / " + optInit);
 
         if (m_symtab.accessLocal(id) != null)
         {
@@ -192,7 +191,6 @@ class MyParser extends parser
             // user decided to initialize the variable, type check it
 
             if (!initType.isAssignableTo(type) && !initType.isNullPointer()) {
-                                // System.out.println("IN vaR DECL: TYPE: " + initType.getName());
                 m_nNumErrors++;
                 m_errors.print(Formatter.toString(ErrorMsg.error8_Assign, initType.getName(), type.getName()));
                 m_symtab.insert(new VarSTO(id, type));
@@ -359,7 +357,6 @@ class MyParser extends parser
             Type initType = constExpr.getType();
             // user decided to initialize the variable, type check it
             if (!initType.isAssignableTo(type) && !initType.isNullPointer()) {
-                // System.out.println("IN CONST DECL: TYPE: " + initType.getName());
                 m_nNumErrors++;
                 m_errors.print(Formatter.toString(ErrorMsg.error8_Assign, initType.getName(), type.getName()));
                 // m_symtab.insert(new ConstSTO(id, type));
@@ -514,7 +511,7 @@ class MyParser extends parser
                 if (m_symtab.accessLocal(id) != null) {
                     m_nNumErrors++;
                     m_errors.print( Formatter.toString(ErrorMsg.error9_Decl, id) );
-                    return;
+                    // return;
                 }
 
                 // Modify the dtor's name (removing '~') for the not same namecheck
@@ -529,7 +526,7 @@ class MyParser extends parser
                 } else {
                     m_errors.print(Formatter.toString(ErrorMsg.error13b_Ctor, id, structType.getName()));
                 }
-                return;
+                // return;
             }
 
             if (isDtor) {
@@ -538,6 +535,7 @@ class MyParser extends parser
                 m_symtab.setFunc(sto);
                 m_symtab.insert(sto);
                 m_symtab.openScope();
+                // System.out.println("idDtor if: " + m_symtab.getLevel());
                 m_symtab.getFunc().setInnerLevel(m_symtab.getLevel());
                 return;
             }
@@ -545,17 +543,14 @@ class MyParser extends parser
 
         // 1. Get the function (could be a var also) associated with the passed id in the given scope
         STO symtabObject;
-        // System.out.println(m_symtab.getStructType() + "<- structType id: " + id);
         if (m_symtab.getStructType() != null) {
             symtabObject = m_symtab.accessLocal(id);
-            // System.out.println(symtabObject  + " <- object id: " + id);
         } else {
             symtabObject = m_symtab.access(id);
         }
 
         // 2. Check if the there was a non-function value related to id in the symtable
         if (symtabObject != null) {
-            // System.out.println("how are we in here"  + " id: " + id);
             if (!symtabObject.isFunc()) {
                 // Check if we are in a struct to know which error to throw
                 if (m_symtab.getStructType() != null) {
@@ -563,13 +558,13 @@ class MyParser extends parser
                     m_nNumErrors++;
                     m_errors.print(Formatter.toString(ErrorMsg.error13a_Struct, id));
                     // m_symtab.setFunc(null);
-                    return;
+                    // return;
                 } else {
                     // Throw regular redeclared_id error.
                     m_nNumErrors++;
                     m_errors.print(Formatter.toString(ErrorMsg.redeclared_id, id));
                     // m_symtab.setFunc(null);
-                    return;
+                    // return;
                 }
             }
         }
@@ -595,9 +590,21 @@ class MyParser extends parser
         // new
         FuncSTO existingFunc;
         if (m_symtab.getStructType() != null) {
-            existingFunc = (FuncSTO) m_symtab.accessLocal(id);
+            if (m_symtab.accessLocal(id) == null) {
+                existingFunc = null;
+            } else if (!m_symtab.accessLocal(id).isFunc()) {
+                existingFunc = null;
+            } else {
+                existingFunc = (FuncSTO) m_symtab.accessLocal(id);
+            }
         } else {
-            existingFunc = (FuncSTO) m_symtab.access(id);
+            if (m_symtab.accessLocal(id) == null) {
+                existingFunc = null;
+            } else if (!m_symtab.access(id).isFunc()) {
+                existingFunc = null;
+            } else {
+                existingFunc = (FuncSTO) m_symtab.access(id);
+            }
         }
         // end new
 
@@ -611,13 +618,19 @@ class MyParser extends parser
                 // Matching parameters, can't overload.
                 m_nNumErrors++;
                 m_errors.print( Formatter.toString(ErrorMsg.error9_Decl, existingFunc.getName()) );
+                m_symtab.openScope();
+                insertParams(candidateFunc.getParameters());
+                m_symtab.getFunc().setInnerLevel(m_symtab.getLevel());
+
+                // trying
                 // Set the current function to null to halt further checks.
-                m_symtab.setFunc(null);
+                // m_symtab.setFunc(null);
             } else {
                 // No matching parameters found, overload the function.
                 existingFunc.addOverload(candidateFunc);
                 // TODO: check if open scope here is correct.
                 m_symtab.openScope();
+                // System.out.println("overloadfunction : " + m_symtab.getLevel());
                 insertParams(candidateFunc.getParameters());
                 m_symtab.getFunc().getOverloadMatch(params).setInnerLevel(m_symtab.getLevel());
             }
@@ -626,6 +639,7 @@ class MyParser extends parser
             m_symtab.insert(candidateFunc);
             // TODO: check if open scope here is correct.
             m_symtab.openScope();
+            // System.out.println("normal func insert: " + m_symtab.getLevel());
             insertParams(candidateFunc.getParameters());
             m_symtab.getFunc().setInnerLevel(m_symtab.getLevel());
         }
@@ -663,6 +677,7 @@ class MyParser extends parser
             m_errors.print(ErrorMsg.error6c_Return_missing);
         }
         m_symtab.closeScope();
+        // System.out.println("do funcdecl 2 end: " + m_symtab.getLevel());
         m_symtab.setFunc(null);
     }
 
@@ -673,6 +688,7 @@ class MyParser extends parser
     {
         // Open a scope.
         m_symtab.openScope();
+        // System.out.println("do block open: " + m_symtab.getLevel());
     }
 
     //----------------------------------------------------------------
@@ -680,10 +696,13 @@ class MyParser extends parser
     //----------------------------------------------------------------
     void DoBlockClose()
     {
+
         m_symtab.closeScope();
         if(m_symtab.getLevel() <= m_foreachwhileflag){
             m_foreachwhileflag = -1;
         }
+        // System.out.println("do block close: " + m_symtab.getLevel());
+
     }
 
     //----------------------------------------------------------------
@@ -886,6 +905,12 @@ class MyParser extends parser
 
         // Check for struct fields
         if ( !((StructType) type).hasField(strID) ) {
+            if (m_symtab.getStructType() != null) {
+                String errormsg = Formatter.toString(ErrorMsg.error14c_StructExpThis, strID);
+                m_nNumErrors++;
+                m_errors.print(errormsg);
+                return new ErrorSTO(errormsg);  
+            }
             String errormsg = Formatter.toString(ErrorMsg.error14f_StructExp, strID, type.getName());
             m_nNumErrors++;
             m_errors.print(errormsg);
@@ -909,11 +934,9 @@ class MyParser extends parser
         }
         // Good place to do the array checks
         Type stoType = sto.getType();
-        // System.out.println("here: " + stoType.isArray());
         //default to true since we don't have to check for pointers.
         if(!(stoType.isArray()) && !(stoType.isPointer())){
             m_nNumErrors++;
-             // System.out.println("printing sto name here: " + stoType.getName() + " type: " + stoType);
             m_errors.print(Formatter.toString(ErrorMsg.error11t_ArrExp, stoType.getName()));
             return new ErrorSTO(sto.getName());
         }
@@ -922,7 +945,6 @@ class MyParser extends parser
         if(!(expr.getType().isEquivalentTo(new IntType())))
         {
             m_nNumErrors++;
-            // System.out.println("printing here 2 DoDesignator2_Array");
             m_errors.print(Formatter.toString(ErrorMsg.error11i_ArrExp, expr.getType().getName()));
             return new ErrorSTO(sto.getName());
         }
@@ -938,7 +960,6 @@ class MyParser extends parser
                     int intval = ((ConstSTO)expr).getIntValue(); 
                     if( intval >= myArry.getCurrentDim() || intval < 0){
                         m_nNumErrors++;
-                        // System.out.println("printing here DoDesignator2_Array");
                         m_errors.print(Formatter.toString(ErrorMsg.error11b_ArrExp, 
                                                             ((ConstSTO)expr).getIntValue(), 
                                                             myArry.getCurrentDim()));
@@ -1085,9 +1106,9 @@ class MyParser extends parser
     /* Phase 1 check 6a */
     void doReturnVoidCheck() {
         // Check if the function failed overload test
-        if (m_symtab.getFunc() == null) {
-            return;
-        }
+        // if (m_symtab.getFunc() == null) {
+        //     return;
+        // }
 
         Type returnType = m_symtab.getFunc().getReturnType();
         if (!returnType.isVoid()) {
@@ -1112,9 +1133,10 @@ class MyParser extends parser
         }
 
         // Check if the function failed overload test
-        if (m_symtab.getFunc() == null) {
-            return;
-        }
+        // if (m_symtab.getFunc() == null) {
+        //     System.out.println("bouncing");
+        //     return;
+        // }
 
         Type exprType = expr.getType();
         FuncSTO curFunc = m_symtab.getFunc();
