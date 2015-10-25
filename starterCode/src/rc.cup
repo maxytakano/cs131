@@ -1069,7 +1069,7 @@ Designator3 ::=     T_LPAREN Expr:_2 T_RPAREN
                     :}
     |               T_NULLPTR
                     {:
-                        RESULT = new ExprSTO ("nullptr", new NullPointerType(), true, true);     // fixed?
+                        RESULT = new ExprSTO ("nullptr", new NullPointerType(), false, false);     // fixed?
                     :}
     |               T_THIS
                     {:

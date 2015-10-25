@@ -75,7 +75,8 @@ class UnaryOp extends Operator
             expr = new ExprSTO(expr_builder.toString(), new FloatType());
         } else {
             // its a pointer.
-            PointerType myPTR = new PointerType(((PointerType)aType).getNextLevel());
+            PointerType myPTR = new PointerType(((PointerType)aType).getBaseType());
+            myPTR.setNextLevel( ((PointerType)aType).getNextLevel() );
             expr = new ExprSTO(expr_builder.toString(), myPTR);
         }
 

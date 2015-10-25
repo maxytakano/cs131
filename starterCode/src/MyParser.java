@@ -750,7 +750,6 @@ class MyParser extends parser
         Type lhs = stoDes.getType();
         Type rhs = stoExpr.getType();
 
-
         if(!(rhs.isAssignableTo(lhs))){
             String errormsg = Formatter.toString(ErrorMsg.error3b_Assign, rhs.getName(), lhs.getName());
             m_nNumErrors++;
@@ -1555,7 +1554,10 @@ class MyParser extends parser
     }
 
     STO getAddressOf(STO expr) {
-        
+        if (expr.isError()) {
+            return expr;
+        }
+
         if(!expr.getIsAddressable()){
             m_nNumErrors++;
                 m_errors.print(Formatter.toString(ErrorMsg.error18_AddressOf, expr.getType().getName()));
