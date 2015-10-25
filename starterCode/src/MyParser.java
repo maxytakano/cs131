@@ -194,8 +194,8 @@ class MyParser extends parser
 // System.out.println("optInit type: " + optInit.getType());
 // System.out.println("type: " + type);
 // System.out.println();
-            if (!initType.isAssignableTo(type)) {
-                                System.out.println("IN vaR DECL: TYPE: " + initType.getName());
+            if (!initType.isAssignableTo(type) && !initType.isNullPointer()) {
+                                // System.out.println("IN vaR DECL: TYPE: " + initType.getName());
                 m_nNumErrors++;
                 m_errors.print(Formatter.toString(ErrorMsg.error8_Assign, initType.getName(), type.getName()));
                 return;
@@ -358,8 +358,8 @@ class MyParser extends parser
             // check assignment
             Type initType = constExpr.getType();
             // user decided to initialize the variable, type check it
-            if (!initType.isAssignableTo(type)) {
-                System.out.println("IN CONST DECL: TYPE: " + initType.getName());
+            if (!initType.isAssignableTo(type) && !initType.isNullPointer()) {
+                // System.out.println("IN CONST DECL: TYPE: " + initType.getName());
                 m_nNumErrors++;
                 m_errors.print(Formatter.toString(ErrorMsg.error8_Assign, initType.getName(), type.getName()));
                 return;
@@ -1523,6 +1523,12 @@ class MyParser extends parser
     }
 
     STO getAddressOf(STO expr) {
+        if(!expr.getIsAddressable()){
+            m_nNumErrors++;
+                m_errors.print(Formatter.toString(ErrorMsg.error18_AddressOf, expr.getType().getName()));
+                return new ErrorSTO(expr.getName());
+            
+        }
         PointerType addressof = new PointerType(expr.getType());
         addressof.setNextLevel(expr.getType());
         ExprSTO myExpr = new ExprSTO(expr.getName(), addressof);
@@ -1541,12 +1547,12 @@ class MyParser extends parser
                 m_errors.print(Formatter.toString(ErrorMsg.error20_Cast, sto.getType().getName(), type.getName()));
                 return new ErrorSTO(sto.getName());
         }
-        if(sto.isConst()){
+        if(sto.isConst() && !type.isPointer()){
             BigDecimal myVal = ((ConstSTO) sto).getValue();
-            return new ConstSTO(sto.getName(), type, myVal);
+            return new ConstSTO(sto.getName(), type, myVal, false, false);
         }
         else{
-            return new ExprSTO(sto.getName(), type);
+            return new ExprSTO(sto.getName(), type, false, false);
         }
     }
 }
