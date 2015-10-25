@@ -175,7 +175,6 @@ class MyParser extends parser
     //----------------------------------------------------------------
     void DoVarDecl(String id, Type type, STO optInit)
     {
-        // System.out.println(id + " / " + type + " / " + optInit);
 
         if (m_symtab.accessLocal(id) != null)
         {
@@ -191,8 +190,8 @@ class MyParser extends parser
             Type initType = optInit.getType();
             // user decided to initialize the variable, type check it
 
-            if (!initType.isAssignableTo(type) && !initType.isNullPointer()) {
-                                // System.out.println("IN vaR DECL: TYPE: " + initType.getName());
+            // if (!initType.isAssignableTo(type) && !initType.isNullPointer()) {
+            if (!initType.isAssignableTo(type)) {
                 m_nNumErrors++;
                 m_errors.print(Formatter.toString(ErrorMsg.error8_Assign, initType.getName(), type.getName()));
                 m_symtab.insert(new VarSTO(id, type));
@@ -359,7 +358,6 @@ class MyParser extends parser
             Type initType = constExpr.getType();
             // user decided to initialize the variable, type check it
             if (!initType.isAssignableTo(type) && !initType.isNullPointer()) {
-                // System.out.println("IN CONST DECL: TYPE: " + initType.getName());
                 m_nNumErrors++;
                 m_errors.print(Formatter.toString(ErrorMsg.error8_Assign, initType.getName(), type.getName()));
                 // m_symtab.insert(new ConstSTO(id, type));
@@ -545,17 +543,14 @@ class MyParser extends parser
 
         // 1. Get the function (could be a var also) associated with the passed id in the given scope
         STO symtabObject;
-        // System.out.println(m_symtab.getStructType() + "<- structType id: " + id);
         if (m_symtab.getStructType() != null) {
             symtabObject = m_symtab.accessLocal(id);
-            // System.out.println(symtabObject  + " <- object id: " + id);
         } else {
             symtabObject = m_symtab.access(id);
         }
 
         // 2. Check if the there was a non-function value related to id in the symtable
         if (symtabObject != null) {
-            // System.out.println("how are we in here"  + " id: " + id);
             if (!symtabObject.isFunc()) {
                 // Check if we are in a struct to know which error to throw
                 if (m_symtab.getStructType() != null) {
@@ -909,11 +904,9 @@ class MyParser extends parser
         }
         // Good place to do the array checks
         Type stoType = sto.getType();
-        // System.out.println("here: " + stoType.isArray());
         //default to true since we don't have to check for pointers.
         if(!(stoType.isArray()) && !(stoType.isPointer())){
             m_nNumErrors++;
-             // System.out.println("printing sto name here: " + stoType.getName() + " type: " + stoType);
             m_errors.print(Formatter.toString(ErrorMsg.error11t_ArrExp, stoType.getName()));
             return new ErrorSTO(sto.getName());
         }
@@ -922,7 +915,6 @@ class MyParser extends parser
         if(!(expr.getType().isEquivalentTo(new IntType())))
         {
             m_nNumErrors++;
-            // System.out.println("printing here 2 DoDesignator2_Array");
             m_errors.print(Formatter.toString(ErrorMsg.error11i_ArrExp, expr.getType().getName()));
             return new ErrorSTO(sto.getName());
         }
@@ -938,7 +930,6 @@ class MyParser extends parser
                     int intval = ((ConstSTO)expr).getIntValue(); 
                     if( intval >= myArry.getCurrentDim() || intval < 0){
                         m_nNumErrors++;
-                        // System.out.println("printing here DoDesignator2_Array");
                         m_errors.print(Formatter.toString(ErrorMsg.error11b_ArrExp, 
                                                             ((ConstSTO)expr).getIntValue(), 
                                                             myArry.getCurrentDim()));
@@ -1549,7 +1540,13 @@ class MyParser extends parser
                 return new ErrorSTO(expr.getName());
             
         }
-        PointerType addressof = new PointerType(expr.getType());
+        PointerType addressof;
+        if(!expr.getType().isPointer()){
+            addressof = new PointerType(expr.getType());
+        }
+        else{
+            addressof = new PointerType( ((PointerType) expr.getType()).getBaseType() );
+        }
         addressof.setNextLevel(expr.getType());
         ExprSTO myExpr = new ExprSTO(expr.getName(), addressof);
 
