@@ -190,7 +190,9 @@ class MyParser extends parser
             Type initType = optInit.getType();
             // user decided to initialize the variable, type check it
 
-            if (!initType.isAssignableTo(type) && !initType.isNullPointer()) {
+
+            // if (!initType.isAssignableTo(type) && !initType.isNullPointer()) {
+            if (!initType.isAssignableTo(type)) {
                 m_nNumErrors++;
                 m_errors.print(Formatter.toString(ErrorMsg.error8_Assign, initType.getName(), type.getName()));
                 m_symtab.insert(new VarSTO(id, type));
@@ -1571,7 +1573,13 @@ class MyParser extends parser
                 return new ErrorSTO(expr.getName());
             
         }
-        PointerType addressof = new PointerType(expr.getType());
+        PointerType addressof;
+        if(!expr.getType().isPointer()){
+            addressof = new PointerType(expr.getType());
+        }
+        else{
+            addressof = new PointerType( ((PointerType) expr.getType()).getBaseType() );
+        }
         addressof.setNextLevel(expr.getType());
         ExprSTO myExpr = new ExprSTO(expr.getName(), addressof);
 

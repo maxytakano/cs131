@@ -43,7 +43,7 @@ class UnaryOp extends Operator
         if(a.isFunc()){
             aType = ((FuncSTO) a).getReturnType();
 
-            if(!(a.isModLValue())){
+            if(!(a.isModLValue()) || a.getType().isNullPointer()){
                 return new ErrorSTO( Formatter.toString(ErrorMsg.error2_Lval, getName()));
             }
 
@@ -58,7 +58,7 @@ class UnaryOp extends Operator
                 return new ErrorSTO( Formatter.toString(ErrorMsg.error2_Type, aType.getName(), getName()) );
             }
 
-            if(!(a.isModLValue())){
+            if(!(a.isModLValue()) || a.getType().isNullPointer()){
                 return new ErrorSTO( Formatter.toString(ErrorMsg.error2_Lval, getName()));
             }
         }
