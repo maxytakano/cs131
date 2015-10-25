@@ -1,0 +1,6 @@
+Error, "/tmp/cs131_testrunner_q_mrMF/file.rc": 
+  Incompatible types to operator ==:
+    nullptr,
+    bool;
+  both must be of equivalent pointer type.
+Compile: failure.

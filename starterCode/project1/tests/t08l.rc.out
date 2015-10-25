@@ -1,0 +1,3 @@
+Error, "/tmp/cs131_testrunner_O9mrMF/file.rc": 
+  Arithmetic exception occurred during constant folding.
+Compile: failure.

@@ -1,0 +1,15 @@
+Error, "/tmp/cs131_testrunner_3_mrMF/file.rc": 
+  Argument passed to reference parameter x (type int) is not a modifiable L-value.
+Error, "/tmp/cs131_testrunner_3_mrMF/file.rc": 
+  Argument passed to reference parameter y (type float) is not a modifiable L-value.
+Error, "/tmp/cs131_testrunner_3_mrMF/file.rc": 
+  Argument of type bool* not equivalent to reference parameter bptr, of type bool.
+Error, "/tmp/cs131_testrunner_3_mrMF/file.rc": 
+  Argument passed to reference parameter x (type int) is not a modifiable L-value.
+Error, "/tmp/cs131_testrunner_3_mrMF/file.rc": 
+  Argument passed to reference parameter y (type float) is not a modifiable L-value.
+Error, "/tmp/cs131_testrunner_3_mrMF/file.rc": 
+  Argument of type bool* not equivalent to reference parameter bptr, of type bool.
+Error, "/tmp/cs131_testrunner_3_mrMF/file.rc": 
+  Return required in function, none found.
+Compile: failure.

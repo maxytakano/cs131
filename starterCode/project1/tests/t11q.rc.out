@@ -1,0 +1,3 @@
+Error, "/tmp/cs131_testrunner_f.mrMF/file.rc": 
+  Type of index expression in array reference (bool) not equivalent to int.
+Compile: failure.

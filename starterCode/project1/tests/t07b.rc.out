@@ -1,0 +1,3 @@
+Error, "/tmp/cs131_testrunner_A9mrMF/file.rc": 
+  Exit expression (type float) is not assignable to int.
+Compile: failure.

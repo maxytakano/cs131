@@ -1,0 +1,7 @@
+Error, "/tmp/cs131_testrunner_w.mrMF/file.rc": 
+  Incompatible type bool to binary operator +, numeric expected.
+Error, "/tmp/cs131_testrunner_w.mrMF/file.rc": 
+  Type of return expression (bool), not assignment compatible with function's return type (float).
+Error, "/tmp/cs131_testrunner_w.mrMF/file.rc": 
+  Return required in function, none found.
+Compile: failure.

@@ -1,0 +1,5 @@
+Error, "/tmp/cs131_testrunner_x_mrMF/file.rc": 
+  Argument of type int[10] not equivalent to reference parameter x, of type int**.
+Error, "/tmp/cs131_testrunner_x_mrMF/file.rc": 
+  Argument of type int[10] not assignable to value parameter x, of type int**.
+Compile: failure.

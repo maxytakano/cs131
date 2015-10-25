@@ -1,0 +1,9 @@
+Error, "/tmp/cs131_testrunner_5.mrMF/file.rc": 
+  Argument of type S2* not assignable to value parameter x, of type S1*.
+Error, "/tmp/cs131_testrunner_5.mrMF/file.rc": 
+  Argument of type S1* not assignable to value parameter y, of type S2*.
+Error, "/tmp/cs131_testrunner_5.mrMF/file.rc": 
+  Argument of type S1* not assignable to value parameter y, of type S2*.
+Error, "/tmp/cs131_testrunner_5.mrMF/file.rc": 
+  Argument of type S2* not equivalent to reference parameter z, of type S1*.
+Compile: failure.

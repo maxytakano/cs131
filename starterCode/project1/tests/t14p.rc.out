@@ -1,0 +1,3 @@
+Error, "/tmp/cs131_testrunner_O.mrMF/file.rc": 
+  Type of return expression (_MYS_1) is not equivalent to the function's return type (_MYS_2).
+Compile: failure.

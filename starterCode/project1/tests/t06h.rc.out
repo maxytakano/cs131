@@ -1,0 +1,127 @@
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (float), not assignment compatible with function's return type (int).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (bool), not assignment compatible with function's return type (int).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (float), not assignment compatible with function's return type (int).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (bool), not assignment compatible with function's return type (int).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (float), not assignment compatible with function's return type (int).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (float), not assignment compatible with function's return type (int).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (bool), not assignment compatible with function's return type (int).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (float), not assignment compatible with function's return type (int).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (float), not assignment compatible with function's return type (int).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (bool), not assignment compatible with function's return type (int).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (float), not assignment compatible with function's return type (int).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (bool), not assignment compatible with function's return type (int).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  undeclared identifier 'cx'.
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  undeclared identifier 'cx'.
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (float), not assignment compatible with function's return type (int).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (bool), not assignment compatible with function's return type (int).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Return in function requires a result expression, none found.
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (bool), not assignment compatible with function's return type (float).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (bool), not assignment compatible with function's return type (float).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (bool), not assignment compatible with function's return type (float).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (bool), not assignment compatible with function's return type (float).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (bool), not assignment compatible with function's return type (float).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  undeclared identifier 'cx'.
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  undeclared identifier 'cx'.
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (bool), not assignment compatible with function's return type (float).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Return in function requires a result expression, none found.
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (int), not assignment compatible with function's return type (void).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (float), not assignment compatible with function's return type (void).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (bool), not assignment compatible with function's return type (void).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (int), not assignment compatible with function's return type (void).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (float), not assignment compatible with function's return type (void).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (bool), not assignment compatible with function's return type (void).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (int), not assignment compatible with function's return type (void).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (float), not assignment compatible with function's return type (void).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (float), not assignment compatible with function's return type (void).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (bool), not assignment compatible with function's return type (void).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (int), not assignment compatible with function's return type (void).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (float), not assignment compatible with function's return type (void).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (float), not assignment compatible with function's return type (void).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (bool), not assignment compatible with function's return type (void).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (int), not assignment compatible with function's return type (void).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (float), not assignment compatible with function's return type (void).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (bool), not assignment compatible with function's return type (void).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  undeclared identifier 'cx'.
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  undeclared identifier 'cx'.
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (float), not assignment compatible with function's return type (void).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (bool), not assignment compatible with function's return type (void).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (int), not assignment compatible with function's return type (bool).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (float), not assignment compatible with function's return type (bool).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (int), not assignment compatible with function's return type (bool).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (float), not assignment compatible with function's return type (bool).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (int), not assignment compatible with function's return type (bool).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (float), not assignment compatible with function's return type (bool).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (float), not assignment compatible with function's return type (bool).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (int), not assignment compatible with function's return type (bool).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (float), not assignment compatible with function's return type (bool).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (float), not assignment compatible with function's return type (bool).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (int), not assignment compatible with function's return type (bool).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (float), not assignment compatible with function's return type (bool).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  undeclared identifier 'cx'.
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  undeclared identifier 'cx'.
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Type of return expression (float), not assignment compatible with function's return type (bool).
+Error, "/tmp/cs131_testrunner_g9mrMF/file.rc": 
+  Return in function requires a result expression, none found.
+Compile: failure.

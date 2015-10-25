@@ -1,0 +1,5 @@
+Error, "/tmp/cs131_testrunner_0_mrMF/file.rc": 
+  Left-hand operand is not assignable (not a modifiable L-value).
+Error, "/tmp/cs131_testrunner_0_mrMF/file.rc": 
+  Return required in function, none found.
+Compile: failure.

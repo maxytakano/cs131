@@ -1,0 +1,7 @@
+Error, "/tmp/cs131_testrunner_m.mrMF/file.rc": 
+  Break does not occur in a loop.
+Error, "/tmp/cs131_testrunner_m.mrMF/file.rc": 
+  Continue does not occur in a loop.
+Error, "/tmp/cs131_testrunner_m.mrMF/file.rc": 
+  Return required in function, none found.
+Compile: failure.

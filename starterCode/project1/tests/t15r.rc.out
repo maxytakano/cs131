@@ -1,0 +1,5 @@
+Error, "/tmp/cs131_testrunner_b_mrMF/file.rc": 
+  Index value of 2 is outside legal range [0,2).
+Error, "/tmp/cs131_testrunner_b_mrMF/file.rc": 
+  Value of type int not assignable to variable of type bool.
+Compile: failure.

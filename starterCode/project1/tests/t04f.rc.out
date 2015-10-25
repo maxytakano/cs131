@@ -1,0 +1,21 @@
+Error, "/tmp/cs131_testrunner_E8mrMF/file.rc": 
+  bool required for conditional test, int found.
+Error, "/tmp/cs131_testrunner_E8mrMF/file.rc": 
+  bool required for conditional test, int found.
+Error, "/tmp/cs131_testrunner_E8mrMF/file.rc": 
+  bool required for conditional test, int found.
+Error, "/tmp/cs131_testrunner_E8mrMF/file.rc": 
+  bool required for conditional test, float found.
+Error, "/tmp/cs131_testrunner_E8mrMF/file.rc": 
+  bool required for conditional test, float found.
+Error, "/tmp/cs131_testrunner_E8mrMF/file.rc": 
+  bool required for conditional test, float found.
+Error, "/tmp/cs131_testrunner_E8mrMF/file.rc": 
+  bool required for conditional test, float found.
+Error, "/tmp/cs131_testrunner_E8mrMF/file.rc": 
+  bool required for conditional test, float found.
+Error, "/tmp/cs131_testrunner_E8mrMF/file.rc": 
+  bool required for conditional test, float found.
+Error, "/tmp/cs131_testrunner_E8mrMF/file.rc": 
+  bool required for conditional test, float found.
+Compile: failure.

@@ -1,0 +1,29 @@
+Error, "/tmp/cs131_testrunner_h8mrMF/file.rc": 
+  Operand to ++ is not a modifiable L-value.
+Error, "/tmp/cs131_testrunner_h8mrMF/file.rc": 
+  Operand to ++ is not a modifiable L-value.
+Error, "/tmp/cs131_testrunner_h8mrMF/file.rc": 
+  Operand to ++ is not a modifiable L-value.
+Error, "/tmp/cs131_testrunner_h8mrMF/file.rc": 
+  Operand to ++ is not a modifiable L-value.
+Error, "/tmp/cs131_testrunner_h8mrMF/file.rc": 
+  Operand to ++ is not a modifiable L-value.
+Error, "/tmp/cs131_testrunner_h8mrMF/file.rc": 
+  Incompatible type bool to operator ++, equivalent to int, float, or pointer expected.
+Error, "/tmp/cs131_testrunner_h8mrMF/file.rc": 
+  Incompatible type bool to operator ++, equivalent to int, float, or pointer expected.
+Error, "/tmp/cs131_testrunner_h8mrMF/file.rc": 
+  Incompatible type bool to operator ++, equivalent to int, float, or pointer expected.
+Error, "/tmp/cs131_testrunner_h8mrMF/file.rc": 
+  Incompatible type bool to operator ++, equivalent to int, float, or pointer expected.
+Error, "/tmp/cs131_testrunner_h8mrMF/file.rc": 
+  Operand to -- is not a modifiable L-value.
+Error, "/tmp/cs131_testrunner_h8mrMF/file.rc": 
+  Operand to ++ is not a modifiable L-value.
+Error, "/tmp/cs131_testrunner_h8mrMF/file.rc": 
+  Operand to ++ is not a modifiable L-value.
+Error, "/tmp/cs131_testrunner_h8mrMF/file.rc": 
+  Operand to ++ is not a modifiable L-value.
+Error, "/tmp/cs131_testrunner_h8mrMF/file.rc": 
+  Incompatible type bool to operator ++, equivalent to int, float, or pointer expected.
+Compile: failure.

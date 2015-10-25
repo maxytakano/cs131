@@ -1,0 +1,13 @@
+Error, "/tmp/cs131_testrunner_d8mrMF/file.rc": 
+  Incompatible type bool to binary operator +, numeric expected.
+Error, "/tmp/cs131_testrunner_d8mrMF/file.rc": 
+  Incompatible type bool to binary operator +, numeric expected.
+Error, "/tmp/cs131_testrunner_d8mrMF/file.rc": 
+  Incompatible type bool to operator ++, equivalent to int, float, or pointer expected.
+Error, "/tmp/cs131_testrunner_d8mrMF/file.rc": 
+  Incompatible type bool to binary operator +, numeric expected.
+Error, "/tmp/cs131_testrunner_d8mrMF/file.rc": 
+  Incompatible type bool to binary operator +, numeric expected.
+Error, "/tmp/cs131_testrunner_d8mrMF/file.rc": 
+  Incompatible type bool to operator --, equivalent to int, float, or pointer expected.
+Compile: failure.

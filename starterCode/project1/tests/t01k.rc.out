@@ -1,0 +1,5 @@
+Error, "/tmp/cs131_testrunner_37mrMF/file.rc": 
+  Incompatible type int to unary operator !, equivalent to bool expected.
+Error, "/tmp/cs131_testrunner_37mrMF/file.rc": 
+  Incompatible type float to unary operator !, equivalent to bool expected.
+Compile: failure.

@@ -1,0 +1,35 @@
+Error, "/tmp/cs131_testrunner_L9mrMF/file.rc": 
+  Initialization value of constant named p not known at compile time.
+Error, "/tmp/cs131_testrunner_L9mrMF/file.rc": 
+  Initialization value of constant named q not known at compile time.
+Error, "/tmp/cs131_testrunner_L9mrMF/file.rc": 
+  Initialization value of constant named z1 not known at compile time.
+Error, "/tmp/cs131_testrunner_L9mrMF/file.rc": 
+  Initialization value of constant named z2 not known at compile time.
+Error, "/tmp/cs131_testrunner_L9mrMF/file.rc": 
+  Initialization value of constant named z3 not known at compile time.
+Error, "/tmp/cs131_testrunner_L9mrMF/file.rc": 
+  Initialization value of constant named r1 not known at compile time.
+Error, "/tmp/cs131_testrunner_L9mrMF/file.rc": 
+  Initialization value of constant named r2 not known at compile time.
+Error, "/tmp/cs131_testrunner_L9mrMF/file.rc": 
+  Initialization value of constant named r3 not known at compile time.
+Error, "/tmp/cs131_testrunner_L9mrMF/file.rc": 
+  Initialization value of constant named s1 not known at compile time.
+Error, "/tmp/cs131_testrunner_L9mrMF/file.rc": 
+  Initialization value of constant named s2 not known at compile time.
+Error, "/tmp/cs131_testrunner_L9mrMF/file.rc": 
+  Initialization value of constant named s3 not known at compile time.
+Error, "/tmp/cs131_testrunner_L9mrMF/file.rc": 
+  Initialization value of constant named t1 not known at compile time.
+Error, "/tmp/cs131_testrunner_L9mrMF/file.rc": 
+  Initialization value of constant named t2 not known at compile time.
+Error, "/tmp/cs131_testrunner_L9mrMF/file.rc": 
+  Initialization value of constant named t3 not known at compile time.
+Error, "/tmp/cs131_testrunner_L9mrMF/file.rc": 
+  Initialization value of constant named u1 not known at compile time.
+Error, "/tmp/cs131_testrunner_L9mrMF/file.rc": 
+  Initialization value of constant named u2 not known at compile time.
+Error, "/tmp/cs131_testrunner_L9mrMF/file.rc": 
+  Initialization value of constant named u3 not known at compile time.
+Compile: failure.

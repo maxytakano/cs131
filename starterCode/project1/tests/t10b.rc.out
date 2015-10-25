@@ -1,0 +1,3 @@
+Error, "/tmp/cs131_testrunner_S9mrMF/file.rc": 
+  Index expression type (float) in array declaration not equivalent to int.
+Compile: failure.

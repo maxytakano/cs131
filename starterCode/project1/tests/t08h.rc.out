@@ -1,0 +1,3 @@
+Error, "/tmp/cs131_testrunner_K9mrMF/file.rc": 
+  Initialization value of type void not assignable to constant/variable of type float.
+Compile: failure.

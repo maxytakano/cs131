@@ -1,0 +1,3 @@
+Error, "/tmp/cs131_testrunner_B9mrMF/file.rc": 
+  Exit expression (type bool) is not assignable to int.
+Compile: failure.

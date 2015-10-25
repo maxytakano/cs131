@@ -995,6 +995,20 @@ class MyParser extends parser
     {
         STO sto;
 
+        if (m_symtab.getStructType() != null) {
+            // if we are in a struct, only check local/global scope. 
+            if ((sto = m_symtab.accessLocal(strID)) != null) {
+                return sto;
+            } else if ((sto = m_symtab.accessGlobal(strID)) != null) {
+                return sto;
+            } else {
+                m_nNumErrors++;
+                m_errors.print(Formatter.toString(ErrorMsg.undeclared_id, strID));
+                sto = new ErrorSTO(strID);
+                return sto;
+            }
+        }
+
         if ((sto = m_symtab.access(strID)) == null)
         {
             m_nNumErrors++;
@@ -1252,6 +1266,22 @@ class MyParser extends parser
         }
         //do all checks for valid array[expr] in this helper method
         return arrayValidityHelper(expr);
+    }
+
+    public Boolean doStructCtorArrayCheck(Vector<STO> arrayList) {
+        if (arrayList == null) {
+            return true;
+        }
+
+        for (STO curSTO : arrayList){
+            if(curSTO.getType().isError()){
+                m_nNumErrors++;
+                m_errors.print(curSTO.getName());
+                return false;
+            }
+        }
+
+        return true;
     }
 
     //----------------------------------------------------------------

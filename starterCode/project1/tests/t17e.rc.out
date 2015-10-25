@@ -1,0 +1,5 @@
+Error, "/tmp/cs131_testrunner_t_mrMF/file.rc": 
+  Left-hand operand is not assignable (not a modifiable L-value).
+Error, "/tmp/cs131_testrunner_t_mrMF/file.rc": 
+  Incompatible type int*** to binary operator +, numeric expected.
+Compile: failure.

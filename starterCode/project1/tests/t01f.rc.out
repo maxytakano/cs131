@@ -1,0 +1,17 @@
+Error, "/tmp/cs131_testrunner_X7mrMF/file.rc": 
+  Incompatible type float to binary operator &, equivalent to int expected.
+Error, "/tmp/cs131_testrunner_X7mrMF/file.rc": 
+  Incompatible type bool to binary operator &, equivalent to int expected.
+Error, "/tmp/cs131_testrunner_X7mrMF/file.rc": 
+  Incompatible type bool to binary operator &, equivalent to int expected.
+Error, "/tmp/cs131_testrunner_X7mrMF/file.rc": 
+  Incompatible type bool to binary operator &, equivalent to int expected.
+Error, "/tmp/cs131_testrunner_X7mrMF/file.rc": 
+  Incompatible type bool to binary operator &, equivalent to int expected.
+Error, "/tmp/cs131_testrunner_X7mrMF/file.rc": 
+  Incompatible type float to binary operator &, equivalent to int expected.
+Error, "/tmp/cs131_testrunner_X7mrMF/file.rc": 
+  Incompatible type float to binary operator &, equivalent to int expected.
+Error, "/tmp/cs131_testrunner_X7mrMF/file.rc": 
+  Incompatible type float to binary operator &, equivalent to int expected.
+Compile: failure.

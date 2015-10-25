@@ -1,0 +1,3 @@
+Error, "/tmp/cs131_testrunner_H_mrMF/file.rc": 
+  undeclared identifier 'foo'.
+Compile: failure.

@@ -1,0 +1,3 @@
+Error, "/tmp/cs131_testrunner_..mrMF/file.rc": 
+  Value of type bool not assignable to variable of type int.
+Compile: failure.

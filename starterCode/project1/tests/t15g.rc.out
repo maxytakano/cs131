@@ -1,0 +1,3 @@
+Error, "/tmp/cs131_testrunner_1.mrMF/file.rc": 
+  Incompatible type bool* to operator ->, pointer to struct expected.
+Compile: failure.

@@ -1,0 +1,5 @@
+Error, "/tmp/cs131_testrunner_u9mrMF/file.rc": 
+  Type of return expression (int) is not equivalent to the function's return type (bool).
+Error, "/tmp/cs131_testrunner_u9mrMF/file.rc": 
+  Type of return expression (float) is not equivalent to the function's return type (bool).
+Compile: failure.

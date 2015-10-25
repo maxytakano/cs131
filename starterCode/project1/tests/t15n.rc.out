@@ -1,0 +1,5 @@
+Error, "/tmp/cs131_testrunner_9.mrMF/file.rc": 
+  Type of return expression (bool[10]), not assignment compatible with function's return type (bool*).
+Error, "/tmp/cs131_testrunner_9.mrMF/file.rc": 
+  Value of type bool not assignable to variable of type int.
+Compile: failure.

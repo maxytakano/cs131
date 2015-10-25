@@ -1,0 +1,6 @@
+Error, "/tmp/cs131_testrunner_r_mrMF/file.rc": 
+  Incompatible types to operator !=:
+    MS*,
+    MS2*;
+  both must be of equivalent pointer type.
+Compile: failure.

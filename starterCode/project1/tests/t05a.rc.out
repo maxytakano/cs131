@@ -1,0 +1,5 @@
+Error, "/tmp/cs131_testrunner_H8mrMF/file.rc": 
+  Operand to ++ is not a modifiable L-value.
+Error, "/tmp/cs131_testrunner_H8mrMF/file.rc": 
+  Return required in function, none found.
+Compile: failure.

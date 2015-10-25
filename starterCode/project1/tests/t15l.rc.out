@@ -1,0 +1,3 @@
+Error, "/tmp/cs131_testrunner_7.mrMF/file.rc": 
+  Initialization value of type int[4] not assignable to constant/variable of type int*.
+Compile: failure.

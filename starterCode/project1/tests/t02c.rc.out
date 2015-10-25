@@ -1,0 +1,21 @@
+Error, "/tmp/cs131_testrunner_f8mrMF/file.rc": 
+  Operand to ++ is not a modifiable L-value.
+Error, "/tmp/cs131_testrunner_f8mrMF/file.rc": 
+  Operand to -- is not a modifiable L-value.
+Error, "/tmp/cs131_testrunner_f8mrMF/file.rc": 
+  Operand to ++ is not a modifiable L-value.
+Error, "/tmp/cs131_testrunner_f8mrMF/file.rc": 
+  Operand to -- is not a modifiable L-value.
+Error, "/tmp/cs131_testrunner_f8mrMF/file.rc": 
+  Operand to ++ is not a modifiable L-value.
+Error, "/tmp/cs131_testrunner_f8mrMF/file.rc": 
+  Operand to -- is not a modifiable L-value.
+Error, "/tmp/cs131_testrunner_f8mrMF/file.rc": 
+  Operand to ++ is not a modifiable L-value.
+Error, "/tmp/cs131_testrunner_f8mrMF/file.rc": 
+  Operand to -- is not a modifiable L-value.
+Error, "/tmp/cs131_testrunner_f8mrMF/file.rc": 
+  Operand to ++ is not a modifiable L-value.
+Error, "/tmp/cs131_testrunner_f8mrMF/file.rc": 
+  Operand to -- is not a modifiable L-value.
+Compile: failure.

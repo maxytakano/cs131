@@ -1,0 +1,3 @@
+Error, "/tmp/cs131_testrunner_A_mrMF/file.rc": 
+  Non-addressable argument of type int to address-of operator.
+Compile: failure.

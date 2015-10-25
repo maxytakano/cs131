@@ -1,0 +1,7 @@
+Error, "/tmp/cs131_testrunner_g8mrMF/file.rc": 
+  Operand to ++ is not a modifiable L-value.
+Error, "/tmp/cs131_testrunner_g8mrMF/file.rc": 
+  Operand to -- is not a modifiable L-value.
+Error, "/tmp/cs131_testrunner_g8mrMF/file.rc": 
+  Operand to ++ is not a modifiable L-value.
+Compile: failure.

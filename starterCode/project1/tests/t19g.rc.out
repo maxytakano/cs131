@@ -1,0 +1,11 @@
+Error, "/tmp/cs131_testrunner_K_mrMF/file.rc": 
+  Index value of 48 is outside legal range [0,10).
+Error, "/tmp/cs131_testrunner_K_mrMF/file.rc": 
+  Index value of 136 is outside legal range [0,10).
+Error, "/tmp/cs131_testrunner_K_mrMF/file.rc": 
+  Index value of 40 is outside legal range [0,10).
+Error, "/tmp/cs131_testrunner_K_mrMF/file.rc": 
+  Index value of 12 is outside legal range [0,10).
+Error, "/tmp/cs131_testrunner_K_mrMF/file.rc": 
+  Index value of 16 is outside legal range [0,10).
+Compile: failure.

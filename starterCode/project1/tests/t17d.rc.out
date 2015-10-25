@@ -1,0 +1,5 @@
+Error, "/tmp/cs131_testrunner_s_mrMF/file.rc": 
+  Operand to -- is not a modifiable L-value.
+Error, "/tmp/cs131_testrunner_s_mrMF/file.rc": 
+  Incompatible type MYS to operator ++, equivalent to int, float, or pointer expected.
+Compile: failure.

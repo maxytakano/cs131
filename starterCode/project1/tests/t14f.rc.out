@@ -1,0 +1,9 @@
+Error, "/tmp/cs131_testrunner_B.mrMF/file.rc": 
+  Number of arguments (0) differs from number of parameters (1).
+Error, "/tmp/cs131_testrunner_B.mrMF/file.rc": 
+  Number of arguments (0) differs from number of parameters (1).
+Error, "/tmp/cs131_testrunner_B.mrMF/file.rc": 
+  Referenced field z not found in type _MYS_2.
+Error, "/tmp/cs131_testrunner_B.mrMF/file.rc": 
+  Return required in function, none found.
+Compile: failure.

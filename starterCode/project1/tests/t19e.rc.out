@@ -1,0 +1,5 @@
+Error, "/tmp/cs131_testrunner_I_mrMF/file.rc": 
+  undeclared identifier 'x'.
+Error, "/tmp/cs131_testrunner_I_mrMF/file.rc": 
+  undeclared identifier 'x'.
+Compile: failure.

@@ -1,0 +1,3 @@
+Error, "/tmp/cs131_testrunner__9mrMF/file.rc": 
+  Index value of -4 is outside legal range [0,10).
+Compile: failure.

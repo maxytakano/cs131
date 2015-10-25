@@ -1,0 +1,9 @@
+Error, "/tmp/cs131_testrunner_t8mrMF/file.rc": 
+  Value of type float not assignable to variable of type int.
+Error, "/tmp/cs131_testrunner_t8mrMF/file.rc": 
+  Value of type float not assignable to variable of type int.
+Error, "/tmp/cs131_testrunner_t8mrMF/file.rc": 
+  Value of type int not assignable to variable of type bool.
+Error, "/tmp/cs131_testrunner_t8mrMF/file.rc": 
+  Value of type float not assignable to variable of type bool.
+Compile: failure.
