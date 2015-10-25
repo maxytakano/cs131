@@ -55,6 +55,9 @@ class ArrayType extends CompositeType
 	//----------------------------------------------------------------
 	public boolean isAssignableTo(Type t){
 		if(baseType != null){
+			if(t.isArray()){
+				return t.getName().equals(getName());
+			}
 			if (nextLevel == null && baseType.isAssignableTo(t)){
 				return true;
 			}
