@@ -255,6 +255,7 @@ VarDecl ::=         OptStatic:_1 DecoratedType:_2 T_ID:_3 OptArrayList:_4 OptIni
                     {:
                         // Always doing the ctor call, either with args or calling the
                         // default ctor.
+                        // System.out.println(_2.getName() + " / " + _5);
                         ((MyParser) parser).doCtorCall(_2, _5);
                         ((MyParser) parser).DoVarDecl (_3, _2, null); // todo: 3rd param might not be null
                     :}

@@ -456,9 +456,20 @@ class MyParser extends parser
     // Check 14
     //----------------------------------------------------------------
     void doCtorCall(Type structType, Vector<STO> params) {
+        STO structCtor;
+
+        // Check if we are in a struct, and the name is the same, if so
+        // use the current structs ctor. 
+        if (m_symtab.getStructType() != null) {
+            if (m_symtab.getStructType().getName() == structType.getName()) {
+                structCtor = m_symtab.getStructType().getCtor();
+                DoFuncCall(structCtor, params);
+                return;
+            }
+        } 
 
         STO structSTO = m_symtab.access(structType.getName());
-        STO structCtor = ((StructType)structSTO.getType()).getCtor();
+        structCtor = ((StructType)structSTO.getType()).getCtor();
         // STO structCtor = m_symtab.getStructType().getCtor();
         DoFuncCall(structCtor, params);
     }
@@ -533,10 +544,18 @@ class MyParser extends parser
         }
 
         // 1. Get the function (could be a var also) associated with the passed id in the given scope
-        STO symtabObject = m_symtab.access(id);
+        STO symtabObject;
+        // System.out.println(m_symtab.getStructType() + "<- structType id: " + id);
+        if (m_symtab.getStructType() != null) {
+            symtabObject = m_symtab.accessLocal(id);
+            // System.out.println(symtabObject  + " <- object id: " + id);
+        } else {
+            symtabObject = m_symtab.access(id);
+        }
 
         // 2. Check if the there was a non-function value related to id in the symtable
         if (symtabObject != null) {
+            // System.out.println("how are we in here"  + " id: " + id);
             if (!symtabObject.isFunc()) {
                 // Check if we are in a struct to know which error to throw
                 if (m_symtab.getStructType() != null) {
@@ -570,7 +589,18 @@ class MyParser extends parser
         }
 
         // 3. now we can assume we have a candidate and existing function.
-        FuncSTO existingFunc = (FuncSTO) m_symtab.access(id);
+        // old
+        // FuncSTO existingFunc = (FuncSTO) m_symtab.access(id);
+
+        // new
+        FuncSTO existingFunc;
+        if (m_symtab.getStructType() != null) {
+            existingFunc = (FuncSTO) m_symtab.accessLocal(id);
+        } else {
+            existingFunc = (FuncSTO) m_symtab.access(id);
+        }
+        // end new
+
         FuncSTO candidateFunc = m_symtab.getFunc();
         candidateFunc.setParameters(params);
 
@@ -1127,6 +1157,10 @@ class MyParser extends parser
     }
 
     void setFunctionReturn() {
+        if (m_symtab.getFunc() == null) {
+            return;
+        }
+
         /* Phase 1 check 6c */
         int curlevel = m_symtab.getLevel();
         // if (curlevel == 2) {
