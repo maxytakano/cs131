@@ -1,7 +1,7 @@
-Error, "/tmp/cs131_testrunner__5frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_VNjrMF/file.rc": 
   Invalid operand to sizeof. Not a type or not addressable.
-Error, "/tmp/cs131_testrunner__5frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_VNjrMF/file.rc": 
   Left-hand operand is not assignable (not a modifiable L-value).
-Error, "/tmp/cs131_testrunner__5frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_VNjrMF/file.rc": 
   Argument passed to reference parameter x (type int) is not a modifiable L-value.
 Compile: failure.

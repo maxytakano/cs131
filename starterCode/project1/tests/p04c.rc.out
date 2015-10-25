@@ -1,5 +1,5 @@
-Error, "/tmp/cs131_testrunner_00frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_bDjrMF/file.rc": 
   Incompatible type bool to binary operator +, numeric expected.
-Error, "/tmp/cs131_testrunner_00frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_bDjrMF/file.rc": 
   Value of type float not assignable to variable of type int.
 Compile: failure.

@@ -1,13 +1,13 @@
-Error, "/tmp/cs131_testrunner_M5frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_bNjrMF/file.rc": 
   Incompatible types to operator ==:
     int*,
     bool*;
   both must be of equivalent pointer type.
-Error, "/tmp/cs131_testrunner_M5frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_bNjrMF/file.rc": 
   Incompatible types to operator !=:
     int*,
     bool*;
   both must be of equivalent pointer type.
-Error, "/tmp/cs131_testrunner_M5frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_bNjrMF/file.rc": 
   Value of type nullptr not assignable to variable of type int.
 Compile: failure.

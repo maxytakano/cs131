@@ -1,7 +1,7 @@
-Error, "/tmp/cs131_testrunner__YfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_pwjrMF/file.rc": 
   Incompatible type bool to binary operator &, equivalent to int expected.
-Error, "/tmp/cs131_testrunner__YfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_pwjrMF/file.rc": 
   Incompatible type float to binary operator &, equivalent to int expected.
-Error, "/tmp/cs131_testrunner__YfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_pwjrMF/file.rc": 
   Incompatible type float to binary operator &, equivalent to int expected.
 Compile: failure.

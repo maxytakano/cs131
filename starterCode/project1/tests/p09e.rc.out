@@ -1,19 +1,19 @@
-Error, "/tmp/cs131_testrunner_X2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_XHjrMF/file.rc": 
   Duplicate declaration of overloaded function foo.
-Error, "/tmp/cs131_testrunner_X2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_XHjrMF/file.rc": 
   redeclared identifier 'foo2'.
-Error, "/tmp/cs131_testrunner_X2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_XHjrMF/file.rc": 
   Number of arguments (0) differs from number of parameters (1).
-Error, "/tmp/cs131_testrunner_X2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_XHjrMF/file.rc": 
   Illegal call to overloaded function foo.
-Error, "/tmp/cs131_testrunner_X2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_XHjrMF/file.rc": 
   Illegal call to overloaded function foo.
-Error, "/tmp/cs131_testrunner_X2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_XHjrMF/file.rc": 
   Illegal call to overloaded function foo.
-Error, "/tmp/cs131_testrunner_X2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_XHjrMF/file.rc": 
   Incompatible type int to unary operator !, equivalent to bool expected.
-Error, "/tmp/cs131_testrunner_X2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_XHjrMF/file.rc": 
   Illegal call to overloaded function foo.
-Error, "/tmp/cs131_testrunner_X2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_XHjrMF/file.rc": 
   undeclared identifier 'boo'.
 Compile: failure.

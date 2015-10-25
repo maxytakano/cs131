@@ -1,15 +1,15 @@
-Error, "/tmp/cs131_testrunner_23frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_.JjrMF/file.rc": 
   Initialization value of type float not assignable to constant/variable of type int.
-Error, "/tmp/cs131_testrunner_23frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_.JjrMF/file.rc": 
   Initialization value of type float not assignable to constant/variable of type bool.
-Error, "/tmp/cs131_testrunner_23frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_.JjrMF/file.rc": 
   Foreach array element of type int not assignable to value iteration variable x, of type bool.
-Error, "/tmp/cs131_testrunner_23frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_.JjrMF/file.rc": 
   Foreach array element of type int not equivalent to reference iteration variable x, of type float.
-Error, "/tmp/cs131_testrunner_23frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_.JjrMF/file.rc": 
   Foreach array element of type float* not assignable to value iteration variable x, of type float.
-Error, "/tmp/cs131_testrunner_23frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_.JjrMF/file.rc": 
   Foreach array element of type float[4] not assignable to value iteration variable x, of type float.
-Error, "/tmp/cs131_testrunner_23frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_.JjrMF/file.rc": 
   Foreach array element of type float[4] not assignable to value iteration variable x, of type float.
 Compile: failure.

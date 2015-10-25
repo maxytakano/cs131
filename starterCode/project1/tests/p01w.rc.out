@@ -1,137 +1,137 @@
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type float to binary operator %, equivalent to int expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type bool to binary operator +, numeric expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type bool to binary operator +, numeric expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type bool to binary operator +, numeric expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type bool to binary operator -, numeric expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type bool to binary operator -, numeric expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type bool to binary operator -, numeric expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type float to binary operator %, equivalent to int expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type float to binary operator %, equivalent to int expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type bool to binary operator %, equivalent to int expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type bool to binary operator /, numeric expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type bool to binary operator /, numeric expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type bool to binary operator *, numeric expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type bool to binary operator *, numeric expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type int to binary operator &&, equivalent to bool expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type float to binary operator &&, equivalent to bool expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type float to binary operator &&, equivalent to bool expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type int to binary operator ||, equivalent to bool expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type float to binary operator ||, equivalent to bool expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type int to binary operator ||, equivalent to bool expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type float to binary operator ||, equivalent to bool expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type int to binary operator ||, equivalent to bool expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type int to unary operator !, equivalent to bool expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type float to unary operator !, equivalent to bool expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type float to binary operator |, equivalent to int expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type bool to binary operator |, equivalent to int expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type float to binary operator |, equivalent to int expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type float to binary operator &, equivalent to int expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type bool to binary operator &, equivalent to int expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type float to binary operator &, equivalent to int expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type float to binary operator ^, equivalent to int expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type bool to binary operator ^, equivalent to int expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type float to binary operator ^, equivalent to int expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type bool to binary operator <, numeric expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type bool to binary operator <, numeric expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type bool to binary operator >, numeric expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type bool to binary operator >, numeric expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type bool to binary operator >=, numeric expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type bool to binary operator >=, numeric expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type bool to binary operator <=, numeric expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type bool to binary operator <=, numeric expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible types to operator: int == bool;
   both must be numeric, or both equivalent to bool.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible types to operator: bool == int;
   both must be numeric, or both equivalent to bool.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible types to operator: int != bool;
   both must be numeric, or both equivalent to bool.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible types to operator: bool != int;
   both must be numeric, or both equivalent to bool.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible types to operator: int == bool;
   both must be numeric, or both equivalent to bool.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible types to operator: bool == int;
   both must be numeric, or both equivalent to bool.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible types to operator: int != bool;
   both must be numeric, or both equivalent to bool.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible types to operator: bool != int;
   both must be numeric, or both equivalent to bool.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Value of type bool not assignable to variable of type int.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Value of type bool not assignable to variable of type int.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Value of type bool not assignable to variable of type int.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Value of type bool not assignable to variable of type int.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Value of type bool not assignable to variable of type int.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Value of type bool not assignable to variable of type int.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Value of type bool not assignable to variable of type int.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Value of type bool not assignable to variable of type int.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Value of type bool not assignable to variable of type int.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Operand to ++ is not a modifiable L-value.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Operand to ++ is not a modifiable L-value.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Operand to -- is not a modifiable L-value.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Operand to -- is not a modifiable L-value.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type bool to operator ++, equivalent to int, float, or pointer expected.
-Error, "/tmp/cs131_testrunner_o0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_UAjrMF/file.rc": 
   Incompatible type bool to operator --, equivalent to int, float, or pointer expected.
 Compile: failure.

@@ -1,5 +1,5 @@
-Error, "/tmp/cs131_testrunner_C5frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_XMjrMF/file.rc": 
   Operand to "new" is not a modifiable L-value.
-Error, "/tmp/cs131_testrunner_C5frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_XMjrMF/file.rc": 
   Type of new's operand must be of pointer type, int found.
 Compile: failure.

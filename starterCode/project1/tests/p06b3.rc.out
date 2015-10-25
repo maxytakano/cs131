@@ -1,3 +1,3 @@
-Error, "/tmp/cs131_testrunner_K1frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_hFjrMF/file.rc": 
   Type of return expression (bool), not assignment compatible with function's return type (int).
 Compile: failure.

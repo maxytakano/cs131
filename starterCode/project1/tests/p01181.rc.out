@@ -1,33 +1,33 @@
-Error, "/tmp/cs131_testrunner_nYfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_PtjrMF/file.rc": 
   Incompatible type bool to binary operator >, numeric expected.
-Error, "/tmp/cs131_testrunner_nYfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_PtjrMF/file.rc": 
   Incompatible type bool to binary operator >, numeric expected.
-Error, "/tmp/cs131_testrunner_nYfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_PtjrMF/file.rc": 
   Incompatible type bool to binary operator >, numeric expected.
-Error, "/tmp/cs131_testrunner_nYfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_PtjrMF/file.rc": 
   Incompatible type bool to binary operator >, numeric expected.
-Error, "/tmp/cs131_testrunner_nYfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_PtjrMF/file.rc": 
   Incompatible type bool to binary operator <, numeric expected.
-Error, "/tmp/cs131_testrunner_nYfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_PtjrMF/file.rc": 
   Incompatible type bool to binary operator <, numeric expected.
-Error, "/tmp/cs131_testrunner_nYfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_PtjrMF/file.rc": 
   Incompatible type bool to binary operator <, numeric expected.
-Error, "/tmp/cs131_testrunner_nYfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_PtjrMF/file.rc": 
   Incompatible type bool to binary operator <, numeric expected.
-Error, "/tmp/cs131_testrunner_nYfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_PtjrMF/file.rc": 
   Incompatible type bool to binary operator >=, numeric expected.
-Error, "/tmp/cs131_testrunner_nYfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_PtjrMF/file.rc": 
   Incompatible type bool to binary operator >=, numeric expected.
-Error, "/tmp/cs131_testrunner_nYfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_PtjrMF/file.rc": 
   Incompatible type bool to binary operator >=, numeric expected.
-Error, "/tmp/cs131_testrunner_nYfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_PtjrMF/file.rc": 
   Incompatible type bool to binary operator >=, numeric expected.
-Error, "/tmp/cs131_testrunner_nYfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_PtjrMF/file.rc": 
   Incompatible type bool to binary operator <=, numeric expected.
-Error, "/tmp/cs131_testrunner_nYfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_PtjrMF/file.rc": 
   Incompatible type bool to binary operator <=, numeric expected.
-Error, "/tmp/cs131_testrunner_nYfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_PtjrMF/file.rc": 
   Incompatible type bool to binary operator <=, numeric expected.
-Error, "/tmp/cs131_testrunner_nYfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_PtjrMF/file.rc": 
   Incompatible type bool to binary operator <=, numeric expected.
 Compile: failure.

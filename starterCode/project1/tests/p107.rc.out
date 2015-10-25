@@ -1,5 +1,5 @@
-Error, "/tmp/cs131_testrunner_62frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_eIjrMF/file.rc": 
   Index expression value (-1) in array declaration must be > 0.
-Error, "/tmp/cs131_testrunner_62frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_eIjrMF/file.rc": 
   Value of index expression not known at compile time.
 Compile: failure.

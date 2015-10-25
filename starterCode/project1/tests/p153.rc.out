@@ -1,7 +1,7 @@
-Error, "/tmp/cs131_testrunner_64frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_bMjrMF/file.rc": 
   Type of return expression (MYS***[20]), not assignment compatible with function's return type (MYS**).
-Error, "/tmp/cs131_testrunner_64frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_bMjrMF/file.rc": 
   Incompatible type float to unary dereference operator *, pointer expected.
-Error, "/tmp/cs131_testrunner_64frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_bMjrMF/file.rc": 
   Left-hand operand is not assignable (not a modifiable L-value).
 Compile: failure.

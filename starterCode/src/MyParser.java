@@ -175,6 +175,8 @@ class MyParser extends parser
     //----------------------------------------------------------------
     void DoVarDecl(String id, Type type, STO optInit)
     {
+        // System.out.println(id + " / " + type + " / " + optInit);
+
         if (m_symtab.accessLocal(id) != null)
         {
             m_nNumErrors++;
@@ -187,13 +189,7 @@ class MyParser extends parser
             }
             Type initType = optInit.getType();
             // user decided to initialize the variable, type check it
-// System.out.println("-------------------------------------------");
-// System.out.println("id: " + id);
-// System.out.println("optInit: " + optInit);
-// System.out.println("optInit name: " + optInit.getName());
-// System.out.println("optInit type: " + optInit.getType());
-// System.out.println("type: " + type);
-// System.out.println();
+
             if (!initType.isAssignableTo(type) && !initType.isNullPointer()) {
                                 // System.out.println("IN vaR DECL: TYPE: " + initType.getName());
                 m_nNumErrors++;
@@ -1353,9 +1349,7 @@ class MyParser extends parser
             return new ErrorSTO(ErrorMsg.error19_Sizeof);
         }
 
-        // System.out.println(sto.getName());
-        // System.out.println(sto.getType());
-        // System.out.println(sto.getType().getSize());
+
         // int finalSize;
         Type type = sto.getType();
         if (type.isPointer()) {
@@ -1367,10 +1361,6 @@ class MyParser extends parser
 
 
         // else if (type.isArray()) {
-
-
-        //     System.out.println("2");
-        //     System.out.println(type.getSize());
 
         //     return new ConstSTO("var size", new IntType(), type.getSize(), false, false);
 
@@ -1469,10 +1459,8 @@ class MyParser extends parser
             if(recursedType.isError()){
                 return recursedType;
             }
-            // System.out.println("Type: " + recursedSTO.getType() + " \n Name: " + recursedSTO.getName());
             myPointerType.setNextLevel(recursedType);
             //the new varsto will be an non-mod lval, so addressable, but not modifiable
-            // System.out.println("returning recursion type: " + myArrayType.getName());
             return myPointerType;
         }
     }

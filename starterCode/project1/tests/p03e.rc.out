@@ -1,3 +1,3 @@
-Error, "/tmp/cs131_testrunner_P0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_xCjrMF/file.rc": 
   Value of type bool not assignable to variable of type float.
 Compile: failure.

@@ -1,3 +1,3 @@
-Error, "/tmp/cs131_testrunner_0WfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_VojrMF/file.rc": 
   Incompatible type float to binary operator ||, equivalent to bool expected.
 Compile: failure.

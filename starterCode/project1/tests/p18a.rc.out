@@ -1,7 +1,7 @@
-Error, "/tmp/cs131_testrunner_35frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_CNjrMF/file.rc": 
   Left-hand operand is not assignable (not a modifiable L-value).
-Error, "/tmp/cs131_testrunner_35frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_CNjrMF/file.rc": 
   Left-hand operand is not assignable (not a modifiable L-value).
-Error, "/tmp/cs131_testrunner_35frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_CNjrMF/file.rc": 
   Return required in function, none found.
 Compile: failure.

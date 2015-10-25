@@ -1,45 +1,45 @@
-Error, "/tmp/cs131_testrunner_x4frMF/file.rc": 
+Error, "/tmp/cs131_testrunner__KjrMF/file.rc": 
   Field x declared second time in struct.
-Error, "/tmp/cs131_testrunner_x4frMF/file.rc": 
+Error, "/tmp/cs131_testrunner__KjrMF/file.rc": 
   Field x declared second time in struct.
-Error, "/tmp/cs131_testrunner_x4frMF/file.rc": 
+Error, "/tmp/cs131_testrunner__KjrMF/file.rc": 
   Referenced field a not found in current struct.
-Error, "/tmp/cs131_testrunner_x4frMF/file.rc": 
+Error, "/tmp/cs131_testrunner__KjrMF/file.rc": 
   Referenced field a not found in current struct.
-Error, "/tmp/cs131_testrunner_x4frMF/file.rc": 
+Error, "/tmp/cs131_testrunner__KjrMF/file.rc": 
   Value of type float not assignable to variable of type int.
-Error, "/tmp/cs131_testrunner_x4frMF/file.rc": 
+Error, "/tmp/cs131_testrunner__KjrMF/file.rc": 
   Return required in function, none found.
-Error, "/tmp/cs131_testrunner_x4frMF/file.rc": 
+Error, "/tmp/cs131_testrunner__KjrMF/file.rc": 
   Field x declared second time in struct.
-Error, "/tmp/cs131_testrunner_x4frMF/file.rc": 
+Error, "/tmp/cs131_testrunner__KjrMF/file.rc": 
   Referenced field a not found in current struct.
-Error, "/tmp/cs131_testrunner_x4frMF/file.rc": 
+Error, "/tmp/cs131_testrunner__KjrMF/file.rc": 
   Referenced field a not found in current struct.
-Error, "/tmp/cs131_testrunner_x4frMF/file.rc": 
+Error, "/tmp/cs131_testrunner__KjrMF/file.rc": 
   Value of type float not assignable to variable of type int.
-Error, "/tmp/cs131_testrunner_x4frMF/file.rc": 
+Error, "/tmp/cs131_testrunner__KjrMF/file.rc": 
   Illegal call to overloaded function MYS1.
-Error, "/tmp/cs131_testrunner_x4frMF/file.rc": 
+Error, "/tmp/cs131_testrunner__KjrMF/file.rc": 
   Illegal call to overloaded function MYS2.
-Error, "/tmp/cs131_testrunner_x4frMF/file.rc": 
+Error, "/tmp/cs131_testrunner__KjrMF/file.rc": 
   Value of type float not assignable to variable of type int.
-Error, "/tmp/cs131_testrunner_x4frMF/file.rc": 
+Error, "/tmp/cs131_testrunner__KjrMF/file.rc": 
   Value of type float not assignable to variable of type int.
-Error, "/tmp/cs131_testrunner_x4frMF/file.rc": 
+Error, "/tmp/cs131_testrunner__KjrMF/file.rc": 
   Value of type float not assignable to variable of type int.
-Error, "/tmp/cs131_testrunner_x4frMF/file.rc": 
+Error, "/tmp/cs131_testrunner__KjrMF/file.rc": 
   Referenced field a not found in type MYS1.
-Error, "/tmp/cs131_testrunner_x4frMF/file.rc": 
+Error, "/tmp/cs131_testrunner__KjrMF/file.rc": 
   Referenced field a not found in type MYS1.
-Error, "/tmp/cs131_testrunner_x4frMF/file.rc": 
+Error, "/tmp/cs131_testrunner__KjrMF/file.rc": 
   Referenced field a not found in type MYS1.
-Error, "/tmp/cs131_testrunner_x4frMF/file.rc": 
+Error, "/tmp/cs131_testrunner__KjrMF/file.rc": 
   Value of type float not assignable to variable of type int.
-Error, "/tmp/cs131_testrunner_x4frMF/file.rc": 
+Error, "/tmp/cs131_testrunner__KjrMF/file.rc": 
   Value of type void not assignable to variable of type int.
-Error, "/tmp/cs131_testrunner_x4frMF/file.rc": 
+Error, "/tmp/cs131_testrunner__KjrMF/file.rc": 
   Value of type void not assignable to variable of type int.
-Error, "/tmp/cs131_testrunner_x4frMF/file.rc": 
+Error, "/tmp/cs131_testrunner__KjrMF/file.rc": 
   Value of type void not assignable to variable of type int.
 Compile: failure.

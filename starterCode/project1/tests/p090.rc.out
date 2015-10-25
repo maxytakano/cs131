@@ -1,21 +1,21 @@
-Error, "/tmp/cs131_testrunner_N2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_DHjrMF/file.rc": 
   Duplicate declaration of overloaded function foo.
-Error, "/tmp/cs131_testrunner_N2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_DHjrMF/file.rc": 
   Duplicate declaration of overloaded function foo.
-Error, "/tmp/cs131_testrunner_N2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_DHjrMF/file.rc": 
   Duplicate declaration of overloaded function foo.
-Error, "/tmp/cs131_testrunner_N2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_DHjrMF/file.rc": 
   Duplicate declaration of overloaded function bar.
-Error, "/tmp/cs131_testrunner_N2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_DHjrMF/file.rc": 
   Duplicate declaration of overloaded function bar.
-Error, "/tmp/cs131_testrunner_N2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_DHjrMF/file.rc": 
   Duplicate declaration of overloaded function bar.
-Error, "/tmp/cs131_testrunner_N2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_DHjrMF/file.rc": 
   Duplicate declaration of overloaded function foobar.
-Error, "/tmp/cs131_testrunner_N2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_DHjrMF/file.rc": 
   Duplicate declaration of overloaded function foobar.
-Error, "/tmp/cs131_testrunner_N2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_DHjrMF/file.rc": 
   Duplicate declaration of overloaded function foobar.
-Error, "/tmp/cs131_testrunner_N2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_DHjrMF/file.rc": 
   Duplicate declaration of overloaded function foobar.
 Compile: failure.

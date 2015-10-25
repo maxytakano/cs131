@@ -1,3 +1,3 @@
-Error, "/tmp/cs131_testrunner_U0frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_RCjrMF/file.rc": 
   bool required for conditional test, float found.
 Compile: failure.

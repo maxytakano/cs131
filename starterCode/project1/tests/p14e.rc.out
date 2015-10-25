@@ -1,3 +1,3 @@
-Error, "/tmp/cs131_testrunner_Q4frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_JLjrMF/file.rc": 
   Type of expression referenced by "." (TR*) is not a struct.
 Compile: failure.

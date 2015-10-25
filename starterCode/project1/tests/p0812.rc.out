@@ -1,5 +1,5 @@
-Error, "/tmp/cs131_testrunner_i2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_HGjrMF/file.rc": 
   Initialization value of type int not assignable to constant/variable of type bool.
-Error, "/tmp/cs131_testrunner_i2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_HGjrMF/file.rc": 
   Initialization value of type float not assignable to constant/variable of type int.
 Compile: failure.

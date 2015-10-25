@@ -1,5 +1,5 @@
-Error, "/tmp/cs131_testrunner_H5frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_2MjrMF/file.rc": 
   Operand to "new" is not a modifiable L-value.
-Error, "/tmp/cs131_testrunner_H5frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_2MjrMF/file.rc": 
   Operand to "delete" is not a modifiable L-value.
 Compile: failure.

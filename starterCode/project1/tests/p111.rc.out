@@ -1,3 +1,3 @@
-Error, "/tmp/cs131_testrunner_j3frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_JIjrMF/file.rc": 
   Argument of type int[5] not assignable to value parameter array, of type int[10].
 Compile: failure.

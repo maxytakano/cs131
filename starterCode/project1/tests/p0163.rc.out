@@ -1,7 +1,7 @@
-Error, "/tmp/cs131_testrunner_gZfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_RwjrMF/file.rc": 
   Incompatible types to operator: bool == int;
   both must be numeric, or both equivalent to bool.
-Error, "/tmp/cs131_testrunner_gZfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_RwjrMF/file.rc": 
   Incompatible types to operator: float == bool;
   both must be numeric, or both equivalent to bool.
 Compile: failure.

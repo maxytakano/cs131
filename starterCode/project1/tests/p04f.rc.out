@@ -1,5 +1,5 @@
-Error, "/tmp/cs131_testrunner_30frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_kDjrMF/file.rc": 
   bool required for conditional test, int found.
-Error, "/tmp/cs131_testrunner_30frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_kDjrMF/file.rc": 
   bool required for conditional test, int found.
 Compile: failure.

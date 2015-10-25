@@ -1,7 +1,7 @@
-Error, "/tmp/cs131_testrunner_dYfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_itjrMF/file.rc": 
   Incompatible type bool to binary operator *, numeric expected.
-Error, "/tmp/cs131_testrunner_dYfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_itjrMF/file.rc": 
   Incompatible type bool to binary operator *, numeric expected.
-Error, "/tmp/cs131_testrunner_dYfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_itjrMF/file.rc": 
   Incompatible type bool to binary operator *, numeric expected.
 Compile: failure.

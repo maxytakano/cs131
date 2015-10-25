@@ -1,17 +1,17 @@
-Error, "/tmp/cs131_testrunner_d6frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_4NjrMF/file.rc": 
   Index value of 4 is outside legal range [0,1).
-Error, "/tmp/cs131_testrunner_d6frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_4NjrMF/file.rc": 
   Index value of 8 is outside legal range [0,1).
-Error, "/tmp/cs131_testrunner_d6frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_4NjrMF/file.rc": 
   Index value of 4 is outside legal range [0,1).
-Error, "/tmp/cs131_testrunner_d6frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_4NjrMF/file.rc": 
   Index value of 12 is outside legal range [0,1).
-Error, "/tmp/cs131_testrunner_d6frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_4NjrMF/file.rc": 
   Index value of 4 is outside legal range [0,1).
-Error, "/tmp/cs131_testrunner_d6frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_4NjrMF/file.rc": 
   Index value of 4 is outside legal range [0,1).
-Error, "/tmp/cs131_testrunner_d6frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_4NjrMF/file.rc": 
   Index value of 16 is outside legal range [0,1).
-Error, "/tmp/cs131_testrunner_d6frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_4NjrMF/file.rc": 
   Index value of 8 is outside legal range [0,1).
 Compile: failure.

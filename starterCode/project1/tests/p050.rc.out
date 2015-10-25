@@ -1,11 +1,11 @@
-Error, "/tmp/cs131_testrunner_40frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_nDjrMF/file.rc": 
   Value of type void not assignable to variable of type int.
-Error, "/tmp/cs131_testrunner_40frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_nDjrMF/file.rc": 
   Number of arguments (1) differs from number of parameters (0).
-Error, "/tmp/cs131_testrunner_40frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_nDjrMF/file.rc": 
   Argument of type float not assignable to value parameter i, of type int.
-Error, "/tmp/cs131_testrunner_40frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_nDjrMF/file.rc": 
   Argument of type int not equivalent to reference parameter i, of type float.
-Error, "/tmp/cs131_testrunner_40frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_nDjrMF/file.rc": 
   Argument passed to reference parameter b (type bool) is not a modifiable L-value.
 Compile: failure.

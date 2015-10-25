@@ -1,7 +1,7 @@
-Error, "/tmp/cs131_testrunner_y3frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_aJjrMF/file.rc": 
   Type of expression referenced by array subscript (int) is not of array or pointer type.
-Error, "/tmp/cs131_testrunner_y3frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_aJjrMF/file.rc": 
   Type of expression referenced by array subscript (float) is not of array or pointer type.
-Error, "/tmp/cs131_testrunner_y3frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_aJjrMF/file.rc": 
   Type of index expression in array reference (float) not equivalent to int.
 Compile: failure.

@@ -1,7 +1,7 @@
-Error, "/tmp/cs131_testrunner_bXfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_NpjrMF/file.rc": 
   Incompatible type bool to binary operator >, numeric expected.
-Error, "/tmp/cs131_testrunner_bXfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_NpjrMF/file.rc": 
   Incompatible type bool to binary operator >, numeric expected.
-Error, "/tmp/cs131_testrunner_bXfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_NpjrMF/file.rc": 
   Incompatible type bool to binary operator >, numeric expected.
 Compile: failure.

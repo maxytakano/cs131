@@ -1,7 +1,7 @@
-Error, "/tmp/cs131_testrunner_T2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_QHjrMF/file.rc": 
   Return required in function, none found.
-Error, "/tmp/cs131_testrunner_T2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_QHjrMF/file.rc": 
   Return required in function, none found.
-Error, "/tmp/cs131_testrunner_T2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_QHjrMF/file.rc": 
   Illegal call to overloaded function foo.
 Compile: failure.

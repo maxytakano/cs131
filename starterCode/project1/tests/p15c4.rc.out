@@ -1,9 +1,9 @@
-Error, "/tmp/cs131_testrunner_m5frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_GMjrMF/file.rc": 
   Initialization value of type int not assignable to constant/variable of type int*.
-Error, "/tmp/cs131_testrunner_m5frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_GMjrMF/file.rc": 
   Initialization value of type int* not assignable to constant/variable of type float*.
-Error, "/tmp/cs131_testrunner_m5frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_GMjrMF/file.rc": 
   Initialization value of type bool* not assignable to constant/variable of type int*.
-Error, "/tmp/cs131_testrunner_m5frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_GMjrMF/file.rc": 
   Index value of 2 is outside legal range [0,2).
 Compile: failure.

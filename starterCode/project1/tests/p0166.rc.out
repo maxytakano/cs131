@@ -1,4 +1,4 @@
-Error, "/tmp/cs131_testrunner_kZfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_3wjrMF/file.rc": 
   Incompatible types to operator: float == bool;
   both must be numeric, or both equivalent to bool.
 Compile: failure.

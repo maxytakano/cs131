@@ -1,19 +1,19 @@
-Error, "/tmp/cs131_testrunner_R5frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_jNjrMF/file.rc": 
   Incompatible types to operator ==:
     int*,
     int;
   both must be of equivalent pointer type.
-Error, "/tmp/cs131_testrunner_R5frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_jNjrMF/file.rc": 
   Incompatible types to operator ==:
     int,
     int*;
   both must be of equivalent pointer type.
-Error, "/tmp/cs131_testrunner_R5frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_jNjrMF/file.rc": 
   Incompatible types to operator ==:
     int*,
     float*;
   both must be of equivalent pointer type.
-Error, "/tmp/cs131_testrunner_R5frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_jNjrMF/file.rc": 
   Incompatible types to operator ==:
     STFU*,
     STFU;

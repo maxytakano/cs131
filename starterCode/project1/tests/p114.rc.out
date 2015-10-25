@@ -1,5 +1,5 @@
-Error, "/tmp/cs131_testrunner_m3frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_QIjrMF/file.rc": 
   Index value of 10 is outside legal range [0,10).
-Error, "/tmp/cs131_testrunner_m3frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_QIjrMF/file.rc": 
   Argument of type int not equivalent to reference parameter f, of type float*.
 Compile: failure.

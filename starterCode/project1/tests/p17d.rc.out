@@ -1,61 +1,61 @@
-Error, "/tmp/cs131_testrunner_Y5frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_vNjrMF/file.rc": 
   Incompatible types to operator ==:
     int*,
     bool*;
   both must be of equivalent pointer type.
-Error, "/tmp/cs131_testrunner_Y5frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_vNjrMF/file.rc": 
   Incompatible types to operator ==:
     int*,
     int**;
   both must be of equivalent pointer type.
-Error, "/tmp/cs131_testrunner_Y5frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_vNjrMF/file.rc": 
   Incompatible types to operator ==:
     int*,
     int;
   both must be of equivalent pointer type.
-Error, "/tmp/cs131_testrunner_Y5frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_vNjrMF/file.rc": 
   Incompatible types to operator ==:
     int*,
     int;
   both must be of equivalent pointer type.
-Error, "/tmp/cs131_testrunner_Y5frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_vNjrMF/file.rc": 
   Incompatible types to operator ==:
     nullptr,
     int;
   both must be of equivalent pointer type.
-Error, "/tmp/cs131_testrunner_Y5frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_vNjrMF/file.rc": 
   Incompatible types to operator !=:
     int*,
     bool*;
   both must be of equivalent pointer type.
-Error, "/tmp/cs131_testrunner_Y5frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_vNjrMF/file.rc": 
   Incompatible types to operator !=:
     int*,
     int**;
   both must be of equivalent pointer type.
-Error, "/tmp/cs131_testrunner_Y5frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_vNjrMF/file.rc": 
   Incompatible types to operator !=:
     int*,
     int;
   both must be of equivalent pointer type.
-Error, "/tmp/cs131_testrunner_Y5frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_vNjrMF/file.rc": 
   Incompatible types to operator !=:
     int*,
     int;
   both must be of equivalent pointer type.
-Error, "/tmp/cs131_testrunner_Y5frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_vNjrMF/file.rc": 
   Incompatible types to operator !=:
     nullptr,
     int;
   both must be of equivalent pointer type.
-Error, "/tmp/cs131_testrunner_Y5frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_vNjrMF/file.rc": 
   Operand to ++ is not a modifiable L-value.
-Error, "/tmp/cs131_testrunner_Y5frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_vNjrMF/file.rc": 
   Operand to -- is not a modifiable L-value.
-Error, "/tmp/cs131_testrunner_Y5frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_vNjrMF/file.rc": 
   Non-addressable argument of type int to address-of operator.
-Error, "/tmp/cs131_testrunner_Y5frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_vNjrMF/file.rc": 
   Non-addressable argument of type int to address-of operator.
-Error, "/tmp/cs131_testrunner_Y5frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_vNjrMF/file.rc": 
   Return required in function, none found.
 Compile: failure.

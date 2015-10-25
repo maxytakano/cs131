@@ -1,3 +1,3 @@
-Error, "/tmp/cs131_testrunner_J4frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_yLjrMF/file.rc": 
   Type of expression referenced by "." (float) is not a struct.
 Compile: failure.

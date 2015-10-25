@@ -1,5 +1,5 @@
-Error, "/tmp/cs131_testrunner_C4frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_kLjrMF/file.rc": 
   Type of expression referenced by "." (int) is not a struct.
-Error, "/tmp/cs131_testrunner_C4frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_kLjrMF/file.rc": 
   Referenced field c not found in type MYS.
 Compile: failure.

@@ -1,3 +1,3 @@
-Error, "/tmp/cs131_testrunner_IZfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_uyjrMF/file.rc": 
   Incompatible type float to binary operator |, equivalent to int expected.
 Compile: failure.

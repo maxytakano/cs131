@@ -1,23 +1,23 @@
-Error, "/tmp/cs131_testrunner_K2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_xHjrMF/file.rc": 
   Arithmetic exception occurred during constant folding.
-Error, "/tmp/cs131_testrunner_K2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_xHjrMF/file.rc": 
   Initialization value of type float not assignable to constant/variable of type int.
-Error, "/tmp/cs131_testrunner_K2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_xHjrMF/file.rc": 
   Initialization value of constant named f not known at compile time.
-Error, "/tmp/cs131_testrunner_K2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_xHjrMF/file.rc": 
   Arithmetic exception occurred during constant folding.
-Error, "/tmp/cs131_testrunner_K2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_xHjrMF/file.rc": 
   Arithmetic exception occurred during constant folding.
-Error, "/tmp/cs131_testrunner_K2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_xHjrMF/file.rc": 
   redeclared identifier 'h'.
-Error, "/tmp/cs131_testrunner_K2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_xHjrMF/file.rc": 
   Arithmetic exception occurred during constant folding.
-Error, "/tmp/cs131_testrunner_K2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_xHjrMF/file.rc": 
   Initialization value of type bool not assignable to constant/variable of type int.
-Error, "/tmp/cs131_testrunner_K2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_xHjrMF/file.rc": 
   redeclared identifier 'c'.
-Error, "/tmp/cs131_testrunner_K2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_xHjrMF/file.rc": 
   Initialization value of type float not assignable to constant/variable of type int.
-Error, "/tmp/cs131_testrunner_K2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_xHjrMF/file.rc": 
   Initialization value of type int not assignable to constant/variable of type bool.
 Compile: failure.

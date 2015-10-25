@@ -1,25 +1,25 @@
-Error, "/tmp/cs131_testrunner_v2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_6GjrMF/file.rc": 
   Initialization value of constant named x6 not known at compile time.
-Error, "/tmp/cs131_testrunner_v2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_6GjrMF/file.rc": 
   Initialization value of constant named x7 not known at compile time.
-Error, "/tmp/cs131_testrunner_v2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_6GjrMF/file.rc": 
   Initialization value of constant named x8 not known at compile time.
-Error, "/tmp/cs131_testrunner_v2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_6GjrMF/file.rc": 
   Initialization value of constant named fail1 not known at compile time.
-Error, "/tmp/cs131_testrunner_v2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_6GjrMF/file.rc": 
   Initialization value of constant named fail2 not known at compile time.
-Error, "/tmp/cs131_testrunner_v2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_6GjrMF/file.rc": 
   Initialization value of constant named fail3 not known at compile time.
-Error, "/tmp/cs131_testrunner_v2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_6GjrMF/file.rc": 
   Initialization value of type float not assignable to constant/variable of type int.
-Error, "/tmp/cs131_testrunner_v2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_6GjrMF/file.rc": 
   Initialization value of type int not assignable to constant/variable of type bool.
-Error, "/tmp/cs131_testrunner_v2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_6GjrMF/file.rc": 
   Initialization value of type bool not assignable to constant/variable of type float.
-Error, "/tmp/cs131_testrunner_v2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_6GjrMF/file.rc": 
   Initialization value of type float not assignable to constant/variable of type int.
-Error, "/tmp/cs131_testrunner_v2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_6GjrMF/file.rc": 
   Initialization value of type int not assignable to constant/variable of type bool.
-Error, "/tmp/cs131_testrunner_v2frMF/file.rc": 
+Error, "/tmp/cs131_testrunner_6GjrMF/file.rc": 
   Initialization value of type bool not assignable to constant/variable of type float.
 Compile: failure.

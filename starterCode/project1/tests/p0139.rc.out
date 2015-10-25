@@ -1,3 +1,3 @@
-Error, "/tmp/cs131_testrunner_QYfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_avjrMF/file.rc": 
   Incompatible type bool to binary operator -, numeric expected.
 Compile: failure.

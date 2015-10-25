@@ -1,21 +1,21 @@
-Error, "/tmp/cs131_testrunner_cZfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_BwjrMF/file.rc": 
   Incompatible type bool to binary operator +, numeric expected.
-Error, "/tmp/cs131_testrunner_cZfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_BwjrMF/file.rc": 
   Incompatible type bool to binary operator -, numeric expected.
-Error, "/tmp/cs131_testrunner_cZfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_BwjrMF/file.rc": 
   Incompatible type bool to binary operator *, numeric expected.
-Error, "/tmp/cs131_testrunner_cZfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_BwjrMF/file.rc": 
   Incompatible type bool to binary operator /, numeric expected.
-Error, "/tmp/cs131_testrunner_cZfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_BwjrMF/file.rc": 
   Incompatible type float to binary operator %, equivalent to int expected.
-Error, "/tmp/cs131_testrunner_cZfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_BwjrMF/file.rc": 
   Incompatible type bool to binary operator +, numeric expected.
-Error, "/tmp/cs131_testrunner_cZfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_BwjrMF/file.rc": 
   Incompatible type float to binary operator %, equivalent to int expected.
-Error, "/tmp/cs131_testrunner_cZfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_BwjrMF/file.rc": 
   Incompatible type float to binary operator %, equivalent to int expected.
-Error, "/tmp/cs131_testrunner_cZfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_BwjrMF/file.rc": 
   Incompatible type float to binary operator %, equivalent to int expected.
-Error, "/tmp/cs131_testrunner_cZfrMF/file.rc": 
+Error, "/tmp/cs131_testrunner_BwjrMF/file.rc": 
   Incompatible type float to binary operator %, equivalent to int expected.
 Compile: failure.
