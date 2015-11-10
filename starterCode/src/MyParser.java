@@ -23,6 +23,8 @@ class MyParser extends parser
 
     private SymbolTable m_symtab;
 
+    private AssemblyGenerator assGen;
+
     //----------------------------------------------------------------
     //
     //----------------------------------------------------------------
@@ -158,6 +160,7 @@ class MyParser extends parser
     {
         // Opens the global scope.
         m_symtab.openScope();
+        assGen = new AssemblyGenerator("vvRC.s");
     }
 
     //----------------------------------------------------------------
@@ -165,6 +168,7 @@ class MyParser extends parser
     //----------------------------------------------------------------
     void DoProgramEnd()
     {
+        assGen.dispose();
         m_symtab.closeScope();
     }
 
