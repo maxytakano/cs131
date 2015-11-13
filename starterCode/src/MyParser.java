@@ -177,8 +177,9 @@ class MyParser extends parser
     //----------------------------------------------------------------
     //
     //----------------------------------------------------------------
-    void DoVarDecl(String id, Type type, STO optInit)
+    void DoVarDecl(String id, Type type, STO optInit, boolean isStatic)
     {
+        // System.out.println("Level: " + id);
 
         if (m_symtab.accessLocal(id) != null)
         {
@@ -206,6 +207,46 @@ class MyParser extends parser
 
         VarSTO sto = new VarSTO(id, type);
         m_symtab.insert(sto);
+
+
+//----------------------------------------------------------------
+// TO DEAL WITH STATIC, WE NEED TO PASS IT IN FIRST
+//----------------------------------------------------------------
+        //PART 2 STUFF HERE!!!
+        //GLOBAL: Check to see if it's global (has level of 1)
+        if(m_symtab.getLevel() == 1){
+            //we have a global here
+            if(optInit != null){
+                BigDecimal dec = null;
+                if(optInit.isVar()){
+                    dec = ((VarSTO)optInit).getValue();
+                }
+                else if(optInit.isConst()){
+                    dec = ((ConstSTO)optInit).getValue();
+                }
+                if(optInit.getType().getName().equals("int"))
+                {
+                    if(dec != null){
+                        assGen.writeGlobalVar(id, type.getName(), "" + dec.intValue(), isStatic);
+                    }
+                    else{
+                        assGen.writeGlobalVar(id, type.getName(), "", isStatic);
+                    }
+                }
+                else if(optInit.getType().getName().equals("float"))
+                {
+                    if(dec != null){
+                        assGen.writeGlobalVar(id, type.getName(), "" + dec.floatValue(), isStatic);
+                    }
+                    else{
+                        assGen.writeGlobalVar(id, type.getName(), "", isStatic);
+                    }
+                }
+            }
+            else{
+                assGen.writeGlobalVar(id, type.getName(), "", isStatic);
+            }
+        }
     }
 
     void doForEachCheck(String lhs_id, Type lhs_type, boolean ref, STO rhs_array){
@@ -244,20 +285,21 @@ class MyParser extends parser
 
         //if we're here, we can initialize our variable in the foreach
         //don't forget to set the foreachwhile flag
-        DoVarDecl(lhs_id, lhs_type, myRHS_Array);
+        //never gonna be static var
+        DoVarDecl(lhs_id, lhs_type, myRHS_Array, false);
     }
 
     //----------------------------------------------------------------
     //
     //----------------------------------------------------------------
-    void DoVarDecl_4Params(String id, Type type, Vector<STO> arraySizes, STO optInit)
+    void DoVarDecl_4Params(String id, Type type, Vector<STO> arraySizes, STO optInit, boolean isStatic)
     {
         //rather than adding on more params to doVarDecl, I'm just gonna do this here
         //for more modularity
         //If arraySizes is null, we just want to call the default vardecl
         if(arraySizes == null){
             //optInit not null, so call the default doVarDecl.
-            DoVarDecl(id, type, optInit);
+            DoVarDecl(id, type, optInit, isStatic);
             return;
         }
 

@@ -109,7 +109,6 @@ non terminal
     ExternDecl,
     VarDecl,
     ConstDecl,
-    OptStatic,
     StructdefDecl,
     CtorDef,
     DtorDef,
@@ -198,7 +197,8 @@ non terminal Vector
     ;
 
 non terminal Boolean
-    OptRef
+    OptRef,
+    OptStatic
     ;
 
 //--------------------------------------------------------------------
@@ -243,12 +243,12 @@ ExternDecl ::=      T_EXTERN DecoratedBasicType:_2 T_ID:_3 OptArrayList:_4
 
 VarDecl ::=         OptStatic:_1 DecoratedType:_2 T_ID:_3 OptArrayList:_4 OptInit:_5
                     {:
-                        ((MyParser) parser).DoVarDecl_4Params(_3, _2, _4, _5);
+                        ((MyParser) parser).DoVarDecl_4Params(_3, _2, _4, _5, _1);
                     :}
                     T_SEMI
     |               OptStatic:_1 T_AUTO T_ID:_3 T_ASSIGN Expr:_5
                     {:
-                        ((MyParser) parser).DoVarDecl (_3, _5.getType(), null);
+                        ((MyParser) parser).DoVarDecl (_3, _5.getType(), null, _1);
                     :}
                     T_SEMI
     |               OptStatic:_1 StructType:_2 T_ID:_3 OptArrayList:_4 OptCtorCall:_5
@@ -259,7 +259,7 @@ VarDecl ::=         OptStatic:_1 DecoratedType:_2 T_ID:_3 OptArrayList:_4 OptIni
                         // first check if the array is valid.
                         if ( ((MyParser) parser).doStructCtorArrayCheck(_4) ) {
                             ((MyParser) parser).doCtorCall(_2, _5);
-                            ((MyParser) parser).DoVarDecl (_3, _2, null); // todo: 3rd param might not be null
+                            ((MyParser) parser).DoVarDecl (_3, _2, null, _1); // todo: 3rd param might not be null
                         }
                         
                     :}
@@ -281,7 +281,12 @@ ConstDecl ::=       OptStatic:_1 T_CONST BasicType:_2 T_ID:_3 T_ASSIGN ConstExpr
 
 
 OptStatic ::=       T_STATIC
-    |               /* empty */
+                    {:
+                        RESULT = true;
+                    :}
+    |               {: 
+                        RESULT = false;
+                    :}
     ;
 
 

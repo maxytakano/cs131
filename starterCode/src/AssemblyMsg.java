@@ -25,7 +25,8 @@ class AssemblyMsg{
     /////////////////////////////////////////////////////////////////
     // Messages used in general everywhere in the rc.s file are here
     /////////////////////////////////////////////////////////////////
-    public static final String SEPARATOR = "\t";
+    public static final String SEPARATOR = 
+        "\t";
 
     public static final String ASCIZ = 
     	".asciz  "+ SEPARATOR + "\"" + "%s" + "\"\n";
@@ -52,16 +53,16 @@ class AssemblyMsg{
     	".section" + SEPARATOR + "\".rodata\"\n";
 
 	public static final String TEXT =
-	".section" + SEPARATOR + "\".text\"\n";
+	   ".section" + SEPARATOR + "\".text\"\n";
 
 	public static final String DATA =
-	".section" + SEPARATOR + "\".data\"\n";
+	   ".section" + SEPARATOR + "\".data\"\n";
 
 	public static final String BSS =
-	".section" + SEPARATOR + "\".bss\"\n";
+	   ".section" + SEPARATOR + "\".bss\"\n";
 
 	public static final String HEAP =
-	".section" + SEPARATOR + "\".heap\"\n";
+	   ".section" + SEPARATOR + "\".heap\"\n";
 
 	public static final String STACK =
     	".section" + SEPARATOR + "\".stack\"\n";
@@ -88,7 +89,7 @@ class AssemblyMsg{
     /////////////////////////////////////////////////////////////////
 
     public static final String DOT_GLOBAL = 
-    	".global " + SEPARATOR + "%s";
+    	".global " + SEPARATOR + "%s\n";
 
     public static final String GLOBAL_LABEL =
     	"%s" + ":\n";
@@ -98,11 +99,11 @@ class AssemblyMsg{
 
     //initialized global and static ints
     public static final String DOT_WORD = 
-    	".word   " + SEPARATOR + "%s";   
+    	".word   " + SEPARATOR + "%s\n\n";   
 
     //initialized global and static floats
 	public static final String DOT_SINGLE = 
-    	".single " + SEPARATOR + "%s"; 
+    	".single " + SEPARATOR + "0r%s\n\n"; 
     /////////////////////////////////////////////////////////////////
     // SET Initialized Here
     /////////////////////////////////////////////////////////////////

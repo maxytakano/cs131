@@ -39,6 +39,7 @@ public class AssemblyGenerator {
                     decreaseIndent();
                 }
             }
+
         } catch (IOException e) {
             System.err.printf(AssemblyMsg.ERROR_IO_CONSTRUCT, fileToWrite);
             e.printStackTrace();
@@ -66,9 +67,76 @@ public class AssemblyGenerator {
         indent_level++;
     }
 
-    public void writeGlobalVars(){
-        
+    // public void writeGlobal(String id, String type, String val){
+    //     switch(type){
+    //         case "int":
+    //             writeGlobalVar(id, type, val);
+    //             break;
+    //         case "float":
+    //             writeGlobalVar(id, val, type);
+    //             break;
+    //         default:
+    //             System.out.println("more needs to be added.");
+    //     }
+    // }
+
+    public void writeGlobalVar(String id, String type, String val, boolean isStatic){
+        writeAssembly(AssemblyMsg.NEWLINE);
+        increaseIndent();
+        boolean noVal = val.equals("");
+
+        //if there's no value, go into bss, otherwise data
+        if(noVal){
+            writeAssembly(AssemblyMsg.BSS);
+        }
+        else{
+            writeAssembly(AssemblyMsg.DATA);
+        }
+        writeAssembly(AssemblyMsg.ALIGN_4);
+
+        //don't do the global key word if it's static
+        if(!isStatic){
+            writeAssembly(AssemblyMsg.DOT_GLOBAL, id);
+        }
+        decreaseIndent();
+        writeAssembly(AssemblyMsg.GLOBAL_LABEL, id);
+        increaseIndent();
+
+        //if noVAl is true, there's no value to initialize
+        if(noVal){
+            writeAssembly(AssemblyMsg.SKIP_4);
+        }
+        else{
+            switch(type){
+                case "int":
+                    writeAssembly(AssemblyMsg.DOT_WORD, val);
+                    break;
+                case "float":
+                    writeAssembly(AssemblyMsg.DOT_SINGLE, val);
+                    break;
+                default:
+                    System.out.println("more needs to be added.");
+            }
+        }
+        writeAssembly(AssemblyMsg.TEXT);
+        writeAssembly(AssemblyMsg.ALIGN_4);
+        decreaseIndent();
     }
+
+    // public void writeInitGlobalFloats(String id, String val){
+    //     writeAssembly(AssemblyMsg.NEWLINE);
+    //     increaseIndent();
+    //     writeAssembly(AssemblyMsg.DATA);
+    //     writeAssembly(AssemblyMsg.ALIGN_4);
+    //     writeAssembly(AssemblyMsg.DOT_GLOBAL, id); // REPLACE WITH VAR NAME
+    //     decreaseIndent();
+    //     writeAssembly(AssemblyMsg.GLOBAL_LABEL, id); //REPLACE WITH VAR NAME
+    //     increaseIndent();
+    //     writeAssembly(AssemblyMsg.DOT_SINGLE, val); // REPLACE WITH ACTUAL VALUE
+    //     writeAssembly(AssemblyMsg.TEXT);
+    //     writeAssembly(AssemblyMsg.ALIGN_4);
+    //     decreaseIndent();
+    // }
     
 
     
