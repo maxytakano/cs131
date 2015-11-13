@@ -229,6 +229,10 @@ class FuncSTO extends STO
 		return m_innerLevel;
 	}
 
+	//----------------------------------------------------------------
+	// Method to return a mangled version of this function's name 
+	// based on the parameters passed in
+	//----------------------------------------------------------------
 	public String getMangledName(){
 		StringBuilder mangledName = new StringBuilder();
 		mangledName.append(this.getName());

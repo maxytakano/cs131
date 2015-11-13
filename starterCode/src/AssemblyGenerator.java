@@ -29,6 +29,8 @@ public class AssemblyGenerator {
             if(AssemblyMsg.START_VAR_NAME_ARRAY.length != AssemblyMsg.START_VAR_ASCIZ_ARRAY.length){
                 System.out.println("What the hell did you do? START_VAR_ASCIZ_ARRAY and START_VAR_NAME_ARRAY should be" +
                                     " the same size!");
+                //close the file to prevent any unintended bugs
+                dispose();
                 System.exit(1);
             }
             else{
