@@ -216,36 +216,59 @@ class MyParser extends parser
         //GLOBAL: Check to see if it's global (has level of 1)
         if(m_symtab.getLevel() == 1){
             //we have a global here
-            if(optInit != null){
-                BigDecimal dec = null;
-                if(optInit.isVar()){
-                    dec = ((VarSTO)optInit).getValue();
+            writeGlobalOrStaticVar(id, type, optInit, isStatic);
+        }
+        if (m_symtab.getFunc() != null)
+        {
+            //in here we are part of a method or a struct
+            //if static, we call the globalorstaticvar writing method
+            if(isStatic){
+                String localStaticID = m_symtab.getFunc().getMangledName() + "." + id;
+                writeGlobalOrStaticVar(localStaticID, type, optInit, isStatic);
+            }
+        }
+    }
+
+    //----------------------------------------------------------------
+    // Helper method that writes any global or static vars
+    //----------------------------------------------------------------
+    void writeGlobalOrStaticVar(String id, Type type, STO optInit, boolean isStatic){
+        if(optInit != null){
+            BigDecimal dec = null;
+            //check to see if there was possible const folding so that values can be initialized
+            //in the assembly itself
+            if(optInit.isVar()){
+                dec = ((VarSTO)optInit).getValue();
+            }
+            else if(optInit.isConst()){
+                dec = ((ConstSTO)optInit).getValue();
+            }
+            //we are passing in the int value from the bigdecimal
+            if(optInit.getType().getName().equals("int"))
+            {
+                if(dec != null){
+                    assGen.writeGlobalOrStaticVar(id, type.getName(), "" + dec.intValue(), isStatic);
                 }
-                else if(optInit.isConst()){
-                    dec = ((ConstSTO)optInit).getValue();
-                }
-                if(optInit.getType().getName().equals("int"))
-                {
-                    if(dec != null){
-                        assGen.writeGlobalVar(id, type.getName(), "" + dec.intValue(), isStatic);
-                    }
-                    else{
-                        assGen.writeGlobalVar(id, type.getName(), "", isStatic);
-                    }
-                }
-                else if(optInit.getType().getName().equals("float"))
-                {
-                    if(dec != null){
-                        assGen.writeGlobalVar(id, type.getName(), "" + dec.floatValue(), isStatic);
-                    }
-                    else{
-                        assGen.writeGlobalVar(id, type.getName(), "", isStatic);
-                    }
+                else{
+                    //if dec is not initialized, then there was no const folding, so pass in empty string
+                    assGen.writeGlobalOrStaticVar(id, type.getName(), "", isStatic);
                 }
             }
-            else{
-                assGen.writeGlobalVar(id, type.getName(), "", isStatic);
+            //we are passing in the float value from the bigdecimal
+            else if(optInit.getType().getName().equals("float"))
+            {
+                if(dec != null){
+                    assGen.writeGlobalOrStaticVar(id, type.getName(), "" + dec.floatValue(), isStatic);
+                }
+                else{
+                    //if dec is not initialized, then there was no const folding, so pass in empty string
+                    assGen.writeGlobalOrStaticVar(id, type.getName(), "", isStatic);
+                }
             }
+        }
+        else{
+            // there was no intitialization, so we just pass in "" for the value
+            assGen.writeGlobalOrStaticVar(id, type.getName(), "", isStatic);
         }
     }
 
@@ -721,6 +744,7 @@ class MyParser extends parser
             m_nNumErrors++;
             m_errors.print(ErrorMsg.error6c_Return_missing);
         }
+        curFunc.getMangledName();
         m_symtab.closeScope();
         m_symtab.setFunc(null);
     }

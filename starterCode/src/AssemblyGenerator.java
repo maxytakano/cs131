@@ -67,20 +67,10 @@ public class AssemblyGenerator {
         indent_level++;
     }
 
-    // public void writeGlobal(String id, String type, String val){
-    //     switch(type){
-    //         case "int":
-    //             writeGlobalVar(id, type, val);
-    //             break;
-    //         case "float":
-    //             writeGlobalVar(id, val, type);
-    //             break;
-    //         default:
-    //             System.out.println("more needs to be added.");
-    //     }
-    // }
-
-    public void writeGlobalVar(String id, String type, String val, boolean isStatic){
+    //-------------------------------------------------------------------
+    // Method that writes out the assembly for any global or static vars
+    //-------------------------------------------------------------------
+    public void writeGlobalOrStaticVar(String id, String type, String val, boolean isStatic){
         writeAssembly(AssemblyMsg.NEWLINE);
         increaseIndent();
         boolean noVal = val.equals("");
@@ -121,23 +111,7 @@ public class AssemblyGenerator {
         writeAssembly(AssemblyMsg.TEXT);
         writeAssembly(AssemblyMsg.ALIGN_4);
         decreaseIndent();
-    }
-
-    // public void writeInitGlobalFloats(String id, String val){
-    //     writeAssembly(AssemblyMsg.NEWLINE);
-    //     increaseIndent();
-    //     writeAssembly(AssemblyMsg.DATA);
-    //     writeAssembly(AssemblyMsg.ALIGN_4);
-    //     writeAssembly(AssemblyMsg.DOT_GLOBAL, id); // REPLACE WITH VAR NAME
-    //     decreaseIndent();
-    //     writeAssembly(AssemblyMsg.GLOBAL_LABEL, id); //REPLACE WITH VAR NAME
-    //     increaseIndent();
-    //     writeAssembly(AssemblyMsg.DOT_SINGLE, val); // REPLACE WITH ACTUAL VALUE
-    //     writeAssembly(AssemblyMsg.TEXT);
-    //     writeAssembly(AssemblyMsg.ALIGN_4);
-    //     decreaseIndent();
-    // }
-    
+    }    
 
     
     // 9
