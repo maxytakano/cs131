@@ -244,7 +244,7 @@ class MyParser extends parser
                 dec = ((ConstSTO)optInit).getValue();
             }
             //we are passing in the int value from the bigdecimal
-            if(optInit.getType().getName().equals("int"))
+            if(optInit.getType().getName().equals("int") || optInit.getType().getName().equals("bool") )
             {
                 if(dec != null){
                     assGen.writeGlobalOrStaticVar(id, type.getName(), "" + dec.intValue(), isStatic);

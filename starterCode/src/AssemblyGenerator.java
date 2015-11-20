@@ -101,6 +101,7 @@ public class AssemblyGenerator {
         else{
             switch(type){
                 case "int":
+                case "bool":
                     writeAssembly(AssemblyMsg.DOT_WORD, val);
                     break;
                 case "float":
