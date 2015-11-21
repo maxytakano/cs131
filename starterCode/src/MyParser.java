@@ -711,6 +711,15 @@ class MyParser extends parser
             insertParams(candidateFunc.getParameters());
             m_symtab.getFunc().setInnerLevel(m_symtab.getLevel());
         }
+
+        //4. added in the code for the assembly. Call the function declaration method here to 
+        //   write the assembly for a function declaration
+        if(existingFunc == null){
+            assGen.writeMethodStart(candidateFunc.getName(), candidateFunc.getMangledName());
+        }
+        else{
+            assGen.writeMethodStart("", candidateFunc.getMangledName());
+        }
     }
 
     //----------------------------------------------------------------

@@ -247,7 +247,7 @@ class FuncSTO extends STO
 				mangledName.append(sto.getType().getName());
 			}
 		}
-		System.out.println(mangledName.toString());
+		// System.out.println(mangledName.toString());
 		return mangledName.toString();
 	}
 }

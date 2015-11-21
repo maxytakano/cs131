@@ -91,7 +91,7 @@ public class AssemblyGenerator {
             writeAssembly(AssemblyMsg.DOT_GLOBAL, id);
         }
         decreaseIndent();
-        writeAssembly(AssemblyMsg.GLOBAL_LABEL, id);
+        writeAssembly(AssemblyMsg.LABEL, id);
         increaseIndent();
 
         //if noVAl is true, there's no value to initialize
@@ -115,6 +115,34 @@ public class AssemblyGenerator {
         writeAssembly(AssemblyMsg.ALIGN_4);
         decreaseIndent();
     }    
+
+
+    //-------------------------------------------------------------------
+    // Method that writes out the assembly for method starts
+    //-------------------------------------------------------------------
+    public void writeMethodStart(String funcName, String mangledName){
+        boolean declared = funcName.equals("");
+        if(!declared){
+            increaseIndent();
+            writeAssembly(AssemblyMsg.NEWLINE);
+            writeAssembly(AssemblyMsg.DOT_GLOBAL, funcName);
+            decreaseIndent();
+            writeAssembly(AssemblyMsg.LABEL, funcName);
+        }
+        writeAssembly(AssemblyMsg.LABEL, mangledName);
+        increaseIndent();
+        writeAssembly((AssemblyMsg.SET_OP + AssemblyMsg.SEPARATOR));
+        writeAssembly(AssemblyMsg.TWO_VALS, mangledName, "%g1");
+        writeAssembly(AssemblyMsg.NEWLINE);
+        writeAssembly(AssemblyMsg.SAVE_METHOD, "%sp", "%g1", "%sp");
+
+        //-------------------------------------------------------------------
+        // everything below here is for testing purposes only
+        //-------------------------------------------------------------------
+        writeAssembly(AssemblyMsg.NEWLINE);
+        writeAssembly(AssemblyMsg.NEWLINE);
+        decreaseIndent();
+    }
 
     
     // 9

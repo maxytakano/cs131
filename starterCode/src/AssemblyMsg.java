@@ -38,6 +38,10 @@ class AssemblyMsg{
     public static final String NEWLINE = 
     	"\n";
 
+    //Label (used for method names, globals, etc.)
+    public static final String LABEL =
+        "%s" + ":\n";
+
     /////////////////////////////////////////////////////////////////
     // FILE HEADER FOR THE DATE ALWAYS AT THE TOP of rc.s file
     /////////////////////////////////////////////////////////////////
@@ -91,8 +95,6 @@ class AssemblyMsg{
     public static final String DOT_GLOBAL = 
     	".global " + SEPARATOR + "%s\n";
 
-    public static final String GLOBAL_LABEL =
-    	"%s" + ":\n";
 
     public static final String SKIP_4 =
     	".skip   " + SEPARATOR + "4\n\n";
@@ -104,9 +106,18 @@ class AssemblyMsg{
     //initialized global and static floats
 	public static final String DOT_SINGLE = 
     	".single " + SEPARATOR + "0r%s\n\n"; 
+
+
+    /////////////////////////////////////////////////////////////////
+    // Starter vars are initialized here.
+    /////////////////////////////////////////////////////////////////
+    public static final String SAVE_METHOD =
+        "save    " + SEPARATOR + "%s, %s, %s";
+
     /////////////////////////////////////////////////////////////////
     // SET Initialized Here
     /////////////////////////////////////////////////////////////////
-    public static final String SET_OP = "set";
+    public static final String SET_OP = "set     ";
     public static final String TWO_PARAM = "%s" + SEPARATOR + "%s, %s\n";
+    public static final String TWO_VALS = "%s, %s";
 }
