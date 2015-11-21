@@ -1,0 +1,46 @@
+function : int foo(int & x)
+{
+	return x;
+}
+
+int x;
+
+function : int & bar(bool x, int & y, int & z)
+{
+	if( x )
+	{
+		return y;
+	}
+	
+	return z;
+}
+
+function : bool foo(float x)
+{
+    if( x > 5 )
+    {
+    	return true;
+    }
+    
+    return false;
+}
+
+function : void loop(int count)
+{
+	if( count > 0 )
+	{
+		cout << "Count: " << count << endl;
+		loop( count - 1 );
+	}
+}
+
+function : void main()
+{
+	int x1 = 0;
+	int x2 = 100;
+	float y = 4.2;
+	
+	bool z = foo( y );
+	int asdf = foo( bar( z, x1, x2 ) );
+	loop( 10 );
+}

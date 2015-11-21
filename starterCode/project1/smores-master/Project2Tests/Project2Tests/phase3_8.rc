@@ -1,0 +1,75 @@
+// struct destructor calls
+structdef MYS_A {
+    int x;
+    MYS_A() {
+        cout << "ctor called MYS_A" << endl;
+    }
+    //~MYS_A() {
+    //    cout << "dtor called MYS_A" << endl;
+    //}
+};
+structdef MYS_B {
+    int x;
+    float * f;
+    MYS_B * m;
+    MYS_B(int x) {
+        cout << "ctor called MYS_B" << endl;
+        MYS_A a;
+        new this.f;
+        new this.m : (1);
+    }
+    ~MYS_B() {
+        delete this.f;
+        delete this.m;
+        cout << "dtor called MYS_B" << endl;
+    }
+    function : void fn() {
+        MYS_A a;
+        MYS_A b;
+    }
+};
+
+MYS_A a1;
+static MYS_B b1 : (1);
+int x;
+MYS_B b2 : (x);
+static MYS_A a2;
+
+function : int test1() {
+    MYS_A a3;
+    if(a3.x == 1) {
+        return a3.x;
+    }
+    static MYS_B b3 : (1);
+    if(b3.x == 1) {
+        return b3.x;
+    }
+    MYS_B b4 : (x);
+    if(b4.x == 1/**(int*)&b4.f == 1*/) {
+        exit(1);
+    }
+    MYS_A a4;
+    return 10;
+}
+
+function : int main() {
+    static MYS_A a3;
+    if(a3.x == 1) {
+        return a3.x;
+    }
+    MYS_B b3 : (1);
+    if(b3.x == 1) {
+        return b3.x;
+    }
+    MYS_B b4 : (x);
+    if(/**(int*)&b4.f*/ b4.x == 1) {
+        exit(1);
+    }
+    MYS_A a4;
+    test1();
+    test1();
+
+    return 10; 
+}
+
+function : void something() { }

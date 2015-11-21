@@ -1,0 +1,7 @@
+function : void print(float f) {
+  cout << f << endl;
+}
+
+function : void main() {
+  print(3);
+}

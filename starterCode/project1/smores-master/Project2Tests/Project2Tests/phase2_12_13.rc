@@ -1,0 +1,134 @@
+// structs
+const int sz = 21;
+int arr1[11];
+
+structdef MYS_A {
+    int x;
+    // asks for default ctor
+};
+
+structdef MYS_1 {
+    // fields
+    int i;
+    bool b;
+    float f;
+    int arr1[10];
+    bool arr2[sz];
+    // MYS_1 * structptr;
+    // MYS_A * m; // HAS TO BE A POINTER?
+
+    // overloaded ctors
+    MYS_1() { }
+    MYS_1(int i) {
+        this.i = i;
+        arr1[0] = i;
+    }
+    MYS_1(bool b, float & f) {
+        this.b = b;
+        this.f = f;
+    }
+    MYS_1(bool b, float f, float & ff) {
+            this.b = b;
+            this.f = f;
+        }
+    ~MYS_1() { }
+
+    // non overloaded function
+    function : void func1() {
+    }
+
+    // overloaded functions
+    function : void func2() {
+    }
+    function : bool func2(int i) {
+        this.func2(); // function call
+        this.arr1[0] = i; // use of this TODO
+        arr1[10] = i;
+        return false;
+    }
+    function : float func2(int i, float f) {
+        this.b = this.func2(i);
+        return f;
+    }
+    function : float func2(float & f, int i) {
+        return this.f;
+    }
+};
+
+MYS_1 b; // global
+static  MYS_A c;
+static MYS_1 a : (1); // static
+int i = 10;
+MYS_1 aa : (i);
+float f = 10.0;
+MYS_1 d : (true, f);
+MYS_1 dd : (true, f, f);
+MYS_1 ddd[10] : (true, f, f);
+
+// arrays of structs
+MYS_1 arr2[10];
+static MYS_A arr3[5];
+
+function : void main() {
+    // entire struct assignment
+    a = b;
+    b = a;
+
+
+    MYS_1 arr2[10];
+    MYS_A arr3[5];
+
+    foreach(MYS_1 m : arr2) {
+        cout << m.f << m.i << "\n";
+        m.f = m.i;
+        cout << m.f << m.i << "\n";
+        bool b = m.b;
+        cout << b << endl;
+        cout << m.arr1[0] << "\n";
+        m.arr1[0] = m.arr1[1];
+        cout << m.arr1[0] << "\n";
+        m.arr2[9] = b;
+        cout << m.arr2[9] << "\n";
+        // m.structptr->i;
+        // (*m.m).x; // PHASE 3 ?
+        m.func1();
+        m.func2();
+        // m.func2(m.structptr->i, m.structptr->f);
+        cout << m.func2(1, 5.0) << "\n";
+        float f1 = m.func2(f, i);
+        cout << f1 << "\n";
+        cout << m.func2(f,i);
+
+        // m.func2((*m.structptr).f, m.i);
+    }
+    foreach(MYS_A m : arr3) {
+        m.x;
+        cout << m.x << "\n";
+    }
+
+    foreach(MYS_1 & m : ::arr2) {
+        cout << m.f << m.i << "\n";
+        m.f=m.i;
+        cout << m.f << m.i << "\n";
+        bool b = m.b;
+        cout << b << endl;
+        cout << m.arr1[0] << "\n";
+        m.arr1[0] = m.arr1[1];
+        cout << m.arr1[0] << "\n";
+        m.arr2[9] = b;
+        cout << m.arr2[9] << "\n";
+        // m.structptr->i;
+        // (*m.m).x;
+        m.func1();
+        m.func2();
+        // m.func2(m.structptr->i, m.structptr->f);
+        // m.func2((*m.structptr).f, m.i);
+    }
+    foreach(MYS_A & m : ::arr3) {
+        m.x;
+    }
+}
+
+function : void main(int a) {
+    int b = a;
+}

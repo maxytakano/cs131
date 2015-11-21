@@ -1,0 +1,7 @@
+int x = 0;
+float y = 0.0;
+
+function : void main()
+{
+    y = (float)x;
+}

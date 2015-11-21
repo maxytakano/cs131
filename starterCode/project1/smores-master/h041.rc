@@ -1,0 +1,8 @@
+function : void main() {
+  bool b = false;
+  if (!b) {
+    cout << "works" << endl;
+  } else {
+    cout << "error" << endl;
+  }
+}

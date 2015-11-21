@@ -1,0 +1,16 @@
+int arr1[2];
+float arr2[3];
+
+function : void main() {
+  foreach (int x : arr1) {
+    cout << x << endl;
+  }
+
+  foreach (float x : arr1) {
+    cout << x << endl;
+  }
+
+  foreach (float x : arr2) {
+    cout << x << endl;
+  }
+}

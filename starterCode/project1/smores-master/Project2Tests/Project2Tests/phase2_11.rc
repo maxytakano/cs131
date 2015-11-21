@@ -1,0 +1,89 @@
+// foreach loops and break/continue statements
+int arr1[10];
+float arr2[5];
+bool arr3[6];
+bool b = arr3[5] && true || arr3[0];
+int i = arr1[0] + arr1[arr1[0]];
+
+function : void main() {
+    foreach(int i : arr1) {
+        i+5;
+        cout << i << "endl";
+        i*2-i;
+        cout << i;
+        if(i > 5) {
+            cout << "break";
+            break;
+        }
+        else {
+            if(i > 2) {
+                cout << "continue" << "endl";
+                continue;
+            }
+        }
+        i = 2;
+        arr1[i+arr1[arr1[i]]] = arr1[i+arr1[arr1[i]]];
+        cout << arr1[i+arr1[arr1[i]]];  
+    }
+    foreach(float f : arr2) {
+        cout << f << "\n";
+        f+5+5.0;
+        cout << f+5+5.0;
+        f*2-arr1[0]/f;
+        cout << f*2-arr1[0]/f;
+    }
+    foreach(bool b : arr3) {
+        b || true && b;
+        bool bb = b || true && b;
+        cout << b << "\n";
+        b = b || true && b;
+
+        cout << b;
+        cout << (b || true && b);
+        cout << (b = b || true && b);
+    }
+
+    int arr4[10];
+    float arr5[5];
+    bool arr6[6];
+
+    foreach(int & i : arr4) {
+        i+5;
+        cout << i << endl;
+        cout << i+5;
+        i*2-i;
+        cout << i*2-i;
+        if(i > 5) {
+            cout << "br";
+            break;
+        }
+        else {
+            if(i > 2) {
+                cout << "conti";
+                continue;
+            }
+        }
+        i = 2;
+        cout << i << endl;
+        arr4[i];
+        arr4[i+arr1[arr1[i]]];
+        arr4[i+arr1[arr1[i]]] = arr4[i+arr1[arr1[i]]];
+    }
+    foreach(float & f : arr5) {
+        f+5+5.0;
+        f*2-arr1[0]/f;
+
+        cout << f << endl;
+        cout << (f+5+5.0);
+        cout << f*2-arr1[0]/f;
+    }
+    foreach(bool & b : arr6) {
+        b || true && b;
+        cout << b << endl;
+        bool bb = b || true && b;
+        b = b || true && b;
+
+        cout << b;
+        cout << bb;
+    }
+}

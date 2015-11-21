@@ -1,0 +1,29 @@
+function : void foo()
+{
+    foo();
+    return;
+}
+
+function : bool bar()
+{
+    bool b = true;
+    return b;
+}
+
+function : float baz()
+{
+    float f = 1;
+    return f;
+}
+
+function : int main()
+{
+    int i = 0;
+    bool x;
+    float y;
+
+    x = bar();
+    y = baz();
+
+    return i;
+}

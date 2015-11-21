@@ -1,0 +1,14 @@
+
+function : void main() {
+  int c1 = 5;
+  float c2 = 5.0;
+  bool c3 = false;
+ 
+  int i = c1;
+  float f = c2;
+  bool b = c3;
+
+  cout << i << endl;
+  cout << f << endl;
+  cout << b << endl;
+}

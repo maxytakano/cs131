@@ -1,0 +1,18 @@
+// handled mixed int and float expressions for all of the above
+int a;
+float b;
+
+function : void main() {
+    int a = 5;
+    float b = 4;
+    b = a; // float = int
+    cout << b;
+    b = a*b+1.0-12*b+(a^::a)/b; // float = mixed expr
+    cout << b;
+    ::b = 12;
+    cout << ::b;
+    b = a/(::a^a)-b;
+    cout << b;
+    b = a+b*420;
+    cout << b;
+}

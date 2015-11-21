@@ -1,0 +1,17 @@
+function : void main()
+{
+    int x = 0;
+    int y = 0;
+    while( x < 10 )
+    {
+        y = ++x;
+        if( y < 5 )
+        {
+            continue;
+        }
+        else
+        {
+            break;
+        }
+    }
+}

@@ -1,0 +1,45 @@
+function : void main() {
+  int x[10];
+  float y[5];
+  bool z[3];
+
+  int i = 0;
+  while (i < 10) {
+    x[i] = i;
+    i++;
+  }
+
+  i = 0;
+  while (i < 10) {
+    cout << x[i] << endl;
+    i++;
+  }
+
+  i = 0;
+  while (i < 5) {
+    y[i] = i;
+    i++;
+  }
+
+  i = 0;
+  while (i < 5) {
+    cout << y[i] << endl;
+    i++;
+  }
+
+  i = 0;
+  while (i < 3) {
+    if ((i % 2) == 0) {
+      z[i] = true;
+    } else {
+      z[i] = false;
+    }
+    i++;
+  }
+
+  i = 0;
+  while (i < 3) {
+    cout << z[i] << endl;
+    i++;
+  }
+}

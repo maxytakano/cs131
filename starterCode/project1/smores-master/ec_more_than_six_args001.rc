@@ -1,0 +1,98 @@
+structdef MS{ int a; float b; bool c; };
+
+function : void foo(int a, float b, bool c, int * d, float * e, bool * f, int & g, float & h, bool & i)
+{
+    cout << "1. " << a << endl;
+    cout << "2. " << b << endl;
+    cout << "3. " << c << endl;
+    cout << "4. " << *d << endl;
+    cout << "5. " << *e << endl;
+    cout << "6. " << *f << endl;
+    cout << "7. " << g << endl;
+    cout << "8. " << h << endl;
+    cout << "9. " << i << endl;
+
+    int localInt = *d;
+    float localFloat = *e;
+    bool localBool = *f;
+
+    *d = g;
+    *e = h;
+    *f = i;
+
+    g = localInt;
+    h = localFloat;
+    i = localBool;
+}
+
+function : void foo2(int a, float b, bool c, int * d, float * e, bool * f, MS & g, MS * h)
+{
+    cout << "16. " << a << endl;
+    cout << "17. " << b << endl;
+    cout << "18. " << c << endl;
+    cout << "19. " << *d << endl;
+    cout << "20. " << *e << endl;
+    cout << "21. " << *f << endl;
+    cout << "22. " << g.a << endl;
+    cout << "23. " << g.b << endl;
+    cout << "24. " << g.c << endl;
+    cout << "25. " << h->a << endl;
+    cout << "26. " << h->b << endl;
+    cout << "27. " << h->c << endl;
+
+    int localInt = *d;
+    float localFloat = *e;
+    bool localBool = *f;
+
+    g.a = *d;
+    g.b = *e;
+    g.c = *f;
+
+    h->a = *d;
+    h->b = *e;
+    h->c = *f;
+}
+
+function : void main()
+{
+    int a = 1;
+    float b = 2.2;
+    bool c = true;
+    int * d = &a;
+    float * e = &b;
+    bool * f = &c;
+    int g = 4;
+    float h = 5.5;
+    bool i = false;
+
+    foo(a,b,c,d,e,f,g,h,i);
+
+    cout << "10. " << *d << endl;
+    cout << "11. " << *e << endl;
+    cout << "12. " << *f << endl;
+    cout << "13. " << g << endl;
+    cout << "14. " << h << endl;
+    cout << "15. " << i << endl;
+
+    MS j;
+    j.a = 1;
+    j.b = 2.2;
+    j.c = false;
+
+    MS * k;
+    new k;
+    k->a = 1;
+    k->b = 2.2;
+    k->c = false;
+
+    foo2(a,b,c,d,e,f,j,k);
+
+    cout << "28. " << j.a << endl;
+    cout << "29. " << j.b << endl;
+    cout << "30. " << j.c << endl;
+    cout << "31. " << k->a << endl;
+    cout << "32. " << k->b << endl;
+    cout << "33. " << k->c << endl;
+
+    delete k;
+}

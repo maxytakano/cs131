@@ -1,0 +1,28 @@
+structdef MS {
+  int x;
+  MS(int v) {
+    this.x = v;
+    cout << "ctor called on " << this.x << endl;
+  }
+  ~MS() {
+    cout << "dtor called on " << this.x << endl;
+  }
+};
+
+MS structA : (1);
+static MS structB : (2);
+
+function : void foo(int x) {
+  MS structC : (3);
+  static MS structD : (4);
+  if (x == 4) {
+    return;
+  }
+  MS structE : (5);
+}
+
+function : void main() {
+  MS structF : (6);
+  foo(3);
+  foo(4);
+}

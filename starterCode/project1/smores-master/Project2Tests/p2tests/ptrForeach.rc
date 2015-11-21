@@ -1,0 +1,22 @@
+int a = 5;
+int * arr[5];
+
+function : void main()
+{
+    int * local[10];
+
+    foreach( int * x : arr )
+    {
+        x = &a;
+    }
+
+    foreach( int * & x : local )
+    {
+        x = &a;
+    }
+
+    foreach( int * x : local )
+    {
+        cout << *x << endl;
+    }
+}

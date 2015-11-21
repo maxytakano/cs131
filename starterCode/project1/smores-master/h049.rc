@@ -1,0 +1,22 @@
+function : void main() {
+  int a = 5;
+  int b = 6;
+  float x = 3.15;
+  float y = 2.318;
+
+  cout << a * b << endl;
+  cout << a * 3 << endl;
+  cout << 2 * b << endl;
+  cout << 2 * 3 << endl;
+
+  cout << x * y << endl;
+  cout << x * 3.14 << endl;
+  cout << 1.23 * y << endl;
+  cout << 1.23 * 3.14 << endl;
+
+  cout << a * y << endl;
+  cout << 2 * y << endl;
+
+  cout << x * b << endl;
+  cout << x * 3 << endl;
+}

@@ -1,0 +1,8 @@
+function : void print(bool & f) {
+  cout << f << endl;
+}
+
+function : void main() {
+  bool x = true;
+  print(x);
+}

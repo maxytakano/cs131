@@ -1,0 +1,59 @@
+int a;
+float b;
+bool c;
+
+static int * aPtr = &a;
+float * bPtr = &b;
+bool * cPtr = &c;
+
+int * arr1[5];
+float * arr2[2];
+bool * arr3[4];
+
+function : void main()
+{
+    int * p = &a;
+    float ** p2;
+    arr1[2] = aPtr;
+    p2 = &arr2[1];
+
+    if( arr1[0] == nullptr )
+    {
+        cout << "Global initialization of array of pointers is correct" << endl;
+    }
+    else
+    {
+        cout << "Check initialization of array of pointers" << endl;
+    }
+
+    if( arr1[0] != arr1[2] )
+    {
+        cout << "nullptr not equal to another pointer" << endl;
+    }
+    else
+    {
+        cout << "nullptr equal to all pointers" << endl;
+    }
+
+    if( *p == a )
+    {
+        cout << "Dereference works" << endl;
+    }
+    else
+    {
+        cout << "Dereference failed" << endl;
+    }
+
+    if( **p2 == *arr2[1] )
+    {
+        cout << "Dereference pointer to pointer passed" << endl;
+    }
+    else
+    {
+        cout << "Multiple levels of indirection failed" << endl;
+    }
+    
+    if( *p2[-1] == p2[0][0] )
+    {
+    }
+}

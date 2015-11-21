@@ -1,0 +1,25 @@
+structdef MS{ int a; float b; bool c; };
+
+function : void foo(int a, int b, int c, int d, int e, int f, int & p[2])
+{
+   cout << "1. " << p[0] << endl;
+   cout << "2. " << p[1] << endl;
+
+    p[0] = 100;
+    p[1] = 101;
+
+}
+
+
+function : void main()
+{
+    int a[2];
+    a[0] = 1;
+    a[1] = 2;
+
+    foo(1,2,3,4,5,6,a);
+
+    cout << "3. " << a[0] << endl;
+    cout << "4. " << a[1] << endl;
+
+}

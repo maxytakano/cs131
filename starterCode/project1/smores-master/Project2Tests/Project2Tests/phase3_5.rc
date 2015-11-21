@@ -1,0 +1,231 @@
+// support params of composite types:
+// pass-by-ref array arg to array params (pass-by-val WNBT)
+// pass-by-ref struct params (pass-by-val is EC)
+// pass-by val and pass-by-ref pointer params
+
+structdef MYS_1 {
+    int x;
+};
+
+function : void fn1(int & i[3], float & f[2], bool & b[4]) {
+    int x = i[0];
+    float y = f[1];
+    bool z = b[3];
+}
+
+function : void fn1(MYS_1 & a) {
+    MYS_1 b;
+    b = a;
+    a = b;
+    b = b;
+    a = a;
+    int x = a.x;
+}
+function : void fn1(MYS_1 & a, int c) { }
+
+function : void fn2(MYS_1 a) {  // EC
+    MYS_1 b;
+    b = a;
+    int x = a.x;
+}
+
+function : void fn2(MYS_1 a, int c) { }
+
+function : void fn2(int * a, float * b, bool * c) {
+    int * x = a;
+    *x = *a;
+    *a = *x;
+    float * y = b;
+    *y = *b;
+    *b = *y;
+    *y = *a;
+    *b = *x;
+    bool * z = c;
+    *z = *c;
+    *c = *z;
+}
+
+function : void fn3(int * & a, float * & b, bool * & c) {
+    int * x = a;
+    *x = *a;
+    *a = *x;
+    float * y = b;
+    *y = *b;
+    *b = *y;
+    *y = *a;
+    *b = *x;
+    bool * z = c;
+    *z = *c;
+    *c = *z;
+}
+
+function : void fn2(int ** a, float ** b, bool ** c) {
+    int ** x = a;
+    *x = *a;
+    *a = *x;
+    **x = **a;
+    **a = **x;
+    float ** y = b;
+    *y = *b;
+    *b = *y;
+    **y = **b;
+    **b = **y;
+    **y = **a;
+    **b = **x;
+    bool ** z = c;
+    *z = *c;
+    *c = *z;
+    **z = **c;
+    **c = **z;
+}
+
+function : void fn3(int** & a, float** & b, bool** & c) {
+    int ** x = a;
+    *x = *a;
+    *a = *x;
+    **x = **a;
+    **a = **x;
+    float ** y = b;
+    *y = *b;
+    *b = *y;
+    **y = **b;
+    **b = **y;
+    **y = **a;
+    **b = **x;
+    bool ** z = c;
+    *z = *c;
+    *c = *z;
+    **z = **c;
+    **c = **z;
+}
+
+function : void fn4(int* & i[3], float* & f[2], bool* & b[4]) {
+    int * x;
+    x = i[0];
+    *x = *i[0];
+    float * y;
+    y = f[1];
+    *y = *f[1];
+    bool * z;
+    z = b[3];
+    *z = *b[3];
+}
+
+function : void fn5(int** & i[3], float** & f[2], bool** & b[4]) {
+    int ** x;
+    x = i[0];
+    *x = *i[0];
+    **x = **i[0];
+
+    float ** y;
+    y = f[1];
+    *y = *f[1];
+    **y = **f[1];
+
+    bool ** z;
+    z = b[3];
+    *z = *b[3];
+    **z = **b[3];
+}
+
+function : void fn5(MYS_1 * a, MYS_1 * & b) {
+    MYS_1 * x;
+    MYS_1 y;
+
+    x = a;
+    a = x;
+    *a = *x;
+    *x = *a;
+
+    y = *a;
+    *a = y;
+    *x = y;
+    y = *x;
+
+    x = b;
+    b = x;
+    *x = *b;
+    *b = *x;
+
+    y = *b;
+    *b = y;
+}
+function : void fn5(MYS_1 **a, MYS_1 ** & b) {
+    MYS_1 ** x;
+    MYS_1 * y;
+    MYS_1 z;
+
+    x = a;
+    a = x;
+    *a = *x;
+    *x = *a;
+    **a = **x;
+    **x = **a;
+
+    y = *a;
+    *a = y;
+    *x = y;
+    y = *x;
+    **x = *y;
+    *y = **x;
+
+    x = b;
+    b = x;
+    *x = *b;
+    *b = *x;
+    **x = **b;
+    **b = **x;
+
+    y = *b;
+    *b = y;
+    *y = **b;
+    **b = *y;
+
+    z = **a;
+    **a = z;
+    z = **b;
+    **b = z;
+    z = **x;
+    **x = z;
+    *y = z;
+    z = *y;
+}
+
+structdef MYS_2 {
+    int arr[3];
+    float * f;
+};
+function : void fn10(MYS_1 a, MYS_1 b, MYS_2 c) { }
+
+function : void main() {
+    int i[3];
+    float f[2];
+    bool b[4];
+
+    int * ii[3];
+    float * ff[2];
+    bool * bb[4];
+
+    MYS_1 a;
+    MYS_1 * aa;
+
+    fn1(i, f, b);
+
+    fn1(a);
+    fn1(*aa);
+    fn2(a);
+    fn2(*aa);
+
+    fn2(ii[0], ff[1], bb[3]);
+    fn2(&i[0], &f[1], &b[3]);
+    fn3(ii[0], ff[1], bb[3]);
+    
+    fn2(&ii[0], &ff[1], &bb[3]);
+
+    fn4(ii, ff, bb);
+
+    fn5(aa, aa);
+
+    MYS_2 c;
+    fn10(a, a, c);
+}

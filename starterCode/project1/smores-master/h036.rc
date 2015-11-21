@@ -1,0 +1,14 @@
+int i = 0;
+
+function : void recurse() {
+  if (i > 3) {
+    cout << i << endl;
+  } else {
+    i++;
+    recurse();
+  }
+}
+
+function : void main() {
+  recurse();
+}

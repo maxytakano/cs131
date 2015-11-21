@@ -1,0 +1,26 @@
+structdef MS{ int a; float b; bool c; };
+
+function : void foo(int a, int b, int c, int d, int e, int f, int g, int * h, int & i)
+{
+    cout << "1. " << g << endl;
+    cout << "2. " << *h << endl;
+    cout << "3. " << i << endl;
+
+    *h = 33;
+    i = 33;
+}
+
+
+function : void main()
+{
+    int g = 5;
+    int * h = &g;
+    int i = 2;
+
+    foo(1,2,3,4,5,6,g,h,i);
+
+    cout << "4. " << g << endl;
+    cout << "5. " << *h << endl;
+    cout << "6. " << i << endl;
+
+}

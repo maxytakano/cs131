@@ -1,0 +1,17 @@
+static int i = 1;
+static float f = 2.0;
+static bool b = true;
+
+function : void main() {
+  cout << i << endl;
+  cout << f << endl;
+  cout << b << endl;
+
+  i = 2;
+  f = 3.0;
+  b = false;
+
+  cout << i << endl;
+  cout << f << endl;
+  cout << b << endl;
+}

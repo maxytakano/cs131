@@ -1,0 +1,50 @@
+// one-dimensional arrays and array indexing
+
+const int sz = 10;
+
+int arr1[sz];
+float arr2[sz];
+bool arr3[sz];
+
+static int arr4[20];
+static float arr5[sz];
+static bool arr6[sz];
+
+int ind = arr1[0];
+float f = arr2[ind];
+
+function : void main() {
+    int arr7[sz];
+    float arr8[sz];
+    bool arr9[100];
+
+    int a = arr1[1] = 52;
+    float b = arr2[2] = 10.0;
+    bool c = arr3[3] = true;
+
+    cout << arr1[1] << arr2[2] << arr3[3];
+    cout << a << b << c;
+
+    arr4[4] = a;
+    arr5[5] = b;
+    arr6[6] = c;
+
+    cout << arr4[4] << arr5[5] << arr6[6];
+
+    arr7[7] = a^a|a;
+    arr8[8] = a*b;
+    arr9[9] = c || c && c;
+
+    cout << arr7[7] << arr8[8] << arr9[9];
+    
+    int ind = arr1[0];
+    arr9[ind];
+
+    cout << ind << arr1[0] << arr9[ind];
+
+    arr2[ind]+arr4[10]/arr7[arr4[10]];
+    arr2[ind+arr4[10]/arr7[arr4[10]]] = arr1[ind+arr4[10]/arr7[arr4[10]]];
+
+    cout << arr2[ind]+arr4[10]/arr7[arr4[10]];
+    cout << arr2[ind+arr4[10]/arr7[arr4[10]]]; 
+}

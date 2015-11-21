@@ -1,0 +1,3 @@
+function : bool main() {
+  return false;
+}

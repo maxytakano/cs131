@@ -1,0 +1,11 @@
+function : void main() {
+  int a = 5;
+  int b = 0;
+
+  while (a > b) {
+    b++;
+    cout << b << endl;
+  }
+
+  cout << b << endl;
+}

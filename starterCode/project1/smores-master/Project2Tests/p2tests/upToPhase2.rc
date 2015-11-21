@@ -1,0 +1,564 @@
+int x;
+int combo = 0;
+float y;
+bool z;
+
+int xArr[5];
+float yArr[5];
+bool zArr[5];
+
+structdef BASIC
+{
+    int x;
+    float y;
+    bool z;
+
+    int arr1[10];
+    float arr2[024];
+    bool arr3[0x1D];
+
+    BASIC()
+    {
+        this.x = 0;
+        this.y = 0.0;
+        this.z = false;
+
+        foreach( int & i : this.arr1 )
+        {
+            i = 0;
+        }
+
+        foreach( float & f : this.arr2 )
+        {
+            f = 0.0;
+        }
+
+        foreach( bool & b : this.arr3 )
+        {
+            b = false;
+        }
+    }
+
+    BASIC(int i, float f, bool b)
+    {
+        this.x = i;
+        this.y = f;
+        this.z = b;
+
+        foreach( int & q : this.arr1 )
+        {
+            q = i;
+        }
+
+        foreach( float & r : this.arr2 )
+        {
+            r = f;
+        }
+
+        foreach( bool & s : this.arr3 )
+        {
+            s = b;
+        }
+    }
+
+    function : void foo()
+    {
+    }
+
+    function : int foo(int index)
+    {
+        return this.arr1[index];
+    }
+};
+
+BASIC b1;
+BASIC b2 : ( 5, 42.0, true );
+float fff=42;
+BASIC b3 : ( 5, fff, true );
+
+function : int foo()
+{
+    if( z )
+    {
+        return -x;
+    }
+
+    return x;
+}
+
+function : int & foo(int & a, int & b, bool c)
+{
+    if( a > b && c )
+    {
+        a = a + b;
+    }
+    else
+    {
+        if( ++b <= a-- )
+        {
+            return b;
+        }
+    }
+
+    return a;
+}
+
+function : float & foo2(float & a, float & b) {
+    if( ++b <= a-- )
+    {
+        return b;
+    }
+    return a;
+}
+
+function : void testBoolExpr()
+{
+    int x1 = 0;
+    int x2 = 0;
+
+    float y1 = 0.0;
+    float y2 = 0.0;
+
+    bool z1 = false;
+    bool z2 = false;
+
+    if( z1 && ++y1 > --x2 )
+    {
+        // Should short-circuit to else
+        combo = 0;
+    }
+    else
+    {
+        if( x1 == x2 && y1 == y2 )
+        {
+            ++combo;
+            cout << "So far, so good..." << endl;
+            if( combo > 2 )
+            {
+                cout << combo << "-hit combo!" << endl;
+            }
+        }
+        else
+        {
+            cout << "Uh-oh... Something went wrong..." << endl;
+            combo = 0;
+        }
+    }
+
+    x1 = x2 = 0;
+    y1 = y2 = 0.0;
+    z1 = z2 = false;
+
+    if( !z2 || --y1 != y2++ && !(x1-- * --x2 == 5))
+    {
+        // Should short circuit and come here
+        if( y1 != y2 || x1 != x2 )
+        {
+            cout << "Oh noes! Something done goofed up!!!" << endl;
+            combo = 0;
+        }
+        else
+        {
+            ++combo;
+            cout << "Lookin good!" << endl;
+            if( combo > 2 )
+            {
+                cout << combo << "-hit combo!" << endl;
+            }
+        }
+    }
+    else
+    {
+        // Should not go here
+        combo = 0;
+    }
+
+    x1 = x2 = 0;
+    y1 = y2 = 0.0;
+    z1 = z2 = false;
+
+    if( foo( x1, x2, z1 ) == -1 )
+    {
+        if( x1 == -1 || ++x2 != ++x1 )
+        {
+            if( x2 == 1 )
+            {
+                ++combo;
+                if( combo > 2 )
+                {
+                    cout << combo << "-hit combo!" << endl;
+                }
+            }
+            else
+            {
+                combo = 0;
+                cout << "Miss" << endl;
+            }
+        }
+        else
+        {
+            combo = 0;
+            cout << "DOH!" << endl;
+        }
+    }
+    else
+    {
+        combo = 0;
+        cout << "NOOOOOOO!!!!!!!!!" << endl;
+    }
+
+    x1 = 5;
+    x2 = -x1;
+    y1 = 42.0;
+    y2 = -y2 * 0.1;
+    z1 = x1 > -y2 || ++y1 < 6;    // Evaluates to true, short-circuits
+    z2 = z1 && x1 != x2 && y1 >= x1;    // Evaluates to true
+
+    if( y1 <= y2 )
+    {
+    }
+    else
+    {
+        if( z1 )
+        {
+            z1 = !z1;
+        }
+
+        if( z1 )
+        {
+            z2 = !z2;
+        }
+    }
+
+    if( z2 )
+    {
+        ++combo;
+        cout << "Great!!!" << endl;
+        if( combo > 2 )
+        {
+            cout << combo << "-hit combo!" << endl;
+        }
+    }
+    else
+    {
+        combo = 0;
+        cout << "Boo" << endl;
+    }
+
+    cout << "+x1: " << +x1 << "\t-x1: " << -x1 << endl;
+    cout << "+y1: " << +y1 << "\t-y1: " << -y1 << endl;
+    cout << "z1: " << z1 << "\t!z1: " << !z1 << endl;
+}
+
+function : void loop()
+{
+    while( x > y )
+    {
+        if( y == x )
+        {
+            cout << "Same values" << endl;
+        }
+        else
+        {
+            cout << "Different values" << endl;
+        }
+
+        if( x % 2 == 0 || y < 0 )
+        {
+            x = x + 1;
+            y = y * -2;
+        }
+        else
+        {
+            if( y == 0 )
+            {
+                cout << "Forget it, y is 0" << endl;
+                break;
+            }
+            else
+            {
+                y = y + 1;
+                cout << "y is not 0" << endl;
+                continue;
+            }
+        }
+    }
+}
+
+function : int loop(int times)
+{
+    if( times > 0 )
+    {
+        cout << loop(times - 1) << endl;
+    }
+
+    return times;
+}
+
+function : void loop(int & x[10])
+{
+    foreach( int a : x )
+    {
+        cout << "Looping " << a << " times" << endl;
+
+        while( true )
+        {
+            if( a <= 0 )
+            {
+                break;
+            }
+
+            cout << "\t" << a-- << endl;
+        }
+    }
+}
+
+function : void main()
+{
+    int arr[10];
+    BASIC local : ();
+    BASIC structArr[25] : (10, 25.1, false);
+
+    loop();
+
+    foreach( int & i : arr )
+    {
+        i = x++;
+    }
+
+    loop( arr );
+
+    if( z = ( x == loop( 10 ) ) )
+    {
+        cout << "Most excellent!" << endl;
+    }
+    else
+    {
+        cout << "=___=" << endl;
+    }
+
+    loop();
+
+    cout << y = foo() << endl;
+
+    loop();
+
+    foreach( int i : arr )
+    {
+        if( i == arr[i] )
+        {
+            cout << "Woot!" << endl;
+        }
+        else
+        {
+            cout << "Aww..." << endl;
+        }
+    }
+
+    foreach( int i : xArr )
+    {
+        if( i == 0 )
+        {
+            ++combo;
+            if( combo > 2 )
+            {
+                cout << combo << "-hit combo!" << endl;
+            }
+        }
+        else
+        {
+            combo = 0;
+            while( i > 0 )
+            {
+                cout << " ";
+                i = i - 2;
+            }
+
+            if( i == 0 )
+            {
+                cout << "Miss" << endl;
+            }
+            else
+            {
+                cout << "Boo!" << endl;
+            }
+        }
+    }
+
+    foreach( float f : yArr )
+    {
+        if( f == 0.0 )
+        {
+            ++combo;
+            if( combo > 2 )
+            {
+                cout << combo << "-hit combo!" << endl;
+            }
+        }
+        else
+        {
+            combo = 0;
+            while( f > 0 )
+            {
+                cout << " ";
+                f = f - 2;
+            }
+
+            if( f == 0 )
+            {
+                cout << "Miss" << endl;
+            }
+            else
+            {
+                cout << "Boo!" << endl;
+            }
+        }
+    }
+
+    foreach( bool b : zArr )
+    {
+        if( !b )
+        {
+            ++combo;
+            if( combo > 2 )
+            {
+                cout << combo << "-hit combo!" << endl;
+            }
+        }
+        else
+        {
+            combo = 0;
+            cout << "Boo!" << endl;
+        }
+    }
+
+    testBoolExpr();
+
+    if( b1.x == 0 )
+    {
+        ++combo;
+        if( combo > 2 )
+        {
+            cout << combo << "-hit combo!" << endl;
+        }
+    }
+    else
+    {
+        combo = 0;
+        cout << "Initialization of global failed!" << endl;
+    }
+
+    if( b1.arr1[4] == local.arr2[012] )
+    {
+        ++combo;
+        cout << "Success!" << endl;
+        if( combo > 2 )
+        {
+            cout << combo << "-hit combo!" << endl;
+        }
+    }
+    else
+    {
+        combo = 0;
+        cout << "Test case failed" << endl;
+    }
+
+    if( b1.foo( 3 ) == local.foo( 3 ) )
+    {
+        ++combo;
+        cout << "Excellent!" << endl;
+        if( combo > 2 )
+        {
+            cout << combo << "-hit combo!" << endl;
+        }
+    }
+    else
+    {
+        combo = 0;
+        cout << ":(" << endl;
+    }
+
+    b1 = b2;
+
+    if( b1.foo( 3 ) == b2.foo( 3 ) )
+    {
+        ++combo;
+        cout << "Struct assignment mastery unlocked!" << endl;
+        if( combo > 2 )
+        {
+            cout << combo << "-hit combo!" << endl;
+        }
+    }
+    else
+    {
+        combo = 0;
+        cout << "Struct assignment failed" << endl;
+    }
+
+    if( b1.foo( 3 ) != local.foo( 3 ) )
+    {
+        ++combo;
+        cout << "^o^" << endl;
+        if( combo > 2 )
+        {
+            cout << combo << "-hit combo!" << endl;
+        }
+    }
+    else
+    {
+        combo = 0;
+        cout << "T_T" << endl;
+    }
+
+    x = foo() + b1.foo( 6 );
+    cout << x << endl;
+
+    foreach( BASIC b : structArr )
+    {
+        if( b.x == b1.x )
+        {
+            combo = 0;
+            cout << b.x << " is NOT equal to " << b1.x << endl;
+            break;
+        }
+        else
+        {
+            ++combo;
+            cout << "Flawless!" << endl;
+            if( combo > 2 )
+            {
+                cout << combo << "-hit combo!" << endl;
+            }
+        }
+    }
+
+    y = foo() + b2.foo( 010 ) + structArr[0xA].foo( 4 );
+    cout << y << endl;
+
+    foreach( BASIC & b : structArr )
+    {
+        b.x = b1.foo( 0 );
+    }
+
+    foreach( BASIC b : structArr )
+    {
+        if( b.x == b1.x && b.y != b1.y )
+        {
+            ++combo;
+            if( combo > 2 )
+            {
+                cout << combo << "-hit combo!" << endl;
+            }
+        }
+        else
+        {
+            combo = 0;
+            break;
+        }
+    }
+
+    if( combo == 74 )
+    {
+        cout << "Full combo complete!" << endl;
+    }
+}

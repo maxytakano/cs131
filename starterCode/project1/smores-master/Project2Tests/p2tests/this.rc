@@ -1,0 +1,12 @@
+structdef A
+{
+    int x;
+    A() { this.x = 5; }
+    ~A() {}
+};
+
+function : void main()
+{
+    A * a;
+    new a;
+}

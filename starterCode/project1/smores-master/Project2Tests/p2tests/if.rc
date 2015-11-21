@@ -1,0 +1,22 @@
+function : void main()
+{
+    float x = 1.2;
+    float y = 2.3;
+    int z = 0;
+    int z2 = 1;
+    if( y > x )
+    {
+        x = 5;
+    }
+
+    if( x == y )
+    {
+        if( x > 3 )
+        {
+            x = 3;
+        }
+    }
+
+    if( z != x ) { }
+    if( z2 == z ) { }
+}

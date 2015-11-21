@@ -1,0 +1,21 @@
+float x = 3.2;
+
+function : void main() {
+  float y = 3.84;
+  float z = x++ + y;
+  
+  cout << z << endl;
+  cout << x << endl;
+  
+  z = x + ++y;
+  cout << z << endl;
+  cout << y << endl;
+ 
+  z = x-- + y;
+  cout << z << endl;
+  cout << x << endl;
+
+  z = x + --y;
+  cout << z << endl;
+  cout << y << endl;
+}

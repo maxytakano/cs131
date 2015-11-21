@@ -1,0 +1,12 @@
+structdef A
+{
+    int x;
+};
+
+function : void main()
+{
+    A * a;
+    new a;
+    a->x = 5;
+    cout << (*a).x << endl;
+}

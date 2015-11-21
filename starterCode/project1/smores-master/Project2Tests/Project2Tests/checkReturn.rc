@@ -1,0 +1,116 @@
+int a;
+float b;
+bool c;
+int arr1[5];
+float arr2[5];
+bool arr3[5];
+function : int test1() {
+    // globals
+    if(0 == ::a) {
+        return ::a;
+    }
+    if(::arr1[0] == 0) {
+        return ::arr1[0];
+    }
+    int a;
+    if(a == 0) {
+        return a;
+    }
+    int arr1[5];
+    if(arr1[1] == 0) {
+        return arr1[1];
+    }
+    return 1;
+
+}
+function : float test2() {
+    if(0 == ::b) {
+        return ::b;
+    }
+    if(::arr2[0] == 0) {
+        return ::arr2[0];
+    }
+    float b;
+    if(b == 0) {
+         return b;
+    }
+    float arr2[5];
+    if(arr2[0] == 0) {
+        return arr2[0];
+    }
+    return 1.5;
+}
+
+function : bool test3() {
+    if(c == false) {
+        return c;
+    }
+    if(::arr3[0] == false) {
+        return ::arr3[0];
+    }
+    bool c;
+    bool arr3[5];
+
+    if(c == false) {
+        return c;
+    }
+    if(arr3[0] == false) {
+        return arr3[0];
+    }
+    return true;
+}
+
+function : float test4(int & a, int b, float & c, float d) {
+    if(a == 0) {
+        return a;
+    }
+    if(b == 0) {
+        return b;
+    }
+    if(c == 0) {
+        return c;
+    }
+    if(d == 0) {
+        return d;
+    }
+
+    foreach(int i : arr1) {
+        if(i == 0) {
+            return i;
+        }
+    }
+    foreach(float & i : arr2) {
+        if(i == 0) {
+            return i;
+        }
+    }
+    return arr2[3];
+}
+
+function : bool test5( bool & e, bool f ) {
+    if(e) {
+        return e;
+    }
+    else {
+        return f;
+    }
+    return false;
+}
+
+function : int & test6() {
+    return arr1[0];
+}
+
+function : void main() {
+    test1();
+    test2();
+    test3();
+    test4(arr1[0], 1, arr2[3], 1);
+    test4(arr1[0], 1, arr2[3], 1.0);
+
+    test4(arr1[0], arr1[1], arr2[3], arr1[3]);
+    test4(arr1[0], arr1[1], arr2[3], arr2[4]);
+
+    test5(arr3[1], false);
+    test6();
+}

@@ -1,0 +1,169 @@
+// new and delete statements, pointers of any type
+// new pointer to struct type
+int * x;
+float * y;
+bool * z;
+
+function : void testIntPtr() {
+    new x;
+    delete x;
+    new x;
+    new x;
+    delete x;
+}
+function : void testFloatPtr() {
+    new y;
+    delete y;
+    new y;
+    new y;
+    delete y;
+    delete y;
+}
+function : void testBoolPtr() {
+    new z;
+    delete z;
+    new z;
+    delete z;
+    delete z;
+}
+function : void testIntPtrPtr() {
+    int ** x;
+    new x;
+    new *x;
+    delete *x;
+    delete x;
+}
+function : void testFloatPtrPtr() {
+    float ** x;
+    new x;
+    new *x;
+    delete *x;
+    delete x;
+}
+function : void testBoolPtrPtr() {
+    bool ** x;
+    new *x;
+    new x;
+    delete x;
+    delete *x;
+}
+function : void testArrayOfPtr() {
+    int * a[2];
+    float * b[2];
+    bool * c[2];
+    new a[0];
+    new b[1];
+    new c[1];
+    new c[1];
+    delete a[0];
+    delete b[1];
+    delete c[1];
+}
+
+structdef MYS {
+    int x;
+    MYS * a;
+    MYS() { }
+    MYS(int a, bool b, float c) {
+    }
+    MYS(float & c, bool & b, int & a) {
+         new this.a; // TODO
+        //  here. bc it's a pointer, also want to do any dereferencing, then call the ctor
+    }
+    MYS(MYS * a) {
+        new a; // TODO
+    }
+    function : void fn() {
+        new this.a; // TODO
+        delete this.a;
+    }
+};
+
+MYS * m;
+
+function : void fn2() {
+    MYS ** m;
+    delete m;
+    new m;
+    new *m : (*y, *z, *x);
+    delete *m;
+    new *m : (::m);
+
+    delete *m;
+    delete m;
+
+}
+
+function : void main() {
+    testIntPtr();
+    testFloatPtr();
+    testBoolPtr();
+    testIntPtrPtr();
+    testFloatPtrPtr();
+    testBoolPtrPtr();
+    testArrayOfPtr();
+    new m; // TODO: *m, *m.MYS(...), aka one level down, if is a struct
+    new m : (1, true, 1.0); // TODO: *m, *m.MYS(1,true,1.0)
+    new m : (*y, *z, *x); // TODO: *m, *m.MYS(*y,*z,*x)
+    delete m; // TODO, *m, *m.~MYS(...)
+    new m : (m); // TODO*m, *m.MYS(...)
+
+    MYS ** m;
+    new m;  // because ptr to ptr to struct, so nothing else
+    delete m;
+    new *m : (1, true, 1.0); // TODO **m, **m.MYS(...) aka one level down
+    delete m;
+    new *m : (*y, *z, *x); // TODO **m, **m.MYS(...) aka one level down
+    delete *m; // TODO, *m, *m.~MYS(...)
+    new *m : (::m);
+
+    delete *m;
+    delete m;
+
+    fn2();
+
+}
+
+/*
+        ! new( x ) TODO
+		mov     	1, %o0
+		set     	x.size, %o1
+		call    	calloc
+		nop
+		set     	x's offset, %o1
+		add     	x's base, %o1, %o1
+
+        ! if need to dereference (*, [])
+        ld          [%o1], %o1
+
+        st      	%o0, [%o1]
+
+
+
+		! delete( x ) TODO
+		set     	x's offset, %l7
+		add     	x's base, %l7, %l7
+
+        ! if need to dereference
+        ld          [%l7], %l7
+
+		ld      	[%l7], %o0
+		call    	.$$.ptrCheck
+		nop
+		set     	x's offset, %l7
+		add     	x's base, %l7, %l7
+
+        ! if need to dereference
+        ld          [%l7], %l7
+
+		ld      	[%l7], %o0
+		call    	free
+		nop
+		set     	x's offset, %o1
+		add     	x's base, %o1, %o1
+
+        ! if need to dereference
+        ld          [%o1], %o1
+
+		st      	%g0, [%o1]
+*/

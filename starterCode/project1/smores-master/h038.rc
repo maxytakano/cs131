@@ -1,0 +1,16 @@
+float x = 3.2;
+
+function : void main() {
+  float y = 1.3;
+  
+  float z;
+  // floating point multiplication division
+  z = x * 6.4;
+  cout << z << endl;
+  z = x * y;
+  cout << z << endl;
+  z = z / 0.25;
+  cout << z << endl;
+  z = x / y;
+  cout << z << endl;
+}

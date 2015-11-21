@@ -1,0 +1,13 @@
+int x = 5;
+float y = 2.0;
+bool z = true;
+
+function : void main() {
+  int x = 3;
+  float y = 3.0;
+  bool z = false;
+
+  cout << ::x << endl;
+  cout << ::y << endl;
+  cout << ::z << endl;
+}

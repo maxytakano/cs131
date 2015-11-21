@@ -1,0 +1,173 @@
+structdef MYS_1 {
+    int a;
+    float b;
+    bool c;
+    int arr1[5];
+    float arr2[5];
+    bool arr3[5];
+    function : int test1() {
+        // globals
+        if(this.a == 0) {
+            return this.a;
+        }
+        if(this.arr1[0] == 0) {
+            return this.arr1[0];
+        }
+        int a;
+        if(a == 0) {
+            return a;
+        }
+        int arr1[5];
+        if(arr1[1] == 0) {
+            return arr1[1];
+        }
+        return 1;
+    }
+    function : float test2() {
+        if(this.b == 0) {
+            return this.b;
+        }
+        if(this.arr2[0] == 0) {
+            return this.arr2[0];
+        }
+        float b;
+        if(b == 0) {
+             return b;
+        }
+        float arr2[5];
+        if(arr2[0] == 0) {
+            return arr2[0];
+        }
+        return 12.0;
+    }
+
+    function : bool test3() {
+        if(this.c == false) {
+            return this.c;
+        }
+        if(this.arr3[0] == false) {
+            return this.arr3[0];
+        }
+        bool c;
+        bool arr3[5];
+
+        if(c == false) {
+            return c;
+        }
+        if(arr3[0] == false) {
+            return arr3[0];
+        }
+        return true;
+    }
+
+    function : float test4(int & a, int b, float & c, float d) {
+        if(a == 0) {
+            return a;
+        }
+        if(b == 0) {
+            return b;
+        }
+        if(c == 0) {
+            return c;
+        }
+        if(d == 0) {
+            return d;
+        }
+
+        foreach(int i : this.arr1) {
+            if(i == 0) {
+                return i;
+            }
+        }
+        foreach(float & i : this.arr2) {
+            if(i == 0) {
+                return i;
+            }
+        }
+        return this.arr2[2];
+    }
+
+    function : bool test5( bool & e, bool f ) {
+        if(e) {
+            return e;
+        }
+        else {
+            return f;
+        }
+        return true;
+    }
+    function : int & test6() {
+        return this.a;
+    }
+
+    function : int & test7() {
+        if(this.arr1[0] == 0) {
+            return this.arr1[0];
+        }
+        return this.test6();
+    }
+
+};
+
+MYS_1 glb;
+
+function : int test1() {
+    MYS_1 loc;
+
+    if(glb.a == 0) {
+        return glb.a;
+    }
+    if(glb.a != 0) {
+        return loc.a;
+    }
+    if(glb.arr1[0] == 0) {
+        return glb.arr1[0];
+    }
+    return loc.arr1[0];
+}
+
+function : float test2() {
+    MYS_1 loc;
+
+    if(glb.b == 0) {
+        return glb.b;
+    }
+    if(glb.b != 0) {
+        return loc.b;
+    }
+    if(glb.arr2[0] == 0) {
+        return glb.arr2[0];
+    }
+    return loc.arr2[0];
+}
+
+function : int & test3() {
+    MYS_1 loc;
+    if(glb.c) {
+        return glb.test7(); // TODO
+    }
+    return loc.test6();  // TODO
+}
+
+function : int test7() {
+    MYS_1 loc;
+    loc.test4(glb.a, 1, loc.arr2[loc.a], 1);
+    glb.test4(glb.a, 1, loc.arr2[loc.a], 1.1);
+
+
+    loc.test4(loc.arr1[0], glb.arr1[1], loc.arr2[3], loc.arr1[3]);
+    glb.test4(loc.arr1[0], glb.arr1[1], glb.arr2[3], glb.arr2[4]);
+
+    loc.test5(loc.c, true);
+    if(glb.c) {
+        return glb.test6(); // TODO
+    }
+    return loc.test6();
+}
+
+function : void main() {
+    test1();
+    test2();
+    test3();
+    test7();
+}

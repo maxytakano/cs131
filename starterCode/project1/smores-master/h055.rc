@@ -1,0 +1,18 @@
+function : void main() {
+  int a = 5;
+  int b = 0;
+
+  while (a > b) {
+    b++;
+    cout << b << endl;
+
+    int z = 0;
+    while (z != 3) {
+      z++;
+      cout << z << endl;
+    }
+    cout << z << endl;
+  }
+  
+  cout << b << endl;
+}

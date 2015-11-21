@@ -1,0 +1,71 @@
+// internal static variable and constant decls
+
+function : int foo(int w) {
+    static int x = w;
+    return x;
+}
+
+ int gi2 = 1+5*7/10;
+ float gf2 = 1+5*7/10;
+ const bool gb = true && false || false; // goes thru short circuit beforehand.
+ bool gbb = true && false || true;
+bool gbb2 = gb && gbb || true;
+static bool sbb2 = gb && gbb || true;
+
+static bool* x;
+static int i2 = 1+5*7/10;
+static float f2 = 1+5*7/10;
+static const bool b = true && false || false; // goes thru short circuit beforehand
+static bool bb = true && false || true;  //
+static const bool bb2 = !true;
+static bool bb3 = !false && !true;
+static bool bb4 = !bb3 || !bb;
+static const bool ggbb2 = !true;
+static bool ggbb3 = !false && !true;
+static bool ggbb4 = !bb3 || !bb;
+
+structdef MYS_1 {
+    int x;
+};
+// TODO: test with short circuit, expressions, arrays, fp offsets are off...
+function : void testConst() {
+    static const int i1 = 1;
+    static const float f3 = 1;
+    static const float f2 = 2.002;
+    static const bool a = true;
+
+    // the following goes thru short circuit beforehand
+    static const bool b = true && false || a;  // check things two again, mainly with %g0, is this important
+    static const bool bb = true && false || false;  // and extra instr after internal label  -- for const
+}
+function : void main() {
+    static int *x;
+    static int i = foo(1);
+    static int i1 = 1;
+    static int i2 = 1+5*7/10;
+    static int i3 = i+i1*7;
+    static float f = foo(1);
+    static float f3 = 1;
+    static float f2 = 2.002;
+    static float f1 = 1.0+5*7.2/10.1;
+    static float f4 = i+f*7-f3+f2;
+    *x = foo(1);
+
+    static bool b;
+    static bool c = true && false || true;  // TODO, no short circuit
+    static float f5;
+    static bool *bb;
+    static float **ff;
+    *bb = true;
+    static bool a = true;
+    static bool d = a && false || b; // TODO, yes on short circuit bc of var
+
+    static int arr[3];
+    static bool arr2[3];
+    static float arr3[4];
+    static MYS_1 m;
+    static MYS_1 * mm;
+    
+    static MYS_1 * m2[2];
+    static MYS_1 mm2[2];
+}

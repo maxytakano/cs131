@@ -1,0 +1,8 @@
+function : void main()
+{
+    int arr[5];
+    foreach( int x : arr )
+    {
+        x = 123;
+    }
+}

@@ -1,0 +1,9 @@
+static int i;
+static float f;
+static bool b;
+
+function : void main() {
+  cout << i << endl;
+  cout << f << endl;
+  cout << b << endl;
+}

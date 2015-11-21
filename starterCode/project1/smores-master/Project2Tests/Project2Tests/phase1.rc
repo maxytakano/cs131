@@ -1,0 +1,106 @@
+// A Cummulative Phase 1 Tester includes
+//  Declaration, initialization, assignment for literals, constants, variables (global, static, var)
+//  cout (int,float,bool expressions, string literals, endl)
+//  constant folding (ints, floats, bools for arithmetic and logical expressions)
+//  integer arithmetic expressions (+,-,UnarySign, *,/,%, &,|,^, ++,--)
+// basic if statements with integers (if(int > int)) statements) TODO
+//  basic functions (no params, recursion, int, float, bool, void return types)
+//  basic return statements (return expr; for int float bool. return; for void)
+//  exits (exit(expr);)
+
+int a = 5;
+float b = 5+5+8;
+int c = a+a*a;
+float d = c/a*a-a;  // TODO
+int e = 16%c;
+bool f = false;
+bool t = true;
+bool g = f && t || f || t && t;
+float h = 16.0;
+float i = 16;
+float j = 16.1001;
+
+function : int fooInt() {
+    a+a;
+    int a = ::a+e*::e%-e;
+    --a;
+    a = --a;
+    return a++;
+}
+function : float fooFloat() {
+    return b;
+}
+function : bool fooBool() {
+    bool g = f&&t&&::g;
+    return g;
+}
+
+int fooI = fooInt();
+float fooF = fooFloat();
+bool fooB = fooBool();
+int fooIn = fooInt()+5+a-c*c;
+float fooFl = fooFloat();
+float fooFlo = fooFloat();
+bool fooBo = fooBool() || fooBool();
+
+
+float c1 = 10.0*3-15.01111/1;  // okay bc constant folding. ow havent done float arithmetic expr
+int c2 = 10*3-15/1%2;
+bool c3 = true || false && true && true;
+
+function : void main() {
+    cout << a << endl;
+    cout << b << endl;
+    cout << c << "\n";
+    cout << a+e << endl;
+    cout << a*c << endl;
+    cout << g || t && f << endl;
+
+    float c1 = 10.0;
+    int c2 = 10*3-15/1%2;
+    cout << c1 << endl;
+    cout << c2 << "\n";
+    bool c3 = true || false && true && true;
+    cout << c3 << "\n";
+}
+
+function : void blank() {
+    return ;
+}
+
+function : void tryExit() {
+    exit(a);
+}
+
+function : void tryExit2() {
+    if(a > c) {
+        cout << a << "\n";
+    }
+    if(c > a) {
+        cout << c << "\n";
+    }
+    exit(0);
+}
+
+function : void globalStaticLocal() {
+    int a = 5;
+    float b = 5+5+8; // TODO
+    int c = a+a*a;
+    float d = c/a*a-a;
+    int e = 16%c;
+    bool f = false;
+    bool t = true;
+    bool g = f && t || f || t && t;
+    float h = 16.0;
+    float i = 16;
+    float j = 16.1001;
+
+    ::a = a;
+    a = ::a;
+    ::a = ::a+e-::e;
+    ::d = d;
+    //::d = ::d+e-::h;
+    f = ::f;
+    ::f = f;
+    ::f = ::f;
+}

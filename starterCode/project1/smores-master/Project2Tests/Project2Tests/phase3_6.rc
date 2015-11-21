@@ -1,0 +1,138 @@
+// more complex return statements
+// return by value for pointer types
+// return by ref for int, float, bool, pointers, structs
+
+function : int * fn1(int * a) {
+    return a;
+
+	/*	! return by value for pointer
+        set     	offset, %l7
+		add     	base, %l7, %l7
+
+        ! if need to dereference, *
+        ld          [%l7], %l7
+
+		ld      	[%l7], %i0
+		call        function_name
+		nop
+		ret
+		restore
+    */
+
+}
+function : float * fn1(float * a) {
+    return a;
+}
+function : bool * fn1(bool * a) {
+    return a;
+}
+
+function : int * fn2(int ** a) {
+    return *a;
+}
+function : float * fn2(float ** a) {
+    return *a;
+}
+function : bool * fn2(bool ** a) {
+    return *a;
+}
+
+function : int ** fn3(int *** a) {
+    return *a;
+}
+function : float ** fn3(float *** a) {
+    return *a;
+}
+function : bool ** fn3(bool *** a) {
+    return *a;
+}
+
+// ----------
+
+int a;
+float b;
+bool c;
+int ** aaa;
+float ** bbb;
+bool ** ccc;
+
+function : int & fn4() {
+    return a;
+
+        /*
+        ! return by ref
+        set     	offset, %i0
+		add     	base, %i0, %i0
+
+        ! if need to dereference, *
+        ld          [%i0], %i0
+
+		call    	function_name
+		nop
+		ret
+		restore
+        */
+}
+function : float & fn5() {
+    return b;
+}
+function : bool & fn6() {
+    return c;
+}
+
+function : int** & fn7() {
+    return aaa;
+}
+function : float** & fn8() {
+    return bbb;
+}
+function : bool** & fn9() {
+    return ccc;
+}
+
+function : int* & fn10() {
+    return *aaa;
+}
+function : float* & fn11() {
+    return *bbb;
+}
+function : bool* & fn12() {
+    return *ccc;
+}
+
+structdef MYS_1 {
+    int x;
+    float y;
+};
+
+MYS_1 m;
+MYS_1 * mm;
+
+function : MYS_1 & fn13() {
+    return m;
+}
+function : MYS_1 & fn14() {
+    return *mm;
+}
+function : MYS_1 * & fn15() {
+    return mm;
+}
+function : MYS_1 fn16() {
+    return m;
+
+    /*
+    ! struct: not return by ref
+        ld      	[%fp+64], %o0
+		set     	offset, %o1
+		add     	base, %o1, %o1
+		set     	struct_size, %o2
+		call    	memmove
+		nop
+		call        function_name
+		nop
+		ret
+		restore
+
+    */
+}
+

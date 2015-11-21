@@ -1,0 +1,29 @@
+function : void main() {
+    int a;
+    int b;
+    a = a&b;
+    cout << a;
+    cout << b;
+    a = a|b;
+    cout << a;
+    a = a ^b;
+    cout << a;
+    
+    a = 5&b;
+    cout << a;
+    a = a|5;
+    cout << a;
+    a = b^5;
+    cout << a;
+
+    a = a+1;
+    cout << a;
+    a = ++a;
+    cout << a;
+    a++;
+    cout << a;
+    --b;
+    cout << b;
+    b = b++;
+    cout << b;
+}

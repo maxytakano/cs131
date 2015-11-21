@@ -1,0 +1,243 @@
+structdef NODE
+{
+    int data;
+    NODE * next;
+    NODE * prev;
+
+    NODE( int d )
+    {
+        this.data = d;
+        this.next = nullptr;
+        this.prev = nullptr;
+    }
+
+    ~NODE()
+    {
+        if( this.next != nullptr )
+        {
+            this.next->prev = this.prev;
+        }
+        if( this.prev != nullptr )
+        {
+            this.prev->next = this.next;
+        }
+        this.next = nullptr;
+        this.prev = nullptr;
+    }
+
+    function : int getData()
+    {
+        return this.data;
+    }
+
+    function : void setData( int num )
+    {
+        this.data = num;
+    }
+
+    function : void printData()
+    {
+        cout << this.data;
+    }
+};
+
+structdef LIST
+{
+    int numNodes;
+    NODE * head;
+    NODE * writer;
+
+    LIST()
+    {
+        this.numNodes = 0;
+        this.head = nullptr;
+        this.writer = nullptr;
+    }
+
+    ~LIST()
+    {
+        while( this.head->prev != nullptr )
+        {
+            delete this.head->prev;
+        }
+
+        delete this.head;
+    }
+
+    function : bool insert( NODE * n )
+    {
+        if( this.numNodes == 0 )
+        {
+            n->next = n;
+            n->prev = n;
+            this.head = n;
+        }
+        else
+        {
+            n->prev = this.head->prev;
+            n->next = this.head;
+            this.head->prev->next = n;
+            this.head->prev = n;
+        }
+
+        ++this.numNodes;
+        return true;
+    }
+
+    function : bool insert( int data )
+    {
+        NODE * node;
+        new node : ( data );
+
+        if( this.numNodes == 0 )
+        {
+            node->next = node;
+            node->prev = node;
+            this.head = node;
+        }
+        else
+        {
+            node->prev = this.head->prev;
+            node->next = this.head;
+            this.head->prev->next = node;
+            this.head->prev = node;
+        }
+
+        ++this.numNodes;
+        return true;
+    }
+
+    function : int remove()
+    {
+        int retData = this.head->data;
+        this.writer = this.head->next;
+
+        delete this.head;
+        this.head = this.writer;
+
+        --this.numNodes;
+        return retData;
+    }
+
+    function : void advanceNext()
+    {
+        if( this.head->next != nullptr )
+        {
+            this.head = this.head->next;
+        }
+    }
+
+    function : void advancePrev()
+    {
+        if( this.head->prev != nullptr )
+        {
+            this.head = this.head->prev;
+        }
+    }
+
+    function : void writeList()
+    {
+        this.writer = this.head->next;
+        cout << "The list contains:" << endl;
+
+        this.head->printData();
+        while( this.writer != this.head )
+        {
+            cout << ", ";
+            this.writer->printData();
+            this.writer = this.writer->next;
+        }
+
+        cout << endl;
+    }
+};
+
+function : void main()
+{
+    int choice = 0;
+    LIST * list;
+    new list;
+
+    while( choice != 6 )
+    {
+        cout << "1. Insert a node" << endl << "2. Remove a node" << endl;
+        cout << "3. Move to next node" << endl << "4. Move to previous node" << endl;
+        cout << "5. Write list contents" << endl << "6. Quit" << endl;
+        cout << "\tEnter choice:  ";
+
+        cin >> choice;
+
+        cout << endl;
+
+        if( choice < 1 || choice > 6 )
+        {
+            cout << choice << " is an invalid selection!" << endl << endl;
+            choice = 0;
+            continue;
+        }
+
+        if( choice == 6 )
+        {
+            break;
+        }
+
+        if( choice == 1 )
+        {
+            cout << "Enter the data of the node to insert:  ";
+            cin >> choice;
+            list->insert( choice );
+            cout << endl << endl;
+        }
+        else    // Choice is 2, 3, 4, or 5
+        {
+            if( choice == 2 )
+            {
+                cout << "1. Remove from front" << endl << "2. Remove from end" << endl;
+
+                cin >> choice;
+
+                if( choice == 1 )
+                {
+                    choice = list->remove();
+                }
+                else
+                {
+                    if( choice != 2 )
+                    {
+                        cout << "Invalid selection!" << endl << endl;
+                        choice = 0;
+                        continue;
+                    }
+
+                    list->advancePrev();
+                    choice = list->remove();
+
+                    cout << "Node removed. Data: " << choice << endl << endl;
+                }
+            }
+            else    // Choice is 3, 4, or 5
+            {
+                if( choice == 3 )
+                {
+                    list->advanceNext();
+                }
+                else    // Choice is 4 or 5
+                {
+                    if( choice == 4 )
+                    {
+                        list->advancePrev();
+                    }
+                    else    // Choice is 5
+                    {
+                        if( choice == 5 )
+                        {
+                            list->writeList();
+                        }
+                    }
+                }
+            }
+        }
+
+        choice = 0;
+    }
+}

@@ -1,0 +1,12 @@
+function : void foo(int x, float y, bool z) {}
+function : void bar(int & x[5], int & y[5]) {}
+function : void main()
+{
+    int x = 0;
+    float y = 0.0;
+    bool z = false;
+    foo( x, y, z );
+
+    int a[5];
+    bar( a, a );
+}

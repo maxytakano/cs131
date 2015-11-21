@@ -1,0 +1,94 @@
+structdef GOOG{
+  int x;
+
+
+function :void bar(){
+            this.x = 10;
+            cout << this.x << endl;
+          }
+};
+
+GOOG goog;
+structdef FB{
+
+  GOOG * gp;
+
+function : GOOG * & baz(){
+             cout << "HELLO!!!!!" << endl;
+             this.gp = &goog;
+             return this.gp;
+           }
+};
+FB fb;
+
+structdef MS {
+  int x;
+  FB * fbp;
+
+  MS(int v) {
+    this.x = v;
+    cout << "ctor called on " << this.x << endl;
+  }
+  ~MS() {
+    cout << "dtor called on " << this.x << endl;
+  }
+
+function : FB & foo(int x){
+             this.fbp = & fb;
+             cout << "wassup" << this.x << endl;
+             return *this.fbp;
+           }
+function : void foo(){
+             cout << "hellO" << endl;
+           }
+
+function : void bar(int i){
+             cout << i << endl;
+           }
+
+};
+
+MS ms : (1);
+structdef STRUCTY {
+
+  int i;
+
+
+  STRUCTY(){
+    this.i = 5;
+    ms.foo();
+    ms.foo(this.i).baz()->bar();
+    ms.bar(2);
+  }
+  ~STRUCTY(){
+    cout << "STRUCTY dtor" << endl;
+  }
+
+function : void baz(MS & m){
+             m.foo();
+             m.bar(3);
+           }
+};
+
+MS structA : (1); //last dtor at end of main because it's global and first init
+
+static MS structB : (2); //third dtor at end of main because it's static/global and third-to-last init
+
+function : void foo(int x) {
+             MS structC : (3); //second dtor at end of foo because it's local and first init
+             static MS structD : (4); //second dtor at end of main because it's static and second-to-last initialized
+             if ( x == 4 ) {
+               return;
+             }
+             STRUCTY structY;
+             MS structE : (5); //first dtor at end of foo because it's local and last init
+           }
+
+function : void main() {
+             MS structF : (6); //first dtor at end of main because it's local in main
+             STRUCTY structG;
+             structG.baz(ms);
+             foo(3);
+             foo(4);
+           }
+

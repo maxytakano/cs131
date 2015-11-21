@@ -1,0 +1,93 @@
+// float arithmetic expressions
+int glb1;
+float glb2;
+
+function : float main2() {
+    int loc1;
+    float loc2;
+    // +, -, UnarySign
+    loc2 = glb2 + loc2; // loc float = float + float
+    cout << loc2 << "\n";
+
+    loc2 = 1.0 + loc2;
+    cout << loc2 << "\n";
+
+    glb2 = loc2 - glb2; // glb float = float - float
+    cout << glb2 << "\n";
+
+    glb2 = loc2 - 11.1;
+    cout << glb2 << "\n";
+
+    loc2 = glb2 + loc1; // loc float = float + int
+    cout << loc2 << "\n";
+    
+    loc2 = glb2 + 1;
+    cout << loc2 << "\n";
+    
+    glb2 = glb1 - loc2; // loc float = int - float
+    cout << glb2 << "\n";
+
+    glb2 = 15 - loc2;
+    cout << glb2 << "\n";
+
+    glb2 = +loc2; // global = + float
+    cout << glb2 << "\n";
+
+    loc2 = -loc2; // float = - float
+    cout << loc2 << "\n";
+
+    // *, /
+    loc2 = glb2 * loc2; // loc float = float * float
+    cout << loc2 << "\n";
+    
+    glb2 = loc2 / glb2; // glb float = float / float 
+    cout << glb2 << "\n";
+
+    loc2 = glb2 * loc1; // loc float = float * int
+    cout << loc2 << "\n";
+    
+    glb2 = glb1 / loc2; // loc float = int / float
+    cout << glb2 << "\n";
+
+    // ++/-i
+    glb2++;
+    cout << glb2 << "\n";
+    ++glb2;
+    cout << glb2 << "\n";
+    loc2--;
+    cout << loc2 << "\n";
+    --loc2;
+    cout << loc2 << "\n";
+
+    if(loc1 > glb1) {
+        cout << 1;
+        return 1;
+    }
+    if(glb1 > loc1) {
+        cout << loc2;
+        return loc2;
+    }
+    if(glb1 > glb1) {
+        cout << glb2;
+        return glb2;
+    }
+    cout << 1.0;
+    return 1.0;
+}
+
+float glb3;
+float f1 = glb2 + glb3;
+float f2 = 1.0 + glb3;
+float f3 = glb3 - glb2;
+float f4 = glb3 - 11.1;
+float f5 = glb2 + glb1;
+float f6 = glb2 + 1;
+float f7 = glb1 - glb3;
+float f8 = 15 - glb3;
+float f9 = +glb3;
+float f10 = -glb3;
+
+function : void main() {
+    cout << f1 << f2 << f3 << f4 << f5 << f6 << f7 << f8 << f9 << f10;
+    main2();
+}

@@ -1,0 +1,21 @@
+function : void main() {
+  float x = 3.05;
+  float y = 2.15;
+
+  if (x > x) {
+    cout << "error" << endl;
+  }
+
+  if (x > y) {
+    cout << "works" << endl;
+  } else {
+    cout << "error" << endl;
+  }
+
+  if (y > -x) {
+    if (x++ > y) {
+      cout << "works" << endl;
+    }
+  }
+  
+}

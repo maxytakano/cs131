@@ -1,0 +1,27 @@
+int i = 10;
+float f = 100;
+bool b = true;
+const int c = 20;
+
+static int si = 10;
+static float sf = 100;
+static bool sb = true;
+static const int sc = 20;
+
+function : void main() {
+    int i;
+    float f;
+    bool b;
+
+    i = si;
+    f = sf;
+    b = sb;
+    i = sc;
+
+    ::i = 10;
+    ::f = 10;
+
+    cout << i << ::i << si << ::si;
+    cout << f << ::f << sf;
+    cout << b << ::b << c << sb;
+}

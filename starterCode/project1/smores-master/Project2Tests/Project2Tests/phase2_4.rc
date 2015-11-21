@@ -1,0 +1,21 @@
+// input with cin, with modifiable L-value ints and floats
+int glb1;
+float glb2;
+
+function : void main() {
+    cin >> glb1;
+    cin >> glb2;
+
+    cout << glb1;
+    cout << glb2;
+
+    int loc1;
+    cin >> loc1;
+
+    cout << loc1;
+
+    float loc2;
+    cin >> loc2;
+
+    cout << loc2;
+}

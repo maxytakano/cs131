@@ -1,0 +1,34 @@
+int x = 0;
+float y = 0.0;
+bool z = false;
+
+int * a = &x;
+float * b = &y;
+bool * c = &z;
+
+function : void main()
+{
+    x = (int)y;
+    x = (int)z;
+    x = *(int *)b;
+    x = *(int *)c;
+
+    y = (float)x;
+    y = (float)z;
+    y = *(float *)a;
+    y = *(float *)c;
+
+    z = (bool)x;
+    z = (bool)y;
+    z = *(bool *)a;
+    z = *(bool *)b;
+
+    a = (int *)b;
+    a = (int *)c;
+
+    b = (float *)a;
+    b = (float *)c;
+
+    c = (bool *)a;
+    c = (bool *)b;
+}

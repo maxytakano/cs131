@@ -1,0 +1,19 @@
+float f = 10;
+float f2;
+float f3 = 20.0;
+const float f8 = 100;
+const float f4 = 100.5;
+static float f5 = 100;
+static float f6;
+static float f7 = 10.500;
+
+function : void main() {
+    cout << sizeof(int) + sizeof(bool) / sizeof(int *) << endl;
+    const bool b = true || false && true;
+    bool c = b && b && b;
+    cout << 105.6 << endl;
+    cout << 100.0 << endl;
+    cout << f8+f4 << endl;
+    cout << b;
+    cout << c;
+}

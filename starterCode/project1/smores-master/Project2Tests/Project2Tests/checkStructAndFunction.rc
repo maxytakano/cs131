@@ -1,0 +1,118 @@
+function : int test1(int & a, int b, float & c, float d, bool & e, bool f) {
+    if(a == 1) {
+        return a; // ref, ld to %l7, %i0
+    }
+    if(c == 1.00) {
+        return b; // val, ld to %i0
+    }
+    return 1; // const
+}
+
+function : int & test2(int & a, int b, float & c, float d, bool & e, bool f) {
+    if(a == 1) {
+        return a; // ref, ld to %i0
+    }
+    return b; // val
+}
+
+function : float test3(int & a, int b, float & c, float d, bool & e, bool f) {
+    if(a == 1) {
+        return c; // ref, ld to %l7, %f0
+    }
+    if(c == 1.00) {
+        return d; // val, ld to %f0
+    }
+    if(a > 20) {
+        return a; // int ref, ld to %l7, %i0
+    }
+    if(d == 20) {
+        return b; // int, ld to %i0
+    }
+    if(e) {
+        return 1.0; // const
+    }
+    return 1; // const int
+}
+
+function : float & test4(int & a, int b, float & c, float d, bool & e, bool f) {
+    if(a == 1) {
+        return c; // ref, ld to %i0
+    }
+    return d; // val
+}
+
+function : bool test5(int & a, int b, float & c, float d, bool & e, bool f) {
+    if(a == 1) {
+        return e; // ref, ld to %l7, %i0
+    }
+    if(c == 1.00) {
+        return f; // val, ld to %i0
+    }
+    return true; // const
+}
+
+function : bool & test6(int & a, int b, float & c, float d, bool & e, bool f) {
+    if(a == 1) {
+        return e; // ref, ld to %i0
+    }
+    return f; // val
+}
+
+structdef MYS_1 {
+    int x;
+    MYS_1 (int & a, int b, float & c, float d, bool & e) {
+        // can't use %i6
+    }
+};
+
+structdef MYS_2 {
+    int x;
+    MYS_2 (bool & a, bool b) {
+
+    }
+};
+
+int arr1[1];
+float arr2[1];
+bool arr3[1];
+
+MYS_1 a : (arr1[0], arr1[0], arr2[0], arr2[0], arr3[0]);
+// param: int &, ld %o1
+// param: int, ld %l7 (array indexed), %o2
+// param: float &, ld %o3
+// param: float, ld %l7 (array indexed), %f4
+// param: bool &, ld %o5
+// param: float, arg: int, use %o
+
+
+MYS_1 b : (arr1[0], arr1[0], arr2[0], arr1[0], arr3[0]);
+MYS_1 c : (arr1[0], 1, arr2[0], 1, arr3[0]);
+MYS_1 d : (arr1[0], 1, arr2[0], 1.01, arr3[0]);
+
+MYS_2 e : (arr3[0], arr3[0]);
+MYS_2 f : (arr3[0], true);
+
+function : void main() {
+    MYS_1 a : (arr1[0], arr1[0], arr2[0], arr2[0], arr3[0]);
+    MYS_1 b : (arr1[0], arr1[0], arr2[0], arr1[0], arr3[0]);
+    MYS_1 c : (arr1[0], 1, arr2[0], 1, arr3[0]);
+    MYS_1 d : (arr1[0], 1, arr2[0], 1.01, arr3[0]);
+    
+    arr1[0] = test1(arr1[0], arr1[0], arr2[0], arr2[0], arr3[0], arr3[0]);
+    arr1[0] = test2(arr1[0], arr1[0], arr2[0], arr1[0], arr3[0], arr3[0]);
+    test2(arr1[0], arr1[0], arr2[0], arr1[0], arr3[0], arr3[0]) = arr1[0];
+    arr2[0] = test1(arr1[0], arr1[0], arr2[0], arr2[0], arr3[0], arr3[0]);
+    arr2[0] = test2(arr1[0], arr1[0], arr2[0], arr1[0], arr3[0], arr3[0]);
+
+    MYS_2 e : (arr3[0], arr3[0]);
+    MYS_2 f : (arr3[0], false);
+
+    arr2[0] = test3(arr1[0], 1, arr2[0], 1, arr3[0], true);
+    arr2[0] = test4(arr1[0], 1, arr2[0], 1.01, arr3[0], false);
+    test4(arr1[0], 1, arr2[0], 1.01, arr3[0], false) = arr2[0];
+    test4(arr1[0], 1, arr2[0], 1.01, arr3[0], false) = arr1[0];
+    
+    arr3[0] = test5(arr1[0], 1, arr2[0], 1, arr3[0], true);
+    arr3[0] = test6(arr1[0], 1, arr2[0], 1.01, arr3[0], false);
+    test6(arr1[0], 1, arr2[0], 1.01, arr3[0], false) = arr3[0];
+}

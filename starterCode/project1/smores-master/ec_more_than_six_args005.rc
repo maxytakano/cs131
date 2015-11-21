@@ -1,0 +1,48 @@
+structdef MS{ int a; float b; bool c; };
+
+function : void foo(int a, int b, int c, int d, int e, int f, MS * g, MS & h)
+{
+    cout << "1. " << g->a << endl;
+    cout << "2. " << g->b << endl;
+    cout << "3. " << g->c << endl;
+    cout << "4. " << h.a << endl;
+    cout << "5. " << h.b << endl;
+    cout << "6. " << h.c << endl;
+
+    g->a = 5;
+    g->b = 5.55;
+    g->c = true;
+
+    h.a = 5;
+    h.b = 5.55;
+    h.c = true;
+
+}
+
+
+function : void main()
+{
+    MS j;
+    j.a = 1;
+    j.b = 2.2;
+    j.c = false;
+
+    MS * k;
+    new k;
+    k->a = 1;
+    k->b = 2.2;
+    k->c = false;
+
+    foo(1,2,3,4,5,6,k,j);
+
+    cout << "7. " << k->a << endl;
+    cout << "8. " << k->b << endl;
+    cout << "9. " << k->c << endl;
+    cout << "10. " << j.a << endl;
+    cout << "11. " << j.b << endl;
+    cout << "12. " << j.c << endl;
+
+
+    delete k;
+
+}

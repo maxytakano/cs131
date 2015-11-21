@@ -1,0 +1,214 @@
+// A Cummulative Phase 2 Tester includes
+// float arithmetic expressions
+// basic if statements with float >
+// bool expressions containing >=, <=, >, <, ==, !=, &&, ||, !
+// input with cin, ints and floats, modifiable L vals
+// mixed expressions
+// assignment expressions
+// if statements (all), else blocks
+// while loops and break/continue statements
+// functions with params (incl. overloading)
+// one-dimensional arrays and array indexing
+// for each loops and break/continue statements
+// structs --
+// arrays of structs --
+
+float arr1[5];
+int arr2[5];
+
+function : int test1() {
+    // float arithmetic v
+    // if else, bool expressions v
+    // mixed expressions v
+    // arrays v
+    // cin v
+    float arr1[5];
+    int arr2[5];
+    arr1[0] = 1;
+    arr1[1] = arr1[0];
+    arr1[2] = (5.0 + arr1[0] / arr2[::arr2[0]]);
+    arr1[2] = arr2[::arr2[0]] = ::arr2[0];
+
+    int x;
+    int y;
+    int z;
+
+    cout << "Please enter x:";
+    cin >> x;
+    cout << "Please enter y:";
+    cin >> y;
+
+    if( (arr2[0] ^ ::arr2[1]) > 0) {
+        cout << x;
+    }
+    else {
+        cout << y;
+    }
+
+    foreach(int i : arr2) {
+        cout << i;
+    }
+    foreach(int & i : ::arr2) {
+        cout << i;
+        foreach(float & f : ::arr1) {
+            if(f != 1) {
+                cout << f;
+            }
+        }
+        foreach(float f : arr1) {
+            cout << f;
+            if(f == 1.0) {
+                foreach(float f : arr2) {
+                    cout << f;
+                }
+            }
+        }
+    }
+
+    bool arr3[3];
+    arr3[0] = true;
+    arr3[1] = false;
+    arr3[2] = arr3[0] || arr3[1] && true || false;
+    arr3[2] = arr3[2] && (arr3[0] || arr3[1] && true || false) || arr3[2];
+
+    if(arr3[0] && arr3[1]) {
+        cout << arr3[0];
+    }
+    if(arr3[0] || arr3[2]) {
+        cout << arr3[2];
+
+        if(arr3[0] != arr3[1]) {
+                cout << arr3[0];
+            }
+            if(arr3[0] == arr3[2]) {
+                cout << arr3[2];
+            }
+    }
+
+    if(arr2[0] <= arr2[2]) {
+        cout << arr2[2];
+
+        if(arr2[0] < arr2[1]) {
+            cout << arr2[0];
+        }
+        if(arr2[0] != arr2[2]) {
+            cout << arr2[2];
+        }
+    }
+    return 1;
+}
+
+function : int test1(int i) {
+    cout << i;
+    return i;
+}
+
+function : float test1(float i) {
+    cout << i;
+    return i;
+}
+
+function : float & test1(float i, float & f) {
+    cout << i << f;
+    return f;
+}
+
+
+structdef MYS_1 {
+    int x;
+    //default
+};
+
+structdef MYS_2 {
+    int x;
+    float y;
+    int arr1[2];
+    bool z;
+    float arr2[3];
+    bool arr3[1];
+    MYS_2 (int i) {
+        this.x = i;
+    }
+    MYS_2 (float & f, float f2) {
+        this.y = f;
+        arr1[0] = f2;
+        this.arr2[0] = f2;
+        f = this.y;
+    }
+
+    function : void man() {
+        this.x = 1;
+        this.y = arr2[0];
+    }
+
+    function : int fn1() {
+        this.man();
+        return arr2[0];
+    }
+
+    function : int fn1(int i) {
+        this.fn1();
+        return this.arr1[0];
+    }
+    function : void fn1(int i, float j) {
+        this.fn1(1);
+        this.fn1(i);
+        this.fn1(this.x);
+    }
+};
+
+MYS_1 a;
+static MYS_1 b : ();
+MYS_1 bb[1] : ();
+static MYS_2 c : (arr1[0], arr1[2]);
+static MYS_2 cc[2] : (arr1[0], arr1[2]);
+MYS_2 ccc[2] : (arr1[0], arr1[2]);
+int i = test1();
+
+function : void cantCallIt(int i) {
+    MYS_1 a : ();
+    MYS_2 b : (arr1[0], arr1[2]);
+    MYS_2 c : (a.x);
+
+    MYS_2 bb[2] : (arr1[0], arr1[2]);
+    MYS_2 cc[3] : (a.x);
+
+    foreach(MYS_2 j : bb) {
+        cout << j.x - j.y << endl;
+        j.man();
+        cout << j.fn1() << "\n";
+        cout << j.fn1(j.x) << endl;
+
+        foreach(MYS_2 & k : cc) {
+            cout << k.x - k.y << endl;
+            j.man();
+            cout << k.fn1() << "\n";
+            cout << j.fn1(k.x) << endl;
+
+            foreach(float f : k.arr2) {
+                cout << f;
+            }
+        }
+    }
+
+}
+
+function : void main() {
+    test1();
+    int i = 5;
+    while(i > 0) {
+        cout << i << "\n";
+        i--;
+        if(i == 1) {
+            break;
+        }
+        else {
+        }
+    }
+    test1(i);
+    test1(i+arr2[0]);
+    test1(5.0, arr1[0]);  // TODO st %o0,
+    test1(5.0, arr1[0]) = arr2[0];
+    cantCallIt(1);
+}
+

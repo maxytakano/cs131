@@ -1,0 +1,13 @@
+const int c1 = 5;
+const float c2 = 5.0;
+const bool c3 = false;
+ 
+int i = c1;
+float f = c2;
+bool b = c3;
+
+function : void main() {
+  cout << i << endl;
+  cout << f << endl;
+  cout << b << endl;
+}

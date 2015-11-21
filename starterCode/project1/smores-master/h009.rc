@@ -1,0 +1,12 @@
+const int c = 1;
+const bool cb = true;
+
+static int i = c;
+static float f = c;
+static bool b = cb;
+
+function : void main() {
+  cout << i << endl;
+  cout << f << endl;
+  cout << b << endl;
+}

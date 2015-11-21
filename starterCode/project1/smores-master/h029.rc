@@ -1,0 +1,16 @@
+int i = 0;
+
+function : int recurse() {
+  if (i > 3) {
+    return i;
+  } else {
+    i++;
+    return recurse();
+  }
+
+  return -1;
+}
+
+function : void main() {
+  recurse();
+}
