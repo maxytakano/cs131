@@ -217,6 +217,8 @@ class MyParser extends parser
         if(m_symtab.getLevel() == 1){
             //we have a global here
             writeGlobalOrStaticVar(id, type, optInit, isStatic);
+            //set the offset to the label of the global
+            sto.setOffset(id);
         }
         if (m_symtab.getFunc() != null)
         {
@@ -225,6 +227,13 @@ class MyParser extends parser
             if(isStatic){
                 String localStaticID = m_symtab.getFunc().getMangledName() + "." + id;
                 writeGlobalOrStaticVar(localStaticID, type, optInit, isStatic);
+                //set the offset to the label of the variable since it's a static variable
+                sto.setOffset(localStaticID);
+            }
+            else{
+                //we have a local. Increment function's offset by local's size. the set sto's offset
+                m_symtab.getFunc().incOffsetCount(type.getSize());
+                sto.setOffset((m_symtab.getFunc().getOffsetCount() + ""));
             }
         }
     }
@@ -247,28 +256,32 @@ class MyParser extends parser
             if(optInit.getType().getName().equals("int") || optInit.getType().getName().equals("bool") )
             {
                 if(dec != null){
-                    assGen.writeGlobalOrStaticVar(id, type.getName(), "" + dec.intValue(), isStatic);
+                    assGen.writeGlobalOrStaticVar(id, type, "" + dec.intValue(), isStatic);
                 }
                 else{
                     //if dec is not initialized, then there was no const folding, so pass in empty string
-                    assGen.writeGlobalOrStaticVar(id, type.getName(), "", isStatic);
+                    assGen.writeGlobalOrStaticVar(id, type, "", isStatic);
                 }
             }
             //we are passing in the float value from the bigdecimal
             else if(optInit.getType().getName().equals("float"))
             {
                 if(dec != null){
-                    assGen.writeGlobalOrStaticVar(id, type.getName(), "" + dec.floatValue(), isStatic);
+                    assGen.writeGlobalOrStaticVar(id, type, "" + dec.floatValue(), isStatic);
                 }
                 else{
                     //if dec is not initialized, then there was no const folding, so pass in empty string
-                    assGen.writeGlobalOrStaticVar(id, type.getName(), "", isStatic);
+                    assGen.writeGlobalOrStaticVar(id, type, "", isStatic);
                 }
+            }
+            else{
+                //not float, int, or bool, so no checks for vals needed?, so pass in empty string
+                assGen.writeGlobalOrStaticVar(id, type, "", isStatic);
             }
         }
         else{
             // there was no intitialization, so we just pass in "" for the value
-            assGen.writeGlobalOrStaticVar(id, type.getName(), "", isStatic);
+            assGen.writeGlobalOrStaticVar(id, type, "", isStatic);
         }
     }
 
@@ -341,6 +354,27 @@ class MyParser extends parser
         }
 
         m_symtab.insert(sto);
+        //write in the assembly for the array
+        if(m_symtab.getLevel() == 1){
+            //we have a global here
+            writeGlobalOrStaticVar(id, sto.getType(), optInit, isStatic);
+        }
+        if (m_symtab.getFunc() != null)
+        {
+            //in here we are part of a method or a struct
+            //if static, we call the globalorstaticvar writing method
+            if(isStatic){
+                String localStaticID = m_symtab.getFunc().getMangledName() + "." + id;
+                writeGlobalOrStaticVar(localStaticID, sto.getType(), optInit, isStatic);
+                //set the offset to the label of the variable since it's a static variable
+                sto.setOffset(localStaticID);
+            }
+            else{
+                //we have a local. Increment function's offset by local's size. the set sto's offset
+                m_symtab.getFunc().incOffsetCount(sto.getType().getSize());
+                sto.setOffset((m_symtab.getFunc().getOffsetCount() + ""));
+            }
+        }
     }
 
     STO makeAnArray(String id, Type type, Vector<STO> arraySizes){
@@ -715,10 +749,11 @@ class MyParser extends parser
         //4. added in the code for the assembly. Call the function declaration method here to 
         //   write the assembly for a function declaration
         if(existingFunc == null){
-            assGen.writeMethodStart(candidateFunc.getName(), candidateFunc.getMangledName());
+            assGen.writeMethodStart(candidateFunc.getName(), candidateFunc.getMangledName(), 
+                                    candidateFunc.getParameters());
         }
         else{
-            assGen.writeMethodStart("", candidateFunc.getMangledName());
+            assGen.writeMethodStart("", candidateFunc.getMangledName(), candidateFunc.getParameters());
         }
     }
 
@@ -753,7 +788,7 @@ class MyParser extends parser
             m_nNumErrors++;
             m_errors.print(ErrorMsg.error6c_Return_missing);
         }
-        curFunc.getMangledName();
+        assGen.writeMethodEnd(curFunc.getMangledName(), curFunc.getOffsetCount() + "");
         m_symtab.closeScope();
         m_symtab.setFunc(null);
     }

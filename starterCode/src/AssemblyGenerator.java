@@ -1,10 +1,12 @@
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
+import java.util.Vector;
 
 public class AssemblyGenerator {
     // 1
     private int indent_level = 0;
+    private int fpOffset = 68;
     
     // 3
     private FileWriter fileWriter;
@@ -72,7 +74,7 @@ public class AssemblyGenerator {
     //-------------------------------------------------------------------
     // Method that writes out the assembly for any global or static vars
     //-------------------------------------------------------------------
-    public void writeGlobalOrStaticVar(String id, String type, String val, boolean isStatic){
+    public void writeGlobalOrStaticVar(String id, Type type, String val, boolean isStatic){
         writeAssembly(AssemblyMsg.NEWLINE);
         increaseIndent();
         boolean noVal = val.equals("");
@@ -96,10 +98,10 @@ public class AssemblyGenerator {
 
         //if noVAl is true, there's no value to initialize
         if(noVal){
-            writeAssembly(AssemblyMsg.SKIP_4);
+            writeAssembly(AssemblyMsg.SKIP, type.getSize() + "");
         }
         else{
-            switch(type){
+            switch(type.getName()){
                 case "int":
                 case "bool":
                     writeAssembly(AssemblyMsg.DOT_WORD, val);
@@ -120,7 +122,7 @@ public class AssemblyGenerator {
     //-------------------------------------------------------------------
     // Method that writes out the assembly for method starts
     //-------------------------------------------------------------------
-    public void writeMethodStart(String funcName, String mangledName){
+    public void writeMethodStart(String funcName, String mangledName, Vector<STO> params){
         boolean declared = funcName.equals("");
         if(!declared){
             increaseIndent();
@@ -132,15 +134,79 @@ public class AssemblyGenerator {
         writeAssembly(AssemblyMsg.LABEL, mangledName);
         increaseIndent();
         writeAssembly((AssemblyMsg.SET_OP + AssemblyMsg.SEPARATOR));
-        writeAssembly(AssemblyMsg.TWO_VALS, mangledName, "%g1");
+        writeAssembly(AssemblyMsg.TWO_VALS, "SAVE." + mangledName, "%g1");
         writeAssembly(AssemblyMsg.NEWLINE);
-        writeAssembly(AssemblyMsg.SAVE_METHOD, "%sp", "%g1", "%sp");
+        writeAssembly(AssemblyMsg.SAVE, "%sp", "%g1", "%sp");
+        writeAssembly(AssemblyMsg.NEWLINE);
+        writeAssembly(AssemblyMsg.NEWLINE);
+
+        writeParameters(params);
 
         //-------------------------------------------------------------------
         // everything below here is for testing purposes only
         //-------------------------------------------------------------------
         writeAssembly(AssemblyMsg.NEWLINE);
         writeAssembly(AssemblyMsg.NEWLINE);
+        decreaseIndent();
+    }
+
+    //-------------------------------------------------------------------
+    // Method that writes out the assembly for method ends
+    //-------------------------------------------------------------------
+    public void writeMethodEnd(String mangledName, String localOffset){
+        increaseIndent();
+
+        //This section is for the ret, restore stuff
+        writeAssembly(AssemblyMsg.FUNC_END, mangledName);
+        String finiName = mangledName + ".fini";
+        writeAssembly(AssemblyMsg.FUNC_CALL, finiName);
+        writeAssembly(AssemblyMsg.NOP);
+        writeAssembly(AssemblyMsg.RET);
+        writeAssembly(AssemblyMsg.RESTORE);
+        writeAssembly(AssemblyMsg.FUNC_SAVE, "SAVE." + mangledName, localOffset);
+        writeAssembly(AssemblyMsg.NEWLINE);
+
+        decreaseIndent();
+
+        //Here's the section with all the fini messages
+        writeAssembly(AssemblyMsg.LABEL, finiName);
+        
+        increaseIndent();
+        
+        writeAssembly(AssemblyMsg.SAVE, "%sp", "-96", "%sp");
+        writeAssembly(AssemblyMsg.NEWLINE);
+        writeAssembly(AssemblyMsg.RET);
+        writeAssembly(AssemblyMsg.RESTORE);
+
+        decreaseIndent();
+    }
+
+    //-------------------------------------------------------------------
+    // Method that writes out the parameters for methods
+    //-------------------------------------------------------------------
+    public void writeParameters(Vector<STO> params){
+        increaseIndent();
+        writeAssembly(AssemblyMsg.PARAM_MSG);
+        writeAssembly(AssemblyMsg.NEWLINE);
+        if(params != null){
+            for(int i = 0; i < params.size(); i++){
+                STO sto = params.get(i);
+                if(sto.getType().getName().equals("int") || sto.getType().getName().equals("bool")){
+                    writeAssembly(AssemblyMsg.ST_OP);
+                    String iString = "%i" + i;
+                    String fpString = "[%fp+" + (fpOffset + (i*4)) + "]";
+                    writeAssembly(AssemblyMsg.TWO_VALS, iString, fpString);
+                    writeAssembly(AssemblyMsg.NEWLINE);
+                }
+                else if(sto.getType().getName().equals("float")){
+                    writeAssembly(AssemblyMsg.ST_OP);
+                    String iString = "%f" + i;
+                    String fpString = "[%fp+" + (fpOffset + (i*4)) + "]";
+                    writeAssembly(AssemblyMsg.TWO_VALS, iString, fpString);
+                    writeAssembly(AssemblyMsg.NEWLINE);
+                }
+            }
+        }
         decreaseIndent();
     }
 

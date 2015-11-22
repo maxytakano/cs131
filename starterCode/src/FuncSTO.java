@@ -16,6 +16,8 @@ class FuncSTO extends STO
 	// Level of scope directly inside this function.
 	private int m_innerLevel;
 
+	private int offsetCount;
+
 	//----------------------------------------------------------------
 	//
 	//----------------------------------------------------------------
@@ -227,6 +229,14 @@ class FuncSTO extends STO
 
 	public int getInnerLevel() {
 		return m_innerLevel;
+	}
+
+	public int getOffsetCount(){
+		return offsetCount;
+	}
+
+	public void incOffsetCount(int inc){
+		offsetCount += inc;
 	}
 
 	//----------------------------------------------------------------
