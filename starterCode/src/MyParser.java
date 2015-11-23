@@ -894,6 +894,17 @@ class MyParser extends parser
                 //we don't have a const at compile time to place into here
                 newVar = new VarSTO(stoDes.getName(), stoDes.getType());
             }
+
+            //set the offset for the newVar STO. It is the same offset as the stoDes
+            newVar.setOffset(stoDes.getOffset());
+
+            //value can be either "", or an actual value. if "" it's handled differently in the
+            //assgen
+            String initVal = optInitExtractor(stoExpr);
+            //we must have a local since assignment. 
+            //write the assembly for the expr.
+            assGen.writeLocalInit(stoDes.getName(), stoDes.getOffset(), initVal, stoDes.getType());
+
             return newVar;
         }
     }
