@@ -903,7 +903,14 @@ class MyParser extends parser
             String initVal = optInitExtractor(stoExpr);
             //we must have a local since assignment. 
             //write the assembly for the expr.
-            assGen.writeLocalInit(stoDes.getName(), stoDes.getOffset(), initVal, stoDes.getType());
+            if(!initVal.equals("")){
+                //we have an actual value to put into the var
+                assGen.writeLocalInit(stoDes.getName(), stoDes.getOffset(), initVal, stoDes.getType());
+            }
+            else{
+                //we don't have an actual value, we have an expression
+                assGen.writeLocalAssign(stoDes.getName(), stoDes.getOffset(), stoExpr.getName(), stoExpr.getOffset());
+            }
 
             return newVar;
         }

@@ -221,18 +221,22 @@ public class AssemblyGenerator {
         increaseIndent();
 
         // ! varName = val
-        writeAssembly(AssemblyMsg.LOCAL_INIT_MSG, name, val);
-        writeAssembly(AssemblyMsg.NEWLINE);
+        // writeAssembly(AssemblyMsg.LOCAL_INIT_MSG, name, val);
+        // writeAssembly(AssemblyMsg.NEWLINE);
 
-        //set       -offset, %o1
-        writeAssembly(AssemblyMsg.SET_OP);
-        writeAssembly(AssemblyMsg.TWO_VALS, "-" + offset, "%o1");
-        writeAssembly(AssemblyMsg.NEWLINE);
+        // //set       -offset, %o1
+        // writeAssembly(AssemblyMsg.SET_OP);
+        // writeAssembly(AssemblyMsg.TWO_VALS, "-" + offset, "%o1");
+        // writeAssembly(AssemblyMsg.NEWLINE);
 
-        //add       %fp, %o1, %o1
-        writeAssembly(AssemblyMsg.ADD_OP);
-        writeAssembly(AssemblyMsg.THREE_VALS, "%fp", "%o1", "%o1");
-        writeAssembly(AssemblyMsg.NEWLINE);
+        // //add       %fp, %o1, %o1
+        // writeAssembly(AssemblyMsg.ADD_OP);
+        // writeAssembly(AssemblyMsg.THREE_VALS, "%fp", "%o1", "%o1");
+        // writeAssembly(AssemblyMsg.NEWLINE);
+
+        //writes out the start of all assign expressions. It's common, so it's 
+        //separated into its own setion for repeated code use.
+        initStart(name, val, offset);
 
         if(!type.getName().equals("float")){
 
@@ -284,6 +288,64 @@ public class AssemblyGenerator {
 
         decreaseIndent();
         decreaseIndent();
+    }
+
+    //-------------------------------------------------------------------
+    // Method that writes out assembly for initialization with vars
+    //-------------------------------------------------------------------
+    public void writeLocalAssign(String desName, String desOffset, String exprName, String exprOffset){
+        increaseIndent();
+        increaseIndent();
+
+        //writes out the start of the initialization
+        // ! b = a
+        // set         -8, %o1
+        // add         %fp, %o1, %o1
+        initStart(desName, exprName, desOffset);
+
+        //do the rest of the more specific stuff here.
+        // set         -4, %l7
+        writeAssembly(AssemblyMsg.SET_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, exprOffset, "%l7");
+        writeAssembly(AssemblyMsg.NEWLINE);
+
+        // add         %fp, %l7, %l7
+        writeAssembly(AssemblyMsg.ADD_OP);
+        writeAssembly(AssemblyMsg.THREE_VALS, "%fp", "%l7", "%l7");
+        writeAssembly(AssemblyMsg.NEWLINE);
+
+        // ld          [%l7], %o0
+        writeAssembly(AssemblyMsg.LD_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, "[%l7]", "%o0");
+        writeAssembly(AssemblyMsg.NEWLINE);
+
+        // st          %o0, [%o1]
+        writeAssembly(AssemblyMsg.ST_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "[%o1]");
+        writeAssembly(AssemblyMsg.NEWLINE);
+        writeAssembly(AssemblyMsg.NEWLINE);
+
+        decreaseIndent();
+        decreaseIndent();
+    }
+
+    //-------------------------------------------------------------------
+    // Method that writes out the the start of all initializations
+    //-------------------------------------------------------------------
+    public void initStart(String desName, String exprName, String desOffset){
+        // ! desName = exprName
+        writeAssembly(AssemblyMsg.LOCAL_INIT_MSG, desName, exprName);
+        writeAssembly(AssemblyMsg.NEWLINE);
+
+        //set       -desOffset, %o1
+        writeAssembly(AssemblyMsg.SET_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, "-" + desOffset, "%o1");
+        writeAssembly(AssemblyMsg.NEWLINE);
+
+        //add       %fp, %o1, %o1
+        writeAssembly(AssemblyMsg.ADD_OP);
+        writeAssembly(AssemblyMsg.THREE_VALS, "%fp", "%o1", "%o1");
+        writeAssembly(AssemblyMsg.NEWLINE);
     }
 
     
