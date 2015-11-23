@@ -7,6 +7,9 @@ public class AssemblyGenerator {
     // 1
     private int indent_level = 0;
     private int fpOffset = 68;
+
+    // a counter for float labels. used for local floats
+    private int floatCounter = 0;
     
     // 3
     private FileWriter fileWriter;
@@ -213,7 +216,7 @@ public class AssemblyGenerator {
     //-------------------------------------------------------------------
     // Method that writes out the parameters for methods
     //-------------------------------------------------------------------
-    public void writeLocalInit(String name, String offset, String val){
+    public void writeLocalInit(String name, String offset, String val, Type type){
         increaseIndent();
         increaseIndent();
 
@@ -231,16 +234,53 @@ public class AssemblyGenerator {
         writeAssembly(AssemblyMsg.THREE_VALS, "%fp", "%o1", "%o1");
         writeAssembly(AssemblyMsg.NEWLINE);
 
-        //set         6, %o0
-        writeAssembly(AssemblyMsg.SET_OP);
-        writeAssembly(AssemblyMsg.TWO_VALS, val, "%o0");
-        writeAssembly(AssemblyMsg.NEWLINE);
+        if(!type.getName().equals("float")){
 
-        //st          %o0, [%o1]
-        writeAssembly(AssemblyMsg.ST_OP);
-        writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "[%o1]");
-        writeAssembly(AssemblyMsg.NEWLINE);
-        writeAssembly(AssemblyMsg.NEWLINE);
+            //set         6, %o0
+            writeAssembly(AssemblyMsg.SET_OP);
+            writeAssembly(AssemblyMsg.TWO_VALS, val, "%o0");
+            writeAssembly(AssemblyMsg.NEWLINE);
+
+            //st          %o0, [%o1]
+            writeAssembly(AssemblyMsg.ST_OP);
+            writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "[%o1]");
+            writeAssembly(AssemblyMsg.NEWLINE);
+            writeAssembly(AssemblyMsg.NEWLINE);
+        }
+        else{
+            //THIS SECTION FOR FLOAT INIT COULD BE A HELPER METHOD, BUT FOR NOW
+            //I'M JUST LEAVING IT HERE IN CASE IT DOESN'T NEED TO BE ONE
+            writeAssembly(AssemblyMsg.NEWLINE);
+            //.section ".rodata"
+            writeAssembly(AssemblyMsg.RODATA);
+            //.align 4
+            writeAssembly(AssemblyMsg.ALIGN_4);
+            //.$$.float.[floatCounter]:
+            decreaseIndent();
+            floatCounter++;
+            String floatLabel = ".$$.float." + floatCounter;
+            writeAssembly(AssemblyMsg.LABEL, floatLabel);
+            increaseIndent();
+            //.single     val
+            writeAssembly(AssemblyMsg.DOT_SINGLE, val);
+            //.section ".text"
+            writeAssembly(AssemblyMsg.TEXT);
+            //.align 4
+            writeAssembly(AssemblyMsg.ALIGN_4);
+            //set         [floatLabel], %l7
+            writeAssembly(AssemblyMsg.SET_OP);
+            writeAssembly(AssemblyMsg.TWO_VALS, floatLabel, "%l7");
+            writeAssembly(AssemblyMsg.NEWLINE);
+            //ld [%l7], %f0
+            writeAssembly(AssemblyMsg.LD_OP);
+            writeAssembly(AssemblyMsg.TWO_VALS, "[%l7]", "%f0");
+            writeAssembly(AssemblyMsg.NEWLINE);
+            //st %f0, [%o1]
+            writeAssembly(AssemblyMsg.ST_OP);
+            writeAssembly(AssemblyMsg.TWO_VALS, "%f0", "[%o1]");
+            writeAssembly(AssemblyMsg.NEWLINE);
+            writeAssembly(AssemblyMsg.NEWLINE);
+        }
 
         decreaseIndent();
         decreaseIndent();

@@ -248,7 +248,7 @@ class MyParser extends parser
                         //possibly don't have to deal with this since we're only receiving correct code
                     }
                     else{
-                        assGen.writeLocalInit(id, sto.getOffset(), optInitVal);
+                        assGen.writeLocalInit(id, sto.getOffset(), optInitVal, type);
                     }
                 }
             }
@@ -364,7 +364,7 @@ class MyParser extends parser
         //value can be either "", or an actual value. if "" it's handled differently in the
         //assgen
         String optInitVal = optInitExtractor(optInit);
-        
+
         if(m_symtab.getLevel() == 1){
             //we have a global here
             assGen.writeGlobalOrStaticVar(id, type, optInitVal, isStatic);

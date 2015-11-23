@@ -158,7 +158,8 @@ class AssemblyMsg{
     /////////////////////////////////////////////////////////////////
     // Ops Initialized Here
     /////////////////////////////////////////////////////////////////
-    public static final String ST_OP = "st  ";
+    public static final String ST_OP  = "st  ";
     public static final String SET_OP = "set  ";
     public static final String ADD_OP = "add  ";
+    public static final String LD_OP  = "ld  ";
 }
