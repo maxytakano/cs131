@@ -210,6 +210,42 @@ public class AssemblyGenerator {
         decreaseIndent();
     }
 
+    //-------------------------------------------------------------------
+    // Method that writes out the parameters for methods
+    //-------------------------------------------------------------------
+    public void writeLocalInit(String name, String offset, String val){
+        increaseIndent();
+        increaseIndent();
+
+        // ! varName = val
+        writeAssembly(AssemblyMsg.LOCAL_INIT_MSG, name, val);
+        writeAssembly(AssemblyMsg.NEWLINE);
+
+        //set       -offset, %o1
+        writeAssembly(AssemblyMsg.SET_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, "-" + offset, "%o1");
+        writeAssembly(AssemblyMsg.NEWLINE);
+
+        //add       %fp, %o1, %o1
+        writeAssembly(AssemblyMsg.ADD_OP);
+        writeAssembly(AssemblyMsg.THREE_VALS, "%fp", "%o1", "%o1");
+        writeAssembly(AssemblyMsg.NEWLINE);
+
+        //set         6, %o0
+        writeAssembly(AssemblyMsg.SET_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, val, "%o0");
+        writeAssembly(AssemblyMsg.NEWLINE);
+
+        //st          %o0, [%o1]
+        writeAssembly(AssemblyMsg.ST_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "[%o1]");
+        writeAssembly(AssemblyMsg.NEWLINE);
+        writeAssembly(AssemblyMsg.NEWLINE);
+
+        decreaseIndent();
+        decreaseIndent();
+    }
+
     
     // 9
     public void writeAssembly(String template, String ... params) {

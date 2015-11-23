@@ -144,14 +144,21 @@ class AssemblyMsg{
         "%s = -(92 +  %s) & -8\n";
 
     /////////////////////////////////////////////////////////////////
-    // SET Initialized Here
+    // Param input stuff initialized
     /////////////////////////////////////////////////////////////////
-    public static final String SET_OP = "set  ";
     public static final String TWO_PARAM = "%s" + SEPARATOR + "%s, %s\n";
     public static final String TWO_VALS = "%s, %s";
+    public static final String THREE_VALS = "%s, %s, %s";
 
     /////////////////////////////////////////////////////////////////
-    // st Initialized Here
+    // The comment for the local int initialization is here.
     /////////////////////////////////////////////////////////////////
-    public static final String ST_OP = "st        ";
+    public static final String LOCAL_INIT_MSG = "! %s = %s";    
+
+    /////////////////////////////////////////////////////////////////
+    // Ops Initialized Here
+    /////////////////////////////////////////////////////////////////
+    public static final String ST_OP = "st  ";
+    public static final String SET_OP = "set  ";
+    public static final String ADD_OP = "add  ";
 }
