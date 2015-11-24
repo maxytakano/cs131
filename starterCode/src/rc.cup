@@ -725,6 +725,9 @@ ReadStmt ::=        T_CIN T_ISTREAM Designator T_SEMI
 
 
 WriteStmt ::=       T_COUT T_OSTREAM WritePairList T_SEMI
+                    {:
+
+                    :}
     ;
 
 //THIS COULD BE THE WRONG LOCATION
@@ -747,12 +750,23 @@ DeleteStmt ::=      T_DELETE Designator:_1 T_SEMI
     ;
 
 
-WritePairList ::=   WritePair
-    |               WritePairList T_OSTREAM WritePair
+WritePairList ::=   WritePair:_1
+                    {:
+                        RESULT = new Vector();
+                        RESULT.addElement(_1);
+                    :}
+    |               WritePairList:_1 T_OSTREAM WritePair:_2
+                    {:
+                        RESULT = _1;
+                        RESULT.addElement(_2);
+                    :}
     ;
 
 
-WritePair ::=       Expr
+WritePair ::=       Expr:_1
+                    {:
+                        RESULT = _1;
+                    :}
     |               T_ENDL
     ;
 
