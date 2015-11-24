@@ -1,8 +1,14 @@
-function:void main(){
-    int a;
-    int b;
-    float c;
-    bool d;
-    float e;
-    bool f[5];
+// int i1 = 1;
+// int i2 = 2;
+
+function : void main()
+{
+    // i1 = 1;
+    // i2 = 2;
+
+    cout << 5 << endl;
+    // cout << 5.0 << endl;
+    // cout << "hi" << endl;
+    // cout << true << endl;
+
 }
