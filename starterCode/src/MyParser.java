@@ -248,8 +248,16 @@ class MyParser extends parser
                         //possibly don't have to deal with this since we're only receiving correct code
                     }
                     else{
-                        assGen.writeLocalInit(id, sto.getOffset(), optInitVal, type);
-                    }
+                        // assGen.writeLocalInit(id, sto.getOffset(), optInitVal, type);
+                        if(!optInitVal.equals("")){
+                            //we have an actual value to put into the var
+                            assGen.writeLocalInit(id, sto.getOffset(), optInitVal, type);
+                        }
+                        else{
+                            //we don't have an actual value, we have an expression
+                            assGen.writeLocalAssign(id, sto.getOffset(), optInit.getName(), optInit.getOffset());
+                        }
+                    } 
                 }
             }
         }
@@ -358,7 +366,6 @@ class MyParser extends parser
             return;
         }
 
-        m_symtab.insert(sto);
         //write in the assembly for the array
 
         //value can be either "", or an actual value. if "" it's handled differently in the
@@ -385,6 +392,8 @@ class MyParser extends parser
                 sto.setOffset((m_symtab.getFunc().getOffsetCount() + ""));
             }
         }
+
+        m_symtab.insert(sto);
     }
 
     STO makeAnArray(String id, Type type, Vector<STO> arraySizes){
@@ -1191,6 +1200,48 @@ class MyParser extends parser
             m_errors.print(result.getName());
             return result;
         }
+
+        //Increment function's offset by local's size. the set sto's offset
+        m_symtab.getFunc().incOffsetCount(result.getType().getSize());
+        result.setOffset((m_symtab.getFunc().getOffsetCount() + ""));
+
+        //THE FOLLOWING SECTION is for assembly writing.
+        String lhsVal = optInitExtractor(a);
+        String rhsVal = optInitExtractor(b);
+        if(lhsVal.equals("") && rhsVal.equals("")){
+            //there was no constants, we're dealing wiht only local vars/exprs
+            switch(o.getName()){
+                case "+":
+                    assGen.exprAddition(a, b, result);
+                    break;
+                default:
+                    System.out.println("not handled");
+                    break;
+            }
+        }
+        else if(lhsVal.equals("") && !rhsVal.equals("")){
+            //rhs is a constant, we have to deal with it differently
+            switch(o.getName()){
+                case "+":
+                    assGen.constAddition(a, rhsVal, result);
+                    break;
+                default:
+                    System.out.println("not handled");
+                    break;
+            }
+        }
+        else{
+            //lhs is constant, rhs is not, deal with it same as else if
+            switch(o.getName()){
+                case "+":
+                    assGen.constAddition(b, lhsVal, result);
+                    break;
+                default:
+                    System.out.println("not handled");
+                    break;
+            }
+        }
+
         return result;
     }
 
@@ -1590,7 +1641,6 @@ class MyParser extends parser
         // return type.getSize();
     }
 
-    //                              BY: VIVEK
     // method to check proper pointer usage
     //----------------------------------------------------------------
     STO checkPointerValidity(STO sto){
@@ -1618,7 +1668,6 @@ class MyParser extends parser
         }
     }
 
-    //                              BY: VIVEK
     // method to make a pointer
     //----------------------------------------------------------------
     public Type makeAPointer(Type t, Vector<Type> pointers) {
@@ -1650,7 +1699,6 @@ class MyParser extends parser
         }
     }
 
-    //                              BY: VIVEK
     // do Arrow Check Validity
     //----------------------------------------------------------------
     STO checkArrowValidity(STO sto, String t_id){
@@ -1739,31 +1787,3 @@ class MyParser extends parser
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

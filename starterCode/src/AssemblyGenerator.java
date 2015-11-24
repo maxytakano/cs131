@@ -47,6 +47,12 @@ public class AssemblyGenerator {
                 }
             }
 
+            increaseIndent();
+            writeAssembly(AssemblyMsg.NEWLINE);
+            writeAssembly(AssemblyMsg.TEXT);
+            writeAssembly(AssemblyMsg.ALIGN_4);
+            decreaseIndent();
+
         } catch (IOException e) {
             System.err.printf(AssemblyMsg.ERROR_IO_CONSTRUCT, fileToWrite);
             e.printStackTrace();
@@ -220,20 +226,6 @@ public class AssemblyGenerator {
         increaseIndent();
         increaseIndent();
 
-        // ! varName = val
-        // writeAssembly(AssemblyMsg.LOCAL_INIT_MSG, name, val);
-        // writeAssembly(AssemblyMsg.NEWLINE);
-
-        // //set       -offset, %o1
-        // writeAssembly(AssemblyMsg.SET_OP);
-        // writeAssembly(AssemblyMsg.TWO_VALS, "-" + offset, "%o1");
-        // writeAssembly(AssemblyMsg.NEWLINE);
-
-        // //add       %fp, %o1, %o1
-        // writeAssembly(AssemblyMsg.ADD_OP);
-        // writeAssembly(AssemblyMsg.THREE_VALS, "%fp", "%o1", "%o1");
-        // writeAssembly(AssemblyMsg.NEWLINE);
-
         //writes out the start of all assign expressions. It's common, so it's 
         //separated into its own setion for repeated code use.
         initStart(name, val, offset);
@@ -306,7 +298,7 @@ public class AssemblyGenerator {
         //do the rest of the more specific stuff here.
         // set         -4, %l7
         writeAssembly(AssemblyMsg.SET_OP);
-        writeAssembly(AssemblyMsg.TWO_VALS, exprOffset, "%l7");
+        writeAssembly(AssemblyMsg.TWO_VALS, "-" + exprOffset, "%l7");
         writeAssembly(AssemblyMsg.NEWLINE);
 
         // add         %fp, %l7, %l7
@@ -335,7 +327,6 @@ public class AssemblyGenerator {
     public void initStart(String desName, String exprName, String desOffset){
         // ! desName = exprName
         writeAssembly(AssemblyMsg.LOCAL_INIT_MSG, desName, exprName);
-        writeAssembly(AssemblyMsg.NEWLINE);
 
         //set       -desOffset, %o1
         writeAssembly(AssemblyMsg.SET_OP);
@@ -345,6 +336,100 @@ public class AssemblyGenerator {
         //add       %fp, %o1, %o1
         writeAssembly(AssemblyMsg.ADD_OP);
         writeAssembly(AssemblyMsg.THREE_VALS, "%fp", "%o1", "%o1");
+        writeAssembly(AssemblyMsg.NEWLINE);
+    }
+
+    //-------------------------------------------------------------------
+    // Method that writes out the assembly for method starts
+    //-------------------------------------------------------------------
+    public void exprAddition(STO a, STO b, STO result){
+        increaseIndent();
+        increaseIndent();
+        // System.out.println("Max's face is stoopid");
+        // ! (a)+(b)
+        writeAssembly(AssemblyMsg.ADD_MSG, a.getName(), b.getName());
+        // set         -4, %l7
+        writeAssembly(AssemblyMsg.SET_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, "-" + a.getOffset(), "%l7");
+        writeAssembly(AssemblyMsg.NEWLINE);
+        // add         %fp, %l7, %l7
+        writeAssembly(AssemblyMsg.ADD_OP);
+        writeAssembly(AssemblyMsg.THREE_VALS, "%fp", "%l7", "%l7");
+        writeAssembly(AssemblyMsg.NEWLINE);
+        // ld          [%l7], %o0
+        writeAssembly(AssemblyMsg.LD_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, "[%l7]", "%o0");
+        writeAssembly(AssemblyMsg.NEWLINE);
+        // set         -8, %l7
+        writeAssembly(AssemblyMsg.SET_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, "-" + b.getOffset(), "%l7");
+        writeAssembly(AssemblyMsg.NEWLINE);
+        // add         %fp, %l7, %l7
+        writeAssembly(AssemblyMsg.ADD_OP);
+        writeAssembly(AssemblyMsg.THREE_VALS, "%fp","%l7", "%l7");
+        writeAssembly(AssemblyMsg.NEWLINE);
+        // ld          [%l7], %o1
+        writeAssembly(AssemblyMsg.LD_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, "[%l7]", "%o1");
+        writeAssembly(AssemblyMsg.NEWLINE);
+        
+        //call the part of the addition op that is the same regardless
+        //of constant/expr addition or expr/expr addition
+        additionEnd(result);
+
+        decreaseIndent();
+        decreaseIndent();
+    }
+
+    public void constAddition(STO a, String b, STO result){
+        increaseIndent();
+        increaseIndent();
+        // ! (7)+(a)
+        writeAssembly(AssemblyMsg.ADD_MSG, a.getName(), b);
+        // set         7, %o0
+        writeAssembly(AssemblyMsg.SET_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, b, "%o0");
+        writeAssembly(AssemblyMsg.NEWLINE);
+        // set         -4, %l7
+        writeAssembly(AssemblyMsg.SET_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, "-" + a.getOffset(), "%l7");
+        writeAssembly(AssemblyMsg.NEWLINE);
+        // add         %fp, %l7, %l7
+        writeAssembly(AssemblyMsg.ADD_OP);
+        writeAssembly(AssemblyMsg.THREE_VALS, "%fp", "%l7", "%l7");
+        writeAssembly(AssemblyMsg.NEWLINE);
+        // ld          [%l7], %o1
+        writeAssembly(AssemblyMsg.LD_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, "[%l7]", "%o1");
+        writeAssembly(AssemblyMsg.NEWLINE);
+        //call the part of the addition op that is the same regardless
+        //of constant/expr addition or expr/expr addition
+        additionEnd(result);
+        decreaseIndent();
+        decreaseIndent();
+    }
+
+    //-------------------------------------------------------------------
+    // Method that writes out the common assembly found at end of 
+    // all additions
+    //-------------------------------------------------------------------
+    public void additionEnd(STO result){
+        // add         %o0, %o1, %o0
+        writeAssembly(AssemblyMsg.ADD_OP);
+        writeAssembly(AssemblyMsg.THREE_VALS, "%o0", "%o1", "%o0");
+        writeAssembly(AssemblyMsg.NEWLINE);
+        // set         -12, %o1
+        writeAssembly(AssemblyMsg.SET_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, "-" + result.getOffset(), "%o1");
+        writeAssembly(AssemblyMsg.NEWLINE);
+        // add         %fp, %o1, %o1
+        writeAssembly(AssemblyMsg.ADD_OP);
+        writeAssembly(AssemblyMsg.THREE_VALS, "%fp", "%o1", "%o1");
+        writeAssembly(AssemblyMsg.NEWLINE);
+        // st          %o0, [%o1]
+        writeAssembly(AssemblyMsg.ST_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "[%o1]");
+        writeAssembly(AssemblyMsg.NEWLINE);
         writeAssembly(AssemblyMsg.NEWLINE);
     }
 
