@@ -426,13 +426,13 @@ public class AssemblyGenerator {
     //-------------------------------------------------------------------
     // Write assemby to print an int
     //-------------------------------------------------------------------
-    public void writePrintInt(String int_name) {
+    public void writePrintInt(String int_value, String int_name) {
         increaseIndent();
         increaseIndent();
 
         writeAssembly(AssemblyMsg.COUT_INT, int_name);
         writeAssembly(AssemblyMsg.SET_OP);
-        writeAssembly(AssemblyMsg.TWO_VALS, int_name, "%o1");
+        writeAssembly(AssemblyMsg.TWO_VALS, int_value, "%o1");
 
         writeAssembly(AssemblyMsg.SET_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, ".$$.intFmt", "%o0");

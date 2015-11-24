@@ -1795,7 +1795,7 @@ class MyParser extends parser
                 // if type is null produce a endl
                 assGen.writeEndl();
             } else if (cur_STO.getType().isInt()) {
-                assGen.writePrintInt(  ((ConstSTO) cur_STO).getName() );
+                assGen.writePrintInt( optInitExtractor(cur_STO), ((ConstSTO) cur_STO).getName() );
             } else if (cur_STO.getType().isString()) {
                 System.out.println("got a string to print");
                 System.out.println( ((ConstSTO) cur_STO).getName() );
