@@ -81,7 +81,6 @@ public class AssemblyGenerator {
     // Method that writes out the assembly for any global or static vars
     //-------------------------------------------------------------------
     public void writeGlobalOrStaticVar(String id, Type type, String val, boolean isStatic){
-        writeAssembly(AssemblyMsg.NEWLINE);
         increaseIndent();
         boolean noVal = val.equals("");
 
@@ -142,8 +141,6 @@ public class AssemblyGenerator {
         writeAssembly((AssemblyMsg.SET_OP + AssemblyMsg.SEPARATOR));
         writeAssembly(AssemblyMsg.TWO_VALS, "SAVE." + mangledName, "%g1");
         writeAssembly(AssemblyMsg.SAVE, "%sp", "%g1", "%sp");
-        writeAssembly(AssemblyMsg.NEWLINE);
-
         writeParameters(params);
 
         decreaseIndent();
@@ -163,7 +160,6 @@ public class AssemblyGenerator {
         writeAssembly(AssemblyMsg.RET);
         writeAssembly(AssemblyMsg.RESTORE);
         writeAssembly(AssemblyMsg.FUNC_SAVE, "SAVE." + mangledName, localOffset);
-        writeAssembly(AssemblyMsg.NEWLINE);
 
         decreaseIndent();
 
@@ -186,7 +182,6 @@ public class AssemblyGenerator {
     public void writeParameters(Vector<STO> params){
         increaseIndent();
         writeAssembly(AssemblyMsg.PARAM_MSG);
-        writeAssembly(AssemblyMsg.NEWLINE);
         if(params != null){
             System.out.println("doing jank");
             for(int i = 0; i < params.size(); i++){
@@ -196,14 +191,12 @@ public class AssemblyGenerator {
                     String iString = "%i" + i;
                     String fpString = "[%fp+" + (fpOffset + (i*4)) + "]";
                     writeAssembly(AssemblyMsg.TWO_VALS, iString, fpString);
-                    writeAssembly(AssemblyMsg.NEWLINE);
                 }
                 else if(sto.getType().getName().equals("float")){
                     writeAssembly(AssemblyMsg.ST_OP);
                     String iString = "%f" + i;
                     String fpString = "[%fp+" + (fpOffset + (i*4)) + "]";
                     writeAssembly(AssemblyMsg.TWO_VALS, iString, fpString);
-                    writeAssembly(AssemblyMsg.NEWLINE);
                 }
             }
         }
@@ -226,51 +219,51 @@ public class AssemblyGenerator {
             //set         6, %o0
             writeAssembly(AssemblyMsg.SET_OP);
             writeAssembly(AssemblyMsg.TWO_VALS, val, "%o0");
-            writeAssembly(AssemblyMsg.NEWLINE);
 
             //st          %o0, [%o1]
             writeAssembly(AssemblyMsg.ST_OP);
             writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "[%o1]");
-            writeAssembly(AssemblyMsg.NEWLINE);
-            writeAssembly(AssemblyMsg.NEWLINE);
         }
         else{
-            //THIS SECTION FOR FLOAT INIT COULD BE A HELPER METHOD, BUT FOR NOW
-            //I'M JUST LEAVING IT HERE IN CASE IT DOESN'T NEED TO BE ONE
-            writeAssembly(AssemblyMsg.NEWLINE);
-            //.section ".rodata"
-            writeAssembly(AssemblyMsg.RODATA);
-            //.align 4
-            writeAssembly(AssemblyMsg.ALIGN_4);
-            //.$$.float.[floatCounter]:
-            decreaseIndent();
-            floatCounter++;
-            String floatLabel = ".$$.float." + floatCounter;
-            writeAssembly(AssemblyMsg.LABEL, floatLabel);
-            increaseIndent();
-            //.single     val
-            writeAssembly(AssemblyMsg.DOT_SINGLE, val);
-            //.section ".text"
-            writeAssembly(AssemblyMsg.TEXT);
-            //.align 4
-            writeAssembly(AssemblyMsg.ALIGN_4);
-            //set         [floatLabel], %l7
-            writeAssembly(AssemblyMsg.SET_OP);
-            writeAssembly(AssemblyMsg.TWO_VALS, floatLabel, "%l7");
-            writeAssembly(AssemblyMsg.NEWLINE);
-            //ld [%l7], %f0
-            writeAssembly(AssemblyMsg.LD_OP);
-            writeAssembly(AssemblyMsg.TWO_VALS, "[%l7]", "%f0");
-            writeAssembly(AssemblyMsg.NEWLINE);
+            writeFloatROData(val);            
             //st %f0, [%o1]
             writeAssembly(AssemblyMsg.ST_OP);
             writeAssembly(AssemblyMsg.TWO_VALS, "%f0", "[%o1]");
-            writeAssembly(AssemblyMsg.NEWLINE);
             writeAssembly(AssemblyMsg.NEWLINE);
         }
 
         decreaseIndent();
         decreaseIndent();
+    }
+
+    //-------------------------------------------------------------------
+    // helper method to write out float in rodata
+    //-------------------------------------------------------------------
+    public void writeFloatROData(String val){
+        writeAssembly(AssemblyMsg.NEWLINE);
+        //.section ".rodata"
+        writeAssembly(AssemblyMsg.RODATA);
+        //.align 4
+        writeAssembly(AssemblyMsg.ALIGN_4);
+        //.$$.float.[floatCounter]:
+        decreaseIndent();
+        floatCounter++;
+        String floatLabel = ".$$.float." + floatCounter;
+        writeAssembly(AssemblyMsg.LABEL, floatLabel);
+        increaseIndent();
+        //.single     val
+        writeAssembly(AssemblyMsg.DOT_SINGLE, val);
+        //.section ".text"
+        writeAssembly(AssemblyMsg.TEXT);
+        //.align 4
+        writeAssembly(AssemblyMsg.ALIGN_4);
+        writeAssembly(AssemblyMsg.NEWLINE);
+        //set         [floatLabel], %l7
+        writeAssembly(AssemblyMsg.SET_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, floatLabel, "%l7");
+        //ld [%l7], %f0
+        writeAssembly(AssemblyMsg.LD_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, "[%l7]", "%f0");
     }
 
     //-------------------------------------------------------------------
@@ -290,23 +283,17 @@ public class AssemblyGenerator {
         // set         -4, %l7
         writeAssembly(AssemblyMsg.SET_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, "-" + exprOffset, "%l7");
-        writeAssembly(AssemblyMsg.NEWLINE);
 
         // add         %fp, %l7, %l7
         writeAssembly(AssemblyMsg.ADD_OP);
         writeAssembly(AssemblyMsg.THREE_VALS, "%fp", "%l7", "%l7");
-        writeAssembly(AssemblyMsg.NEWLINE);
 
         // ld          [%l7], %o0
         writeAssembly(AssemblyMsg.LD_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, "[%l7]", "%o0");
-        writeAssembly(AssemblyMsg.NEWLINE);
-
         // st          %o0, [%o1]
         writeAssembly(AssemblyMsg.ST_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "[%o1]");
-        writeAssembly(AssemblyMsg.NEWLINE);
-        writeAssembly(AssemblyMsg.NEWLINE);
 
         decreaseIndent();
         decreaseIndent();
@@ -322,12 +309,10 @@ public class AssemblyGenerator {
         //set       -desOffset, %o1
         writeAssembly(AssemblyMsg.SET_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, "-" + desOffset, "%o1");
-        writeAssembly(AssemblyMsg.NEWLINE);
 
         //add       %fp, %o1, %o1
         writeAssembly(AssemblyMsg.ADD_OP);
         writeAssembly(AssemblyMsg.THREE_VALS, "%fp", "%o1", "%o1");
-        writeAssembly(AssemblyMsg.NEWLINE);
     }
 
     //-------------------------------------------------------------------
@@ -342,27 +327,21 @@ public class AssemblyGenerator {
         // set         -4, %l7
         writeAssembly(AssemblyMsg.SET_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, "-" + a.getOffset(), "%l7");
-        writeAssembly(AssemblyMsg.NEWLINE);
         // add         %fp, %l7, %l7
         writeAssembly(AssemblyMsg.ADD_OP);
         writeAssembly(AssemblyMsg.THREE_VALS, "%fp", "%l7", "%l7");
-        writeAssembly(AssemblyMsg.NEWLINE);
         // ld          [%l7], %o0
         writeAssembly(AssemblyMsg.LD_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, "[%l7]", "%o0");
-        writeAssembly(AssemblyMsg.NEWLINE);
         // set         -8, %l7
         writeAssembly(AssemblyMsg.SET_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, "-" + b.getOffset(), "%l7");
-        writeAssembly(AssemblyMsg.NEWLINE);
         // add         %fp, %l7, %l7
         writeAssembly(AssemblyMsg.ADD_OP);
         writeAssembly(AssemblyMsg.THREE_VALS, "%fp","%l7", "%l7");
-        writeAssembly(AssemblyMsg.NEWLINE);
         // ld          [%l7], %o1
         writeAssembly(AssemblyMsg.LD_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, "[%l7]", "%o1");
-        writeAssembly(AssemblyMsg.NEWLINE);
 
         //call the part of the addition op that is the same regardless
         //of constant/expr addition or expr/expr addition
@@ -379,19 +358,15 @@ public class AssemblyGenerator {
         // set         7, %o0
         writeAssembly(AssemblyMsg.SET_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, b, "%o0");
-        writeAssembly(AssemblyMsg.NEWLINE);
         // set         -4, %l7
         writeAssembly(AssemblyMsg.SET_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, "-" + a.getOffset(), "%l7");
-        writeAssembly(AssemblyMsg.NEWLINE);
         // add         %fp, %l7, %l7
         writeAssembly(AssemblyMsg.ADD_OP);
         writeAssembly(AssemblyMsg.THREE_VALS, "%fp", "%l7", "%l7");
-        writeAssembly(AssemblyMsg.NEWLINE);
         // ld          [%l7], %o1
         writeAssembly(AssemblyMsg.LD_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, "[%l7]", "%o1");
-        writeAssembly(AssemblyMsg.NEWLINE);
         //call the part of the addition op that is the same regardless
         //of constant/expr addition or expr/expr addition
         additionEnd(result);
@@ -407,19 +382,15 @@ public class AssemblyGenerator {
         // add         %o0, %o1, %o0
         writeAssembly(AssemblyMsg.ADD_OP);
         writeAssembly(AssemblyMsg.THREE_VALS, "%o0", "%o1", "%o0");
-        writeAssembly(AssemblyMsg.NEWLINE);
         // set         -12, %o1
         writeAssembly(AssemblyMsg.SET_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, "-" + result.getOffset(), "%o1");
-        writeAssembly(AssemblyMsg.NEWLINE);
         // add         %fp, %o1, %o1
         writeAssembly(AssemblyMsg.ADD_OP);
         writeAssembly(AssemblyMsg.THREE_VALS, "%fp", "%o1", "%o1");
-        writeAssembly(AssemblyMsg.NEWLINE);
         // st          %o0, [%o1]
         writeAssembly(AssemblyMsg.ST_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "[%o1]");
-        writeAssembly(AssemblyMsg.NEWLINE);
         writeAssembly(AssemblyMsg.NEWLINE);
     }
 
