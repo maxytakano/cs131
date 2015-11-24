@@ -1,5 +1,8 @@
-function : int main() {
-  float i = 3 - 5.0;
-
-  return 0;
+function:void main(){
+    int a;
+    int b;
+    float c;
+    bool d;
+    float e;
+    bool f[5];
 }

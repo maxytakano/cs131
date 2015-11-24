@@ -10,6 +10,7 @@ abstract class STO
 	private Type m_type;
 	private boolean m_isAddressable;
 	private boolean m_isModifiable;
+	private String m_offset;
 
 	//----------------------------------------------------------------
 	//
@@ -116,6 +117,22 @@ abstract class STO
 	public boolean isModLValue()
 	{
 		return getIsModifiable() && getIsAddressable();
+	}
+
+	//----------------------------------------------------------------
+	// set the offset for this STO in the assembly
+	//----------------------------------------------------------------
+	public void setOffset(String val)
+	{
+		m_offset = val;
+	}
+
+	//----------------------------------------------------------------
+	// retrieve the offset for this sto
+	//----------------------------------------------------------------
+	public String getOffset()
+	{
+		return m_offset;
 	}
 
 	//----------------------------------------------------------------
