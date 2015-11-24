@@ -86,4 +86,6 @@ abstract class Type
 	public boolean isStruct()		{ return false; }
 	public boolean isPointer()		{ return false; }
 	public boolean isNullPointer()	{ return false; }
+	public boolean isString()		{ return false; }
+
 }

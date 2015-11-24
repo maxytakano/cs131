@@ -30,4 +30,4 @@ clean:
 
 CC=cc
 compile:
-	$(CC) rc.s $(PUBLIC)/input.c $(PUBLIC)/output.s $(LINKOBJ)
+	$(CC) vvRC.s $(PUBLIC)/input.c $(PUBLIC)/output.s $(LINKOBJ)

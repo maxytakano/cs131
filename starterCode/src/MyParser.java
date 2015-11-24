@@ -1666,7 +1666,7 @@ class MyParser extends parser
             return new ErrorSTO(sto.getName());
         }
         else{
-            //if it's an error, it's been printed. 
+            //if it's an error, it's been printed.
             Type stoType = sto.getType();
             if(!(stoType.isPointer())){
                 m_nNumErrors++;
@@ -1704,7 +1704,6 @@ class MyParser extends parser
             m_nNumErrors++;
                 m_errors.print(Formatter.toString(ErrorMsg.error18_AddressOf, expr.getType().getName()));
                 return new ErrorSTO(expr.getName());
-            
         }
         PointerType addressof;
         if(!expr.getType().isPointer()){
@@ -1738,7 +1737,26 @@ class MyParser extends parser
             return new ExprSTO(sto.getName(), type, false, false);
         }
     }
-}
+
+    void parseWriteStmt(Vector<STO> writeList) {
+        STO cur_STO;
+        for (int i = 0; i < writeList.size(); i++) {
+            cur_STO = writeList.get(i);
+            System.out.println(cur_STO.getType());
+            if ( cur_STO.getType() == null ) {
+                // if type is null produce a endl
+                assGen.writeEndl();
+            } else if (cur_STO.getType().isInt()) {
+                assGen.writePrintInt(  ((ConstSTO) cur_STO).getName() );
+            } else if (cur_STO.getType().isString()) {
+                System.out.println("got a string to print");
+                System.out.println( ((ConstSTO) cur_STO).getName() );
+            }
+        }
+
+    }
+
+} /* end of file */
 
 
 

@@ -58,9 +58,11 @@ class AssemblyMsg{
     // FILE HEADER FOR THE DATE ALWAYS AT THE TOP of rc.s file
     /////////////////////////////////////////////////////////////////
 	public static final String FILE_HEADER = 
+        "\n" +
         "/*\n" +
         " * Generated %s\n" + 
-        " */\n\n";
+        " */\n\n" +
+        "\n";
 
     /////////////////////////////////////////////////////////////////
     // SECTIONS ARE INITIALIZED HERE
@@ -99,7 +101,7 @@ class AssemblyMsg{
     								  "\\n",
     								  "Index value of %d is outside legal range [0,%d).\\n",
     								  "Attempt to dereference NULL pointer.\\n"};
-        
+
     /////////////////////////////////////////////////////////////////
     // Global Variables Initialized Here
     /////////////////////////////////////////////////////////////////
@@ -109,22 +111,22 @@ class AssemblyMsg{
 
 
     public static final String SKIP =
-    	".skip   " + SEPARATOR + "%s\n\n";
+    	".skip   " + SEPARATOR + "%s\n";
 
     //initialized global and static ints
     public static final String DOT_WORD = 
-    	".word   " + SEPARATOR + "%s\n\n";   
+    	".word   " + SEPARATOR + "%s\n";
 
     //initialized global and static floats
 	public static final String DOT_SINGLE = 
-    	".single " + SEPARATOR + "0r%s\n\n"; 
+    	".single " + SEPARATOR + "0r%s\n"; 
 
 
     /////////////////////////////////////////////////////////////////
     // Starter vars are initialized here.
     /////////////////////////////////////////////////////////////////
     public static final String SAVE =
-        "save    " + SEPARATOR + "%s, %s, %s";
+        "save    " + SEPARATOR + "%s, %s, %s\n";
 
     /////////////////////////////////////////////////////////////////
     // Function specific stuff here.
@@ -132,7 +134,7 @@ class AssemblyMsg{
 
     //Message for when we write a parameter
     public static final String PARAM_MSG = 
-        "! Store params";
+        "! Store params\n";
 
     public static final String FUNC_END =
         "!  End of function %s\n";
@@ -147,13 +149,13 @@ class AssemblyMsg{
     // Param input stuff initialized
     /////////////////////////////////////////////////////////////////
     public static final String TWO_PARAM = "%s" + SEPARATOR + "%s, %s\n";
-    public static final String TWO_VALS = "%s, %s";
-    public static final String THREE_VALS = "%s, %s, %s";
+    public static final String TWO_VALS = "%s, %s\n";
+    public static final String THREE_VALS = "%s, %s, %s\n";
 
     /////////////////////////////////////////////////////////////////
     // The comment for the local int initialization is here.
     /////////////////////////////////////////////////////////////////
-    public static final String LOCAL_INIT_MSG = "! %s = %s";    
+    public static final String LOCAL_INIT_MSG = "! %s = %s\n";
 
     /////////////////////////////////////////////////////////////////
     // Ops Initialized Here
@@ -162,4 +164,30 @@ class AssemblyMsg{
     public static final String SET_OP = "set  ";
     public static final String ADD_OP = "add  ";
     public static final String LD_OP  = "ld  ";
+
+    /////////////////////////////////////////////////////////////////
+    // Cout stuff here
+    /////////////////////////////////////////////////////////////////
+
+    // messages used for cout
+    public static final String COUT_ENDL = "! cout << endl\n";
+    public static final String COUT_INT = "! cout << %s\n";
+
+    // function consts
+    public static final String PRINTF = "printf";
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

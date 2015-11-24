@@ -10,15 +10,14 @@ public class AssemblyGenerator {
 
     // a counter for float labels. used for local floats
     private int floatCounter = 0;
-    
+
     // 3
     private FileWriter fileWriter;
-    
-    
+
     public AssemblyGenerator(String fileToWrite) {
         try {
             fileWriter = new FileWriter(fileToWrite);
-            
+
             // 7
             writeAssembly(AssemblyMsg.FILE_HEADER, (new Date()).toString());
 
@@ -47,6 +46,11 @@ public class AssemblyGenerator {
                 }
             }
 
+            writeAssembly(AssemblyMsg.NEWLINE);
+            increaseIndent();
+            writeAssembly(AssemblyMsg.TEXT);
+            writeAssembly(AssemblyMsg.ALIGN_4);
+            decreaseIndent();
         } catch (IOException e) {
             System.err.printf(AssemblyMsg.ERROR_IO_CONSTRUCT, fileToWrite);
             e.printStackTrace();
@@ -119,7 +123,7 @@ public class AssemblyGenerator {
         writeAssembly(AssemblyMsg.TEXT);
         writeAssembly(AssemblyMsg.ALIGN_4);
         decreaseIndent();
-    }    
+    }
 
 
     //-------------------------------------------------------------------
@@ -128,8 +132,8 @@ public class AssemblyGenerator {
     public void writeMethodStart(String funcName, String mangledName, Vector<STO> params){
         boolean declared = funcName.equals("");
         if(!declared){
-            increaseIndent();
             writeAssembly(AssemblyMsg.NEWLINE);
+            increaseIndent();
             writeAssembly(AssemblyMsg.DOT_GLOBAL, funcName);
             decreaseIndent();
             writeAssembly(AssemblyMsg.LABEL, funcName);
@@ -138,18 +142,11 @@ public class AssemblyGenerator {
         increaseIndent();
         writeAssembly((AssemblyMsg.SET_OP + AssemblyMsg.SEPARATOR));
         writeAssembly(AssemblyMsg.TWO_VALS, "SAVE." + mangledName, "%g1");
-        writeAssembly(AssemblyMsg.NEWLINE);
         writeAssembly(AssemblyMsg.SAVE, "%sp", "%g1", "%sp");
-        writeAssembly(AssemblyMsg.NEWLINE);
         writeAssembly(AssemblyMsg.NEWLINE);
 
         writeParameters(params);
 
-        //-------------------------------------------------------------------
-        // everything below here is for testing purposes only
-        //-------------------------------------------------------------------
-        writeAssembly(AssemblyMsg.NEWLINE);
-        writeAssembly(AssemblyMsg.NEWLINE);
         decreaseIndent();
     }
 
@@ -173,9 +170,9 @@ public class AssemblyGenerator {
 
         //Here's the section with all the fini messages
         writeAssembly(AssemblyMsg.LABEL, finiName);
-        
+
         increaseIndent();
-        
+
         writeAssembly(AssemblyMsg.SAVE, "%sp", "-96", "%sp");
         writeAssembly(AssemblyMsg.NEWLINE);
         writeAssembly(AssemblyMsg.RET);
@@ -192,6 +189,7 @@ public class AssemblyGenerator {
         writeAssembly(AssemblyMsg.PARAM_MSG);
         writeAssembly(AssemblyMsg.NEWLINE);
         if(params != null){
+            System.out.println("doing jank");
             for(int i = 0; i < params.size(); i++){
                 STO sto = params.get(i);
                 if(sto.getType().getName().equals("int") || sto.getType().getName().equals("bool")){
@@ -234,7 +232,7 @@ public class AssemblyGenerator {
         // writeAssembly(AssemblyMsg.THREE_VALS, "%fp", "%o1", "%o1");
         // writeAssembly(AssemblyMsg.NEWLINE);
 
-        //writes out the start of all assign expressions. It's common, so it's 
+        //writes out the start of all assign expressions. It's common, so it's
         //separated into its own setion for repeated code use.
         initStart(name, val, offset);
 
@@ -348,19 +346,59 @@ public class AssemblyGenerator {
         writeAssembly(AssemblyMsg.NEWLINE);
     }
 
-    
+    //-------------------------------------------------------------------
+    // Write assemby to print an int
+    //-------------------------------------------------------------------
+    public void writePrintInt(String int_name) {
+        increaseIndent();
+        increaseIndent();
+
+        writeAssembly(AssemblyMsg.COUT_INT, int_name);
+        writeAssembly(AssemblyMsg.SET_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, int_name, "%o1");
+
+        writeAssembly(AssemblyMsg.SET_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, ".$$.intFmt", "%o0");
+
+        writeAssembly(AssemblyMsg.FUNC_CALL, AssemblyMsg.PRINTF);
+        writeAssembly(AssemblyMsg.NOP);
+        writeAssembly(AssemblyMsg.NEWLINE);
+
+
+        decreaseIndent();
+        decreaseIndent();
+    }
+
+    public void writeEndl() {
+        increaseIndent();
+        increaseIndent();
+
+        writeAssembly(AssemblyMsg.COUT_ENDL);
+        writeAssembly(AssemblyMsg.SET_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, ".$$.strEndl", "%o0");
+
+        writeAssembly(AssemblyMsg.FUNC_CALL, AssemblyMsg.PRINTF);
+        writeAssembly(AssemblyMsg.NOP);
+        writeAssembly(AssemblyMsg.NEWLINE);
+
+        decreaseIndent();
+        decreaseIndent();
+    }
+
     // 9
     public void writeAssembly(String template, String ... params) {
         StringBuilder asStmt = new StringBuilder();
-        
+
         // 10
-        for (int i=0; i < indent_level; i++) {
-            asStmt.append(AssemblyMsg.SEPARATOR);
+        if (template != AssemblyMsg.NEWLINE) {
+            for (int i=0; i < indent_level; i++) {
+                asStmt.append(AssemblyMsg.SEPARATOR);
+            }
         }
-        
+
         // 11
         asStmt.append(String.format(template, (Object[])params));
-        
+
         try {
         	// System.out.println("writing assembly: " + asStmt.toString());
             fileWriter.write(asStmt.toString());

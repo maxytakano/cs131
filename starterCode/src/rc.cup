@@ -38,7 +38,6 @@ terminal
     T_COUT,
     T_DOT,
     T_ELSE,
-    T_ENDL,
     T_EQU,
     T_EXIT,
     T_EXTERN,
@@ -91,7 +90,8 @@ terminal String
     T_INT_LITERAL,
     T_STR_LITERAL,
     T_ID_U,
-    T_ID
+    T_ID,
+    T_ENDL
     ;
 
 
@@ -132,8 +132,6 @@ non terminal
     ReturnStmt,
     ReadStmt,
     WriteStmt,
-    WritePairList,
-    WritePair,
     //New stuff below here
     NewStmt,
     DeleteStmt,
@@ -170,7 +168,8 @@ non terminal STO
     ParamDecl,
     ConstExpr,
     OptInit,
-    Array
+    Array,
+    WritePair
     ;
 
 non terminal Type
@@ -193,7 +192,8 @@ non terminal Vector
     ArrayList,
     OptArrayList,
     OptPointerList,
-    PointerList
+    PointerList,
+    WritePairList
     ;
 
 non terminal Boolean
@@ -724,9 +724,9 @@ ReadStmt ::=        T_CIN T_ISTREAM Designator T_SEMI
     ;
 
 
-WriteStmt ::=       T_COUT T_OSTREAM WritePairList T_SEMI
+WriteStmt ::=       T_COUT T_OSTREAM WritePairList:_1 T_SEMI
                     {:
-
+                        ((MyParser) parser).parseWriteStmt(_1);
                     :}
     ;
 
@@ -768,6 +768,9 @@ WritePair ::=       Expr:_1
                         RESULT = _1;
                     :}
     |               T_ENDL
+                    {:
+                        RESULT = new ConstSTO("\n", false, false);
+                    :}
     ;
 
 
@@ -1075,8 +1078,7 @@ Designator3 ::=     T_LPAREN Expr:_2 T_RPAREN
                     :}
     |               T_STR_LITERAL:_1
                     {:
-                        // Jank ctor (assume type is null)
-                        RESULT = new ConstSTO (_1, false, false);
+                        RESULT = new ConstSTO (_1, new StringType());
                     :}
     |               T_TRUE
                     {:
