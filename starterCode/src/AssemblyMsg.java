@@ -176,7 +176,8 @@ class AssemblyMsg{
 
     // messages used for cout
     public static final String COUT_ENDL = "! cout << endl\n";
-    public static final String COUT_INT = "! cout << %s\n";
+    public static final String COUT_COMMENT = "! cout << %s\n";
+    // public static final String COUT_BOOL = "! cout << %s\n";
 
     // function consts
     public static final String PRINTF = "printf";
