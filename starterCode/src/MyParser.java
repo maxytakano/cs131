@@ -1797,8 +1797,9 @@ class MyParser extends parser
             } else if (cur_STO.getType().isInt()) {
                 assGen.writePrintInt( optInitExtractor(cur_STO), cur_STO.getName() );
             } else if (cur_STO.getType().isString()) {
-                System.out.println("got a string to print");
-                System.out.println( ((ConstSTO) cur_STO).getName() );
+                assGen.writePrintString( cur_STO.getName() );
+            } else if (cur_STO.getType().isBoolean()) {
+                assGen.writePrintBool( optInitExtractor(cur_STO), cur_STO.getName() );
             }
         }
 

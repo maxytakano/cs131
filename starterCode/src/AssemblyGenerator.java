@@ -10,6 +10,7 @@ public class AssemblyGenerator {
 
     // a counter for float labels. used for local floats
     private int floatCounter = 0;
+    private int stringCounter = 0;
 
     // 3
     private FileWriter fileWriter;
@@ -225,7 +226,7 @@ public class AssemblyGenerator {
             writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "[%o1]");
         }
         else{
-            writeFloatROData(val);            
+            writeFloatROData(val);
             //st %f0, [%o1]
             writeAssembly(AssemblyMsg.ST_OP);
             writeAssembly(AssemblyMsg.TWO_VALS, "%f0", "[%o1]");
@@ -239,7 +240,7 @@ public class AssemblyGenerator {
     //-------------------------------------------------------------------
     // helper method to write out float in rodata
     //-------------------------------------------------------------------
-    public void writeFloatROData(String val){
+    public void writeFloatROData(String val) {
         writeAssembly(AssemblyMsg.NEWLINE);
         //.section ".rodata"
         writeAssembly(AssemblyMsg.RODATA);
@@ -264,6 +265,27 @@ public class AssemblyGenerator {
         //ld [%l7], %f0
         writeAssembly(AssemblyMsg.LD_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, "[%l7]", "%f0");
+    }
+
+    //-------------------------------------------------------------------
+    // helper method to write out float in rodata
+    //
+    //     .section    ".rodata"
+    //     .align      4
+    // .$$.str.1:
+    //     .asciz      "hi"
+    //-------------------------------------------------------------------
+    public void writeStringROData(String string_name) {
+        writeAssembly(AssemblyMsg.RODATA);
+        writeAssembly(AssemblyMsg.ALIGN_4);
+
+        decreaseIndent();
+        stringCounter++;
+        String stringLabel = ".$$.str." + stringCounter;
+        writeAssembly(AssemblyMsg.LABEL, stringLabel);
+        increaseIndent();
+
+        writeAssembly(AssemblyMsg.ASCIZ, string_name);
     }
 
     //-------------------------------------------------------------------
@@ -396,12 +418,18 @@ public class AssemblyGenerator {
 
     //-------------------------------------------------------------------
     // Write assemby to print an int
+    //
+    // ! cout << 5
+    // set         5, %o1
+    // set         .$$.intFmt, %o0
+    // call        printf
+    // nop
     //-------------------------------------------------------------------
     public void writePrintInt(String int_value, String int_name) {
         increaseIndent();
         increaseIndent();
 
-        writeAssembly(AssemblyMsg.COUT_INT, int_name);
+        writeAssembly(AssemblyMsg.COUT_COMMENT, int_name);
         writeAssembly(AssemblyMsg.SET_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, int_value, "%o1");
 
@@ -416,6 +444,73 @@ public class AssemblyGenerator {
         decreaseIndent();
     }
 
+    //-------------------------------------------------------------------
+    // Write assemby to print an bool
+    //
+    // ! cout << true
+    // set         1, %o0
+    // call        .$$.printBool
+    // nop
+    //-------------------------------------------------------------------
+    public void writePrintBool(String bool_value, String bool_name) {
+        increaseIndent();
+        increaseIndent();
+
+        writeAssembly(AssemblyMsg.COUT_COMMENT, bool_name);
+        writeAssembly(AssemblyMsg.SET_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, bool_value, "%o0");
+        writeAssembly(AssemblyMsg.FUNC_CALL, ".$$.printBool");
+        writeAssembly(AssemblyMsg.NOP);
+        writeAssembly(AssemblyMsg.NEWLINE);
+
+        decreaseIndent();
+        decreaseIndent();
+    }
+
+    //-------------------------------------------------------------------
+    // Write assemby to print a string
+    //
+    //     (string rodata)
+    //
+    //     .section    ".text"
+    //     .align      4
+    //     ! cout << "hi"
+    //     set         .$$.strFmt, %o0
+    //     set         .$$.str.1, %o1
+    //     call        printf
+    //     nop
+    //-------------------------------------------------------------------
+    public void writePrintString(String string_name) {
+        increaseIndent();
+        increaseIndent();
+
+        writeStringROData(string_name);
+        writeAssembly(AssemblyMsg.NEWLINE);
+
+        writeAssembly(AssemblyMsg.TEXT);
+        writeAssembly(AssemblyMsg.ALIGN_4);
+        String comment_string = "\"" + string_name + "\"";
+        writeAssembly(AssemblyMsg.COUT_COMMENT, comment_string);
+        writeAssembly(AssemblyMsg.SET_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, ".$$.strFmt", "%o0");
+        writeAssembly(AssemblyMsg.SET_OP);
+        String string_number = ".$$.str." + stringCounter;
+        writeAssembly(AssemblyMsg.TWO_VALS, string_number, "%o1");
+        writeAssembly(AssemblyMsg.FUNC_CALL, AssemblyMsg.PRINTF);
+        writeAssembly(AssemblyMsg.NOP);
+        writeAssembly(AssemblyMsg.NEWLINE);
+
+        decreaseIndent();
+        decreaseIndent();
+    }
+
+    //-------------------------------------------------------------------
+    // Write assemby to print a endl
+    // ! cout << endl
+    // set         .$$.strEndl, %o0
+    // call        printf
+    // nop
+    //-------------------------------------------------------------------
     public void writeEndl() {
         increaseIndent();
         increaseIndent();
