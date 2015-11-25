@@ -182,6 +182,7 @@ public class AssemblyGenerator {
     public void writeParameters(Vector<STO> params){
         increaseIndent();
         writeAssembly(AssemblyMsg.PARAM_MSG);
+        writeAssembly(AssemblyMsg.NEWLINE);
         if(params != null){
             System.out.println("doing jank");
             for(int i = 0; i < params.size(); i++){
@@ -223,6 +224,7 @@ public class AssemblyGenerator {
             //st          %o0, [%o1]
             writeAssembly(AssemblyMsg.ST_OP);
             writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "[%o1]");
+            writeAssembly(AssemblyMsg.NEWLINE);
         }
         else{
             writeFloatROData(val);            
@@ -253,17 +255,34 @@ public class AssemblyGenerator {
         increaseIndent();
         //.single     val
         writeAssembly(AssemblyMsg.DOT_SINGLE, val);
+        writeAssembly(AssemblyMsg.NEWLINE);
         //.section ".text"
         writeAssembly(AssemblyMsg.TEXT);
         //.align 4
         writeAssembly(AssemblyMsg.ALIGN_4);
-        writeAssembly(AssemblyMsg.NEWLINE);
         //set         [floatLabel], %l7
         writeAssembly(AssemblyMsg.SET_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, floatLabel, "%l7");
         //ld [%l7], %f0
         writeAssembly(AssemblyMsg.LD_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, "[%l7]", "%f0");
+    }
+
+    //-------------------------------------------------------------------
+    // helper method to write out the load block
+    // offset = offset of the expression.
+    // oVal = the type of o we're loading. e.g. %o0, %o1, %o2, etc.
+    //-------------------------------------------------------------------
+    public void writeLoadExpr(String offset, int oVal){
+        // set         -4, %l7
+        writeAssembly(AssemblyMsg.SET_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, "-" + offset, "%l7");
+        // add         %fp, %l7, %l7
+        writeAssembly(AssemblyMsg.ADD_OP);
+        writeAssembly(AssemblyMsg.THREE_VALS, "%fp", "%l7", "%l7");
+        // ld          [%l7], %o0
+        writeAssembly(AssemblyMsg.LD_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, "[%l7]", "%o" + oVal);
     }
 
     //-------------------------------------------------------------------
@@ -279,18 +298,12 @@ public class AssemblyGenerator {
         // add         %fp, %o1, %o1
         initStart(desName, exprName, desOffset);
 
-        //do the rest of the more specific stuff here.
+        //call the load code
         // set         -4, %l7
-        writeAssembly(AssemblyMsg.SET_OP);
-        writeAssembly(AssemblyMsg.TWO_VALS, "-" + exprOffset, "%l7");
-
         // add         %fp, %l7, %l7
-        writeAssembly(AssemblyMsg.ADD_OP);
-        writeAssembly(AssemblyMsg.THREE_VALS, "%fp", "%l7", "%l7");
-
         // ld          [%l7], %o0
-        writeAssembly(AssemblyMsg.LD_OP);
-        writeAssembly(AssemblyMsg.TWO_VALS, "[%l7]", "%o0");
+        writeLoadExpr(exprOffset, 0);
+
         // st          %o0, [%o1]
         writeAssembly(AssemblyMsg.ST_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "[%o1]");
@@ -321,27 +334,17 @@ public class AssemblyGenerator {
     public void exprAddition(STO a, STO b, STO result){
         increaseIndent();
         increaseIndent();
-        // System.out.println("Max's face is stoopid");
         // ! (a)+(b)
         writeAssembly(AssemblyMsg.ADD_MSG, a.getName(), b.getName());
         // set         -4, %l7
-        writeAssembly(AssemblyMsg.SET_OP);
-        writeAssembly(AssemblyMsg.TWO_VALS, "-" + a.getOffset(), "%l7");
         // add         %fp, %l7, %l7
-        writeAssembly(AssemblyMsg.ADD_OP);
-        writeAssembly(AssemblyMsg.THREE_VALS, "%fp", "%l7", "%l7");
         // ld          [%l7], %o0
-        writeAssembly(AssemblyMsg.LD_OP);
-        writeAssembly(AssemblyMsg.TWO_VALS, "[%l7]", "%o0");
+        writeLoadExpr(a.getOffset(), 0);
+
         // set         -8, %l7
-        writeAssembly(AssemblyMsg.SET_OP);
-        writeAssembly(AssemblyMsg.TWO_VALS, "-" + b.getOffset(), "%l7");
         // add         %fp, %l7, %l7
-        writeAssembly(AssemblyMsg.ADD_OP);
-        writeAssembly(AssemblyMsg.THREE_VALS, "%fp","%l7", "%l7");
         // ld          [%l7], %o1
-        writeAssembly(AssemblyMsg.LD_OP);
-        writeAssembly(AssemblyMsg.TWO_VALS, "[%l7]", "%o1");
+        writeLoadExpr(b.getOffset(), 1);
 
         //call the part of the addition op that is the same regardless
         //of constant/expr addition or expr/expr addition
@@ -359,14 +362,9 @@ public class AssemblyGenerator {
         writeAssembly(AssemblyMsg.SET_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, b, "%o0");
         // set         -4, %l7
-        writeAssembly(AssemblyMsg.SET_OP);
-        writeAssembly(AssemblyMsg.TWO_VALS, "-" + a.getOffset(), "%l7");
         // add         %fp, %l7, %l7
-        writeAssembly(AssemblyMsg.ADD_OP);
-        writeAssembly(AssemblyMsg.THREE_VALS, "%fp", "%l7", "%l7");
         // ld          [%l7], %o1
-        writeAssembly(AssemblyMsg.LD_OP);
-        writeAssembly(AssemblyMsg.TWO_VALS, "[%l7]", "%o1");
+        writeLoadExpr(a.getOffset(), 1);
         //call the part of the addition op that is the same regardless
         //of constant/expr addition or expr/expr addition
         additionEnd(result);
