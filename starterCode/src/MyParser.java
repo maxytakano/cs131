@@ -1230,7 +1230,7 @@ class MyParser extends parser
                     break;
             }
         }
-        else{
+        else if(!lhsVal.equals("") && rhsVal.equals("")){
             //lhs is constant, rhs is not, deal with it same as else if
             switch(o.getName()){
                 case "+":
@@ -1241,6 +1241,9 @@ class MyParser extends parser
                     break;
             }
         }
+        //at this point, 
+        //neither a nor b are exprs. they both have vals, but no offset
+        //const folding takes place, so do nothing
 
         return result;
     }
