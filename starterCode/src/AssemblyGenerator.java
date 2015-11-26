@@ -127,6 +127,14 @@ public class AssemblyGenerator {
 
     //-------------------------------------------------------------------
     // Method that writes out the assembly for method starts
+    //      .global     main
+    //  main:
+    //  main.int.float:
+    //      set         SAVE.main.int.float, %g1
+    //      save        %sp, %g1, %sp
+    //
+    //      (writeparameters)
+    //
     //-------------------------------------------------------------------
     public void writeMethodStart(String funcName, String mangledName, Vector<STO> params){
         boolean declared = funcName.equals("");
@@ -142,13 +150,26 @@ public class AssemblyGenerator {
         writeAssembly((AssemblyMsg.SET_OP + AssemblyMsg.SEPARATOR));
         writeAssembly(AssemblyMsg.TWO_VALS, "SAVE." + mangledName, "%g1");
         writeAssembly(AssemblyMsg.SAVE, "%sp", "%g1", "%sp");
+        writeAssembly(AssemblyMsg.NEWLINE);
         writeParameters(params);
+        writeAssembly(AssemblyMsg.NEWLINE);
 
         decreaseIndent();
     }
 
     //-------------------------------------------------------------------
     // Method that writes out the assembly for method ends
+    //      ! End of function main.void
+    //      call        main.void.fini
+    //      nop     
+    //      ret     
+    //      restore 
+    //      SAVE.main.void = -(92 + 28) & -8
+    //      
+    //  main.void.fini:
+    //      save        %sp, -96, %sp
+    //      ret     
+    //      restore 
     //-------------------------------------------------------------------
     public void writeMethodEnd(String mangledName, String localOffset){
         increaseIndent();
@@ -179,11 +200,13 @@ public class AssemblyGenerator {
 
     //-------------------------------------------------------------------
     // Method that writes out the parameters for methods
+    //      ! Store params
+    //      st          %i0, [%fp+68]
+    //      st          %f1, [%fp+72]
     //-------------------------------------------------------------------
     public void writeParameters(Vector<STO> params){
         increaseIndent();
         writeAssembly(AssemblyMsg.PARAM_MSG);
-        writeAssembly(AssemblyMsg.NEWLINE);
         if(params != null){
             System.out.println("doing jank");
             for(int i = 0; i < params.size(); i++){
@@ -207,6 +230,10 @@ public class AssemblyGenerator {
 
     //-------------------------------------------------------------------
     // Method that writes out the parameters for methods
+    //
+    //      (initStart)
+    //      set         6, %o0
+    //      //st          %o0, [%o1]
     //-------------------------------------------------------------------
     public void writeLocalInit(String name, String offset, String val, Type type){
         increaseIndent();
@@ -228,6 +255,7 @@ public class AssemblyGenerator {
             writeAssembly(AssemblyMsg.NEWLINE);
         }
         else{
+            writeAssembly(AssemblyMsg.NEWLINE);
             writeFloatROData(val);
             //st %f0, [%o1]
             writeAssembly(AssemblyMsg.ST_OP);
@@ -241,9 +269,19 @@ public class AssemblyGenerator {
 
     //-------------------------------------------------------------------
     // helper method to write out float in rodata
+    //
+    //    .section    ".rodata"
+    //    .align      4
+    //.$$.float.1:
+    //    .single     0r7.0
+    //    
+    //    .section    ".text"
+    //    .align      4
+    //    set         .$$.float.1, %l7
+    //    ld          [%l7], %f0
+    //
     //-------------------------------------------------------------------
     public void writeFloatROData(String val) {
-        writeAssembly(AssemblyMsg.NEWLINE);
         //.section ".rodata"
         writeAssembly(AssemblyMsg.RODATA);
         //.align 4
@@ -256,6 +294,7 @@ public class AssemblyGenerator {
         increaseIndent();
         //.single     val
         writeAssembly(AssemblyMsg.DOT_SINGLE, val);
+        //now we save the float into the location f0z
         writeAssembly(AssemblyMsg.NEWLINE);
         //.section ".text"
         writeAssembly(AssemblyMsg.TEXT);
@@ -273,6 +312,9 @@ public class AssemblyGenerator {
     // helper method to write out the load block
     // offset = offset of the expression.
     // oVal = the type of o we're loading. e.g. %o0, %o1, %o2, etc.
+    //      set         -4, %l7
+    //      add         %fp, %l7, %l7
+    //      ld          [%l7], %o0
     //-------------------------------------------------------------------
     public void writeLoadExpr(String offset, int oVal){
         // set         -4, %l7
@@ -309,6 +351,10 @@ public class AssemblyGenerator {
 
     //-------------------------------------------------------------------
     // Method that writes out assembly for initialization with vars
+    //      (initStart)
+    //      (loadExpr)
+    //      st          %o0, [%o1]
+    //
     //-------------------------------------------------------------------
     public void writeLocalAssign(String desName, String desOffset, String exprName, String exprOffset){
         increaseIndent();
@@ -329,6 +375,7 @@ public class AssemblyGenerator {
         // st          %o0, [%o1]
         writeAssembly(AssemblyMsg.ST_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "[%o1]");
+        writeAssembly(AssemblyMsg.NEWLINE);
 
         decreaseIndent();
         decreaseIndent();
@@ -352,29 +399,115 @@ public class AssemblyGenerator {
 
     //-------------------------------------------------------------------
     // Method that writes out the assembly for method starts
+    //      ! (a)+(b)
+    //      (writeLoadExpr)
+    //      (writeLoadExpr)
+    //      add/sub/(arithCall)
+    //      (additionEndResult)
     //-------------------------------------------------------------------
-    public void exprAddition(STO a, STO b, STO result){
+    public void exprArith(STO a, STO b, STO result, String op){
         increaseIndent();
         increaseIndent();
-        // ! (a)+(b)
-        writeAssembly(AssemblyMsg.ADD_MSG, a.getName(), b.getName());
-        // set         -4, %l7
-        // add         %fp, %l7, %l7
-        // ld          [%l7], %o0
-        writeLoadExpr(a.getOffset(), 0);
+        switch(op){
+            case "+":
+                // ! (a)+(b)
+                writeAssembly(AssemblyMsg.ADD_MSG, a.getName(), b.getName());
+                // set         -4, %l7
+                // add         %fp, %l7, %l7
+                // ld          [%l7], %o0
+                writeLoadExpr(a.getOffset(), 0);
 
-        // set         -8, %l7
-        // add         %fp, %l7, %l7
-        // ld          [%l7], %o1
-        writeLoadExpr(b.getOffset(), 1);
+                // set         -8, %l7
+                // add         %fp, %l7, %l7
+                // ld          [%l7], %o1
+                writeLoadExpr(b.getOffset(), 1);
+                // add         %o0, %o1, %o0
+                writeAssembly(AssemblyMsg.ADD_OP);
+                writeAssembly(AssemblyMsg.THREE_VALS, "%o0", "%o1", "%o0");
+                break;
+            case "-":
+                // ! (a)-(b)
+                writeAssembly(AssemblyMsg.SUB_MSG, a.getName(), b.getName());
+                // set         -4, %l7      
+                // add         %fp, %l7, %l7
+                // ld          [%l7], %o0
+                writeLoadExpr(a.getOffset(), 0);
+
+                // set         -8, %l7
+                // add         %fp, %l7, %l7
+                // ld          [%l7], %o1
+                writeLoadExpr(b.getOffset(), 1);  
+
+                // add         %o0, %o1, %o0
+                writeAssembly(AssemblyMsg.SUB_OP);
+                writeAssembly(AssemblyMsg.THREE_VALS, "%o0", "%o1", "%o0");  
+                break;
+            case "*":
+                // ! (a)*(b)
+                writeAssembly(AssemblyMsg.MUL_MSG, a.getName(), b.getName());
+
+                // set         -4, %l7
+                // add         %fp, %l7, %l7
+                // ld          [%l7], %o0
+                writeLoadExpr(a.getOffset(), 0);
+
+                // set         -8, %l7
+                // add         %fp, %l7, %l7
+                // ld          [%l7], %o1
+                writeLoadExpr(b.getOffset(), 1);
+
+                arithFuncCall(AssemblyMsg.MUL_OP);
+                break;
+            case "/":
+                // ! (a)/(b)
+                writeAssembly(AssemblyMsg.DIV_MSG, a.getName(), b.getName());
+                // set         -4, %l7
+                // add         %fp, %l7, %l7
+                // ld          [%l7], %o0
+                writeLoadExpr(a.getOffset(), 0);
+
+                // set         -8, %l7
+                // add         %fp, %l7, %l7
+                // ld          [%l7], %o1
+                writeLoadExpr(b.getOffset(), 1);
+
+                arithFuncCall(AssemblyMsg.DIV_OP);
+                break;
+            case "%":
+                // ! (a)%(b)
+                writeAssembly(AssemblyMsg.MOD_MSG, a.getName(), b.getName());
+                // set         -4, %l7
+                // add         %fp, %l7, %l7
+                // ld          [%l7], %o0
+                writeLoadExpr(a.getOffset(), 0);
+
+                // set         -8, %l7
+                // add         %fp, %l7, %l7
+                // ld          [%l7], %o1
+                writeLoadExpr(b.getOffset(), 1);
+
+                arithFuncCall(AssemblyMsg.MOD_OP);
+                break;
+            default:
+                System.out.println("not handled");
+                break;
+        }
+        
 
         //call the part of the addition op that is the same regardless
         //of constant/expr addition or expr/expr addition
-        additionEnd(result);
+        arithEnd(result);
         decreaseIndent();
         decreaseIndent();
     }
 
+    //-------------------------------------------------------------------
+    // Method that writes out the assembly for method starts
+    //      ! (7)+(a)
+    //      set         7, %o0
+    //      (writeLoadExpr)
+    //      (additionEndResult)
+    //-------------------------------------------------------------------
     public void constAddition(STO a, String b, STO result){
         increaseIndent();
         increaseIndent();
@@ -389,7 +522,7 @@ public class AssemblyGenerator {
         writeLoadExpr(a.getOffset(), 1);
         //call the part of the addition op that is the same regardless
         //of constant/expr addition or expr/expr addition
-        additionEnd(result);
+        arithEnd(result);
         decreaseIndent();
         decreaseIndent();
     }
@@ -397,11 +530,11 @@ public class AssemblyGenerator {
     //-------------------------------------------------------------------
     // Method that writes out the common assembly found at end of
     // all additions
+    //      set         -12, %o1
+    //      add         %fp, %o1, %o1
+    //      st          %o0, [%o1]
     //-------------------------------------------------------------------
-    public void additionEnd(STO result){
-        // add         %o0, %o1, %o0
-        writeAssembly(AssemblyMsg.ADD_OP);
-        writeAssembly(AssemblyMsg.THREE_VALS, "%o0", "%o1", "%o0");
+    public void arithEnd(STO result){
         // set         -12, %o1
         writeAssembly(AssemblyMsg.SET_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, "-" + result.getOffset(), "%o1");
@@ -412,6 +545,20 @@ public class AssemblyGenerator {
         writeAssembly(AssemblyMsg.ST_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "[%o1]");
         writeAssembly(AssemblyMsg.NEWLINE);
+    }
+
+    //-------------------------------------------------------------------
+    // Method that writes out the common assembly for arithmetic that 
+    // calls on a function to do stuff
+    //       call        .mul/.div/.rem
+    //       nop     
+    //       mov         %o0, %o0
+    //-------------------------------------------------------------------
+    public void arithFuncCall(String op){
+        writeAssembly(AssemblyMsg.FUNC_CALL, op);
+        writeAssembly(AssemblyMsg.NOP);
+        writeAssembly(AssemblyMsg.MOV_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "%o0");
     }
 
     //-------------------------------------------------------------------

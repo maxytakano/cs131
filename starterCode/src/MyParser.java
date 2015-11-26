@@ -1210,14 +1210,8 @@ class MyParser extends parser
         String rhsVal = optInitExtractor(b);
         if(lhsVal.equals("") && rhsVal.equals("")){
             //there was no constants, we're dealing wiht only local vars/exprs
-            switch(o.getName()){
-                case "+":
-                    assGen.exprAddition(a, b, result);
-                    break;
-                default:
-                    System.out.println("not handled");
-                    break;
-            }
+            System.out.println(o.getName());
+            assGen.exprArith(a, b, result, o.getName());
         }
         else if(lhsVal.equals("") && !rhsVal.equals("")){
             //rhs is a constant, we have to deal with it differently

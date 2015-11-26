@@ -161,6 +161,11 @@ class AssemblyMsg{
     // Operations strings here.
     /////////////////////////////////////////////////////////////////
     public static final String ADD_MSG = "! (%s)+(%s)\n";
+    public static final String SUB_MSG = "! (%s)-(%s)\n";
+    public static final String MUL_MSG = "! (%s)*(%s)\n";
+    public static final String DIV_MSG = "! (%s)/(%s)\n";
+    public static final String MOD_MSG = "! (%s) mod (%s)\n";
+    
 
     /////////////////////////////////////////////////////////////////
     // Ops Initialized Here
@@ -168,7 +173,12 @@ class AssemblyMsg{
     public static final String ST_OP  = "st  ";
     public static final String SET_OP = "set  ";
     public static final String ADD_OP = "add  ";
+    public static final String SUB_OP = "sub  ";
+    public static final String MUL_OP = ".mul";
+    public static final String DIV_OP = ".div";
+    public static final String MOD_OP = ".rem";
     public static final String LD_OP  = "ld  ";
+    public static final String MOV_OP = "mov ";
 
     /////////////////////////////////////////////////////////////////
     // Cout stuff here
