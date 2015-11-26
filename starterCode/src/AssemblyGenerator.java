@@ -650,6 +650,30 @@ public class AssemblyGenerator {
     }
 
     //-------------------------------------------------------------------
+    // Write assemby to print a float
+    //
+    //     (float rodata)
+    //
+    //     call     printFloat
+    //     nop
+    //-------------------------------------------------------------------
+    public void writePrintFloat(String float_value, String float_name) {
+        increaseIndent();
+        increaseIndent();
+
+        writeAssembly(AssemblyMsg.COUT_COMMENT, float_name);
+        writeAssembly(AssemblyMsg.NEWLINE);
+        writeFloatROData(float_value);
+
+        writeAssembly(AssemblyMsg.FUNC_CALL, "printFloat");
+        writeAssembly(AssemblyMsg.NOP);
+        writeAssembly(AssemblyMsg.NEWLINE);
+
+        decreaseIndent();
+        decreaseIndent();
+    }
+
+    //-------------------------------------------------------------------
     // Write assemby to print a endl
     // ! cout << endl
     // set         .$$.strEndl, %o0
