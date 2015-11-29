@@ -1802,18 +1802,17 @@ class MyParser extends parser
         STO cur_STO;
         for (int i = 0; i < writeList.size(); i++) {
             cur_STO = writeList.get(i);
-            System.out.println(cur_STO.getType());
             if ( cur_STO.getType() == null ) {
                 // if type is null produce a endl
                 assGen.writeEndl();
             } else if (cur_STO.getType().isInt()) {
-                assGen.writePrintInt( optInitExtractor(cur_STO), cur_STO.getName() );
+                assGen.writePrintInt(optInitExtractor(cur_STO), cur_STO.getName(), cur_STO.isConst());
             } else if (cur_STO.getType().isString()) {
-                assGen.writePrintString( cur_STO.getName() );
+                assGen.writePrintString(cur_STO.getName());
             } else if (cur_STO.getType().isBoolean()) {
-                assGen.writePrintBool( optInitExtractor(cur_STO), cur_STO.getName() );
+                assGen.writePrintBool(optInitExtractor(cur_STO), cur_STO.getName(), cur_STO.isConst());
             } else if (cur_STO.getType().isFloat()) {
-                assGen.writePrintFloat( optInitExtractor(cur_STO), cur_STO.getName() );
+                assGen.writePrintFloat(optInitExtractor(cur_STO), cur_STO.getName(), cur_STO.isConst());
             }
         }
 
