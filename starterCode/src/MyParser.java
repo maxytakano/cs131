@@ -209,9 +209,9 @@ class MyParser extends parser
         m_symtab.insert(sto);
 
 
-//----------------------------------------------------------------
-// TO DEAL WITH STATIC, WE NEED TO PASS IT IN FIRST
-//----------------------------------------------------------------
+        //----------------------------------------------------------------
+        // TO DEAL WITH STATIC, WE NEED TO PASS IT IN FIRST
+        //----------------------------------------------------------------
         //PART 2 STUFF HERE!!!
         //GLOBAL: Check to see if it's global (has level of 1)
 
@@ -1210,30 +1210,16 @@ class MyParser extends parser
         String rhsVal = optInitExtractor(b);
         if(lhsVal.equals("") && rhsVal.equals("")){
             //there was no constants, we're dealing wiht only local vars/exprs
-            System.out.println(o.getName());
+            // System.out.println(o.getName());
             assGen.exprArith(a, b, result, o.getName());
         }
         else if(lhsVal.equals("") && !rhsVal.equals("")){
             //rhs is a constant, we have to deal with it differently
-            switch(o.getName()){
-                case "+":
-                    assGen.constAddition(a, rhsVal, result);
-                    break;
-                default:
-                    System.out.println("not handled");
-                    break;
-            }
+            assGen.constAddition(a, rhsVal, result, o.getName());
         }
         else if(!lhsVal.equals("") && rhsVal.equals("")){
             //lhs is constant, rhs is not, deal with it same as else if
-            switch(o.getName()){
-                case "+":
-                    assGen.constAddition(b, lhsVal, result);
-                    break;
-                default:
-                    System.out.println("not handled");
-                    break;
-            }
+            assGen.constAddition(b, lhsVal, result, o.getName());
         }
         //at this point, 
         //neither a nor b are exprs. they both have vals, but no offset
@@ -1247,7 +1233,7 @@ class MyParser extends parser
     //----------------------------------------------------------------
     // Checks if we have a valid unary operation.
     //----------------------------------------------------------------
-    STO doUnaryExpr(STO a, UnaryOp o) {
+    STO doUnaryExpr(STO a, UnaryOp o, boolean isPre) {
         if (a.isError()) {
             return a;
         }
@@ -1258,6 +1244,16 @@ class MyParser extends parser
             m_errors.print(result.getName());
             return result;
         }
+
+        if(m_symtab.getFunc() != null){
+            m_symtab.getFunc().incOffsetCount(result.getType().getSize());
+            result.setOffset((m_symtab.getFunc().getOffsetCount() + ""));
+            // System.out.println(o.getName());
+            //true = postincrement
+            //false = preincrement
+            assGen.exprUnaryOp(a, result, o.getName(), isPre);
+        }
+
         return result;
     }
 
@@ -1269,13 +1265,32 @@ class MyParser extends parser
         if (a.isError()) {
             return a;
         }
-        STO result = a;
+        STO result;
+        if(a.isConst()){
+            result = new ConstSTO(a.getName(), a.getType(), ((ConstSTO)a).getFloatValue());
+        }
+        else{
+            result = new VarSTO(a.getName(), a.getType());
+        }
         if(o.getName().equals("-")){
             if(a.isConst()){
                 float signchange = ((ConstSTO)a).getFloatValue() * -1;
                 result = new ConstSTO(a.getName(), a.getType(), signchange);
             }
         }
+
+        //only do this if a isn't a const. Otherwise the case is already handled.
+        if(m_symtab.getFunc() != null){
+            String unaryVal = optInitExtractor(a);
+            if(unaryVal.equals("")){
+                m_symtab.getFunc().incOffsetCount(result.getType().getSize());
+                result.setOffset((m_symtab.getFunc().getOffsetCount() + ""));
+                //there was no constants, we're dealing wiht only local vars/exprs
+                // System.out.println(o.getName());
+                assGen.exprUnarySign(a, result, o.getName());
+            }
+        }
+
         return result;
     }
 

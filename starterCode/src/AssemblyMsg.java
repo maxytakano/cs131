@@ -160,25 +160,38 @@ class AssemblyMsg{
     /////////////////////////////////////////////////////////////////
     // Operations strings here.
     /////////////////////////////////////////////////////////////////
-    public static final String ADD_MSG = "! (%s)+(%s)\n";
-    public static final String SUB_MSG = "! (%s)-(%s)\n";
-    public static final String MUL_MSG = "! (%s)*(%s)\n";
-    public static final String DIV_MSG = "! (%s)/(%s)\n";
-    public static final String MOD_MSG = "! (%s) mod (%s)\n";
-    
+    public static final String ADD_MSG       = "! (%s)+(%s)\n";
+    public static final String SUB_MSG       = "! (%s)-(%s)\n";
+    public static final String MUL_MSG       = "! (%s)*(%s)\n";
+    public static final String DIV_MSG       = "! (%s)/(%s)\n";
+    public static final String MOD_MSG       = "! (%s) mod (%s)\n";
+    public static final String XOR_MSG       = "! (%s)^(%s)\n";
+    public static final String OR_MSG        = "! (%s)|(%s)\n";
+    public static final String AND_MSG       = "! (%s)&(%s)\n";
+    public static final String UNARYNEG_MSG  = "! -(%s)\n";
+    public static final String UNARYPOS_MSG  = "! +(%s)\n";
+
+    public static final String PREINC_MSG    = "! ++(%s)\n";
+    public static final String POSTINC_MSG   = "! (%s)++\n";
+    public static final String PREDEC_MSG    = "! --(%s)\n";
+    public static final String POSTDEC_MSG   = "! (%s)--\n";
 
     /////////////////////////////////////////////////////////////////
     // Ops Initialized Here
     /////////////////////////////////////////////////////////////////
-    public static final String ST_OP  = "st  ";
-    public static final String SET_OP = "set  ";
-    public static final String ADD_OP = "add  ";
-    public static final String SUB_OP = "sub  ";
-    public static final String MUL_OP = ".mul";
-    public static final String DIV_OP = ".div";
-    public static final String MOD_OP = ".rem";
-    public static final String LD_OP  = "ld  ";
-    public static final String MOV_OP = "mov ";
+    public static final String ST_OP        = "st  ";
+    public static final String SET_OP       = "set  ";
+    public static final String ADD_OP       = "add  ";
+    public static final String SUB_OP       = "sub  ";
+    public static final String MUL_OP       = ".mul";
+    public static final String DIV_OP       = ".div";
+    public static final String MOD_OP       = ".rem";
+    public static final String XOR_OP       = "xor ";
+    public static final String OR_OP        = "or  ";
+    public static final String AND_OP       = "and ";
+    public static final String UNARY_OP     = "neg ";
+    public static final String LD_OP        = "ld  ";
+    public static final String MOV_OP       = "mov ";
 
     /////////////////////////////////////////////////////////////////
     // Cout stuff here

@@ -1005,7 +1005,7 @@ Designator ::=      T_STAR Designator:_1
     |               T_NOT Designator:_1
                     {:
                         //doUnaryExpr takes in STO first, then the operator
-                        RESULT = ((MyParser) parser).doUnaryExpr(_1, new NotOp("!"));
+                        RESULT = ((MyParser) parser).doUnaryExpr(_1, new NotOp("!"), false);
                     :}
     |               T_SIZEOF T_LPAREN Designator:_2 T_RPAREN
                     {:
@@ -1027,7 +1027,7 @@ Designator ::=      T_STAR Designator:_1
     |               IncDecOp:_1 Designator:_2
                     {:
                         //pass in STO, then operator
-                        RESULT = ((MyParser) parser).doUnaryExpr(_2, _1);
+                        RESULT = ((MyParser) parser).doUnaryExpr(_2, _1, true);
                     :}
     |               Designator2:_1
                     {:
@@ -1051,7 +1051,7 @@ Designator2 ::=     Designator2:_1 T_DOT T_ID:_3
     |               Designator2:_1 IncDecOp:_2
                     {:
                         //pass in STO, then operator.
-                        RESULT = ((MyParser) parser).doUnaryExpr(_1, _2);
+                        RESULT = ((MyParser) parser).doUnaryExpr(_1, _2, false);
                     :}
     |               Designator2:_1 T_LPAREN OptExprList:_2 T_RPAREN
                     {:
