@@ -548,10 +548,10 @@ public class AssemblyGenerator {
     }
 
     //-------------------------------------------------------------------
-    // Method that writes out the common assembly for arithmetic that 
+    // Method that writes out the common assembly for arithmetic that
     // calls on a function to do stuff
     //       call        .mul/.div/.rem
-    //       nop     
+    //       nop
     //       mov         %o0, %o0
     //-------------------------------------------------------------------
     public void arithFuncCall(String op){
@@ -564,20 +564,31 @@ public class AssemblyGenerator {
     //-------------------------------------------------------------------
     // Write assemby to print an int
     //
+    // Consts:
     // ! cout << 5
     // set         5, %o1
     // set         .$$.intFmt, %o0
     // call        printf
     // nop
+    //
+    // Vars:
+    // ! cout << f1
+    // writeLoadCout(f1, "%o1");
+    // set         .$$.intFmt, %o0
+    // call        printf
+    // nop
     //-------------------------------------------------------------------
-    public void writePrintInt(String int_value, String int_name) {
+    public void writePrintInt(String int_value, String int_name, Boolean is_const) {
         increaseIndent();
         increaseIndent();
 
         writeAssembly(AssemblyMsg.COUT_COMMENT, int_name);
-        writeAssembly(AssemblyMsg.SET_OP);
-        writeAssembly(AssemblyMsg.TWO_VALS, int_value, "%o1");
-
+        if (is_const) {
+            writeAssembly(AssemblyMsg.SET_OP);
+            writeAssembly(AssemblyMsg.TWO_VALS, int_value, "%o1");
+        } else {
+            writeLoadCout(int_name, "%o1");
+        }
         writeAssembly(AssemblyMsg.SET_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, ".$$.intFmt", "%o0");
 
@@ -592,19 +603,63 @@ public class AssemblyGenerator {
     //-------------------------------------------------------------------
     // Write assemby to print an bool
     //
+    // Consts:
     // ! cout << true
     // set         1, %o0
     // call        .$$.printBool
     // nop
+    //
+    // Vars:
+    // ! cout << f1
+    // writeLoadCout(bool_name, "%o0");
+    // call        .$$.printBool
+    // nop
     //-------------------------------------------------------------------
-    public void writePrintBool(String bool_value, String bool_name) {
+    public void writePrintBool(String bool_value, String bool_name, Boolean is_const) {
         increaseIndent();
         increaseIndent();
 
         writeAssembly(AssemblyMsg.COUT_COMMENT, bool_name);
-        writeAssembly(AssemblyMsg.SET_OP);
-        writeAssembly(AssemblyMsg.TWO_VALS, bool_value, "%o0");
+        if (is_const) {
+            writeAssembly(AssemblyMsg.SET_OP);
+            writeAssembly(AssemblyMsg.TWO_VALS, bool_value, "%o0");
+        } else {
+            writeLoadCout(bool_name, "%o0");
+        }
         writeAssembly(AssemblyMsg.FUNC_CALL, ".$$.printBool");
+        writeAssembly(AssemblyMsg.NOP);
+        writeAssembly(AssemblyMsg.NEWLINE);
+
+        decreaseIndent();
+        decreaseIndent();
+    }
+
+    //-------------------------------------------------------------------
+    // Write assemby to print a float
+    //
+    // Vars:
+    // writeLoadCout(float_name, "%f0");
+    // call        printFloat
+    // nop
+    //
+    // Consts:
+    // ! cout << f1
+    // writeFloatROData(float_value);
+    // call     printFloat
+    // nop
+    //-------------------------------------------------------------------
+    public void writePrintFloat(String float_value, String float_name, Boolean is_const) {
+        increaseIndent();
+        increaseIndent();
+
+        writeAssembly(AssemblyMsg.COUT_COMMENT, float_name);
+        if (is_const) {
+            writeAssembly(AssemblyMsg.NEWLINE);
+            writeFloatROData(float_value);
+        } else {
+            writeLoadCout(float_name, "%f0");
+        }
+        writeAssembly(AssemblyMsg.FUNC_CALL, "printFloat");
         writeAssembly(AssemblyMsg.NOP);
         writeAssembly(AssemblyMsg.NEWLINE);
 
@@ -650,27 +705,19 @@ public class AssemblyGenerator {
     }
 
     //-------------------------------------------------------------------
-    // Write assemby to print a float
+    // Helper: Write assemby to load a var into a register
     //
-    //     (float rodata)
-    //
-    //     call     printFloat
-    //     nop
+    // set         |var_name|, %l7
+    // add         %g0, %l7, %l7
+    // ld          [%l7], |reg_name|
     //-------------------------------------------------------------------
-    public void writePrintFloat(String float_value, String float_name) {
-        increaseIndent();
-        increaseIndent();
-
-        writeAssembly(AssemblyMsg.COUT_COMMENT, float_name);
-        writeAssembly(AssemblyMsg.NEWLINE);
-        writeFloatROData(float_value);
-
-        writeAssembly(AssemblyMsg.FUNC_CALL, "printFloat");
-        writeAssembly(AssemblyMsg.NOP);
-        writeAssembly(AssemblyMsg.NEWLINE);
-
-        decreaseIndent();
-        decreaseIndent();
+    public void writeLoadCout(String var_name, String reg_name) {
+        writeAssembly(AssemblyMsg.SET_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, var_name, "%l7");
+        writeAssembly(AssemblyMsg.ADD_OP);
+        writeAssembly(AssemblyMsg.THREE_VALS, "%g0", "%l7", "%l7");
+        writeAssembly(AssemblyMsg.LD_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, "[%l7]", reg_name);
     }
 
     //-------------------------------------------------------------------
