@@ -1,9 +1,0 @@
-function : void main(){
-
-    bool b = true && false;
-    bool c = true || true;
-    cout << "Expect: true: ";
-    cout << b || true << endl;
-    cout << "Expect: false: ";
-    cout << c && false << endl;
-}

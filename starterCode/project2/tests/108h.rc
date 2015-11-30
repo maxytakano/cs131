@@ -1,9 +1,0 @@
-function : void main()
-{
-  cout << "SHOULD PRINT" << endl;
-
-  exit(0); // Tests const literal
-
-  cout << "SHOULD NOT PRINT" << endl;
-
-}
