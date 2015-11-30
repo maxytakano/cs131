@@ -868,107 +868,69 @@ public class AssemblyGenerator {
     }
 
     //-------------------------------------------------------------------
-    // Write assemby to print an int
+    // Handles writing assembly for ints bools and floats
     //
-    // Consts:
-    // ! cout << 5
-    // set         5, %o1
-    // set         .$$.intFmt, %o0
-    // call        printf
-    // nop
-    //
-    // Vars:
-    // ! cout << f1
-    // writeLoadCout(f1, "%o1");
-    // set         .$$.intFmt, %o0
-    // call        printf
+    // ! cout << |STO name|
+    // writeFloatROData(); (if it's a float)
+    // writeLoadCout();      or      set op for consts
+    // print call
     // nop
     //-------------------------------------------------------------------
-    public void writePrintInt(String int_value, String int_name, Boolean is_const) {
+    public void writeCoutCall(STO cur_STO, String value_string) {
+        String register_string = "";
+
+        // 1. Determine type specific strings based on STO type.
+        if (cur_STO.getType().isInt()) {
+            register_string = "%o1";
+        } else if (cur_STO.getType().isBoolean()) {
+            register_string = "%o0";
+        } else if (cur_STO.getType().isFloat()) {
+            register_string = "%f0";
+        }
+
+        // 2. Write the common assembly with type specific strings.
         increaseIndent();
         increaseIndent();
 
-        writeAssembly(AssemblyMsg.COUT_COMMENT, int_name);
-        if (is_const) {
+        writeAssembly(AssemblyMsg.COUT_COMMENT, cur_STO.getName());
+        if (cur_STO.isExpr()) {
+            // if it's an expr always write the offset
+            writeLoadCout(cur_STO.getOffset(), "%fp", register_string);
+        } else {
+            if (cur_STO.isConst()) {
+                if (cur_STO.getType().isFloat()) {
+                    // check for floats to see if we need to print rodata
+                    writeAssembly(AssemblyMsg.NEWLINE);
+                    writeFloatROData(value_string);
+                } else {
+                    writeAssembly(AssemblyMsg.SET_OP);
+                    writeAssembly(AssemblyMsg.TWO_VALS, value_string, register_string);
+                }
+            } else {
+                // Check if it's a global or local var.
+                if (cur_STO.getOffset().equals(cur_STO.getName())) {
+                    // if the name equals the offset it's a global int
+                    writeLoadCout(cur_STO.getOffset(), "%g0", register_string);
+                } else {
+                    // else it's a local int
+                    writeLoadCout(cur_STO.getOffset(), "%fp", register_string);
+                }
+            }
+        }
+
+        // 3. Determine which print function to write.
+        if (cur_STO.getType().isInt()) {
             writeAssembly(AssemblyMsg.SET_OP);
-            writeAssembly(AssemblyMsg.TWO_VALS, int_value, "%o1");
-        } else {
-            writeLoadCout(int_name, "%o1");
+            writeAssembly(AssemblyMsg.TWO_VALS, ".$$.intFmt", "%o0");
+            writeAssembly(AssemblyMsg.FUNC_CALL, AssemblyMsg.PRINTF);
+        } else if (cur_STO.getType().isBoolean()) {
+            writeAssembly(AssemblyMsg.FUNC_CALL, ".$$.printBool");
+        } else if (cur_STO.getType().isFloat()) {
+            writeAssembly(AssemblyMsg.FUNC_CALL, "printFloat");
         }
-        writeAssembly(AssemblyMsg.SET_OP);
-        writeAssembly(AssemblyMsg.TWO_VALS, ".$$.intFmt", "%o0");
 
-        writeAssembly(AssemblyMsg.FUNC_CALL, AssemblyMsg.PRINTF);
         writeAssembly(AssemblyMsg.NOP);
         writeAssembly(AssemblyMsg.NEWLINE);
-
-        decreaseIndent();
-        decreaseIndent();
-    }
-
-    //-------------------------------------------------------------------
-    // Write assemby to print an bool
-    //
-    // Consts:
-    // ! cout << true
-    // set         1, %o0
-    // call        .$$.printBool
-    // nop
-    //
-    // Vars:
-    // ! cout << f1
-    // writeLoadCout(bool_name, "%o0");
-    // call        .$$.printBool
-    // nop
-    //-------------------------------------------------------------------
-    public void writePrintBool(String bool_value, String bool_name, Boolean is_const) {
-        increaseIndent();
-        increaseIndent();
-
-        writeAssembly(AssemblyMsg.COUT_COMMENT, bool_name);
-        if (is_const) {
-            writeAssembly(AssemblyMsg.SET_OP);
-            writeAssembly(AssemblyMsg.TWO_VALS, bool_value, "%o0");
-        } else {
-            writeLoadCout(bool_name, "%o0");
-        }
-        writeAssembly(AssemblyMsg.FUNC_CALL, ".$$.printBool");
-        writeAssembly(AssemblyMsg.NOP);
-        writeAssembly(AssemblyMsg.NEWLINE);
-
-        decreaseIndent();
-        decreaseIndent();
-    }
-
-    //-------------------------------------------------------------------
-    // Write assemby to print a float
-    //
-    // Vars:
-    // writeLoadCout(float_name, "%f0");
-    // call        printFloat
-    // nop
-    //
-    // Consts:
-    // ! cout << f1
-    // writeFloatROData(float_value);
-    // call     printFloat
-    // nop
-    //-------------------------------------------------------------------
-    public void writePrintFloat(String float_value, String float_name, Boolean is_const) {
-        increaseIndent();
-        increaseIndent();
-
-        writeAssembly(AssemblyMsg.COUT_COMMENT, float_name);
-        if (is_const) {
-            writeAssembly(AssemblyMsg.NEWLINE);
-            writeFloatROData(float_value);
-        } else {
-            writeLoadCout(float_name, "%f0");
-        }
-        writeAssembly(AssemblyMsg.FUNC_CALL, "printFloat");
-        writeAssembly(AssemblyMsg.NOP);
-        writeAssembly(AssemblyMsg.NEWLINE);
-
         decreaseIndent();
         decreaseIndent();
     }
@@ -1013,15 +975,15 @@ public class AssemblyGenerator {
     //-------------------------------------------------------------------
     // Helper: Write assemby to load a var into a register
     //
-    // set         |var_name|, %l7
-    // add         %g0, %l7, %l7
+    // set         |offset|, %l7
+    // add         |add_name|, %l7, %l7
     // ld          [%l7], |reg_name|
     //-------------------------------------------------------------------
-    public void writeLoadCout(String var_name, String reg_name) {
+    public void writeLoadCout(String offset, String add_name, String reg_name) {
         writeAssembly(AssemblyMsg.SET_OP);
-        writeAssembly(AssemblyMsg.TWO_VALS, var_name, "%l7");
+        writeAssembly(AssemblyMsg.TWO_VALS, offset, "%l7");
         writeAssembly(AssemblyMsg.ADD_OP);
-        writeAssembly(AssemblyMsg.THREE_VALS, "%g0", "%l7", "%l7");
+        writeAssembly(AssemblyMsg.THREE_VALS, add_name, "%l7", "%l7");
         writeAssembly(AssemblyMsg.LD_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, "[%l7]", reg_name);
     }

@@ -1803,19 +1803,16 @@ class MyParser extends parser
         for (int i = 0; i < writeList.size(); i++) {
             cur_STO = writeList.get(i);
             if ( cur_STO.getType() == null ) {
-                // if type is null produce a endl
+                // If the type is null write an endl.
                 assGen.writeEndl();
-            } else if (cur_STO.getType().isInt()) {
-                assGen.writePrintInt(optInitExtractor(cur_STO), cur_STO.getName(), cur_STO.isConst());
             } else if (cur_STO.getType().isString()) {
+                // Special case for strings.
                 assGen.writePrintString(cur_STO.getName());
-            } else if (cur_STO.getType().isBoolean()) {
-                assGen.writePrintBool(optInitExtractor(cur_STO), cur_STO.getName(), cur_STO.isConst());
-            } else if (cur_STO.getType().isFloat()) {
-                assGen.writePrintFloat(optInitExtractor(cur_STO), cur_STO.getName(), cur_STO.isConst());
+            } else {
+                // This case handles ints, bools, and floats.
+                assGen.writeCoutCall(cur_STO, optInitExtractor(cur_STO));
             }
         }
-
     }
 
 } /* end of file */
