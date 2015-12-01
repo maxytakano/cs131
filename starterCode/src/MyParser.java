@@ -1,3 +1,4 @@
+
 //---------------------------------------------------------------------
 // CSE 131 Reduced-C Compiler Project
 // Copyright (C) 2008-2015 Garo Bournoutian and Rick Ord
@@ -1215,11 +1216,11 @@ class MyParser extends parser
         }
         else if(lhsVal.equals("") && !rhsVal.equals("")){
             //rhs is a constant, we have to deal with it differently
-            assGen.constAddition(a, rhsVal, result, o.getName());
+            assGen.constArith(a, rhsVal, result, o.getName(), true);
         }
         else if(!lhsVal.equals("") && rhsVal.equals("")){
             //lhs is constant, rhs is not, deal with it same as else if
-            assGen.constAddition(b, lhsVal, result, o.getName());
+            assGen.constArith(b, lhsVal, result, o.getName(), false);
         }
         //at this point, 
         //neither a nor b are exprs. they both have vals, but no offset
