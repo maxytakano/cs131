@@ -200,6 +200,11 @@ class AssemblyMsg{
     public static final String BNE_OP        = "bne ";
 
 
+    public static final String FADDS_OP     = "fadds";
+    public static final String FSUBS_OP     = "fsubs";
+    public static final String FMULS_OP     = "fmuls";
+    public static final String FDIVS_OP     = "fdivs";
+
     /////////////////////////////////////////////////////////////////
     // Cout stuff here
     /////////////////////////////////////////////////////////////////

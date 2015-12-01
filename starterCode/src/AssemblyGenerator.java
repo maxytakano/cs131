@@ -316,25 +316,25 @@ public class AssemblyGenerator {
         increaseIndent();
         increaseIndent();
 
-        //writes out the start of all assign expressions. It's common, so it's
-        //separated into its own setion for repeated code use.
-        initStart(name, val, offset);
+        writeAssembly(AssemblyMsg.LOCAL_INIT_MSG, name, val);
+
+        if(offset.equals(name)){
+            writeLoadGlobalForAssign(offset);
+        }else{
+            initStart(name, val, offset);
+        }
 
         if(!type.getName().equals("float")){
-
-            //set         6, %o0
             writeAssembly(AssemblyMsg.SET_OP);
             writeAssembly(AssemblyMsg.TWO_VALS, val, "%o0");
 
-            //st          %o0, [%o1]
             writeAssembly(AssemblyMsg.ST_OP);
             writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "[%o1]");
             writeAssembly(AssemblyMsg.NEWLINE);
         }
         else{
             writeAssembly(AssemblyMsg.NEWLINE);
-            writeFloatROData(val);
-            //st %f0, [%o1]
+            writeFloatROData(val, "%f0");
             writeAssembly(AssemblyMsg.ST_OP);
             writeAssembly(AssemblyMsg.TWO_VALS, "%f0", "[%o1]");
             writeAssembly(AssemblyMsg.NEWLINE);
@@ -350,39 +350,32 @@ public class AssemblyGenerator {
     //    .section    ".rodata"
     //    .align      4
     //.$$.float.1:
-    //    .single     0r7.0
+    //    .single     0r[val]
     //    
     //    .section    ".text"
     //    .align      4
     //    set         .$$.float.1, %l7
-    //    ld          [%l7], %f0
+    //    ld          [%l7], [register]
     //
     //-------------------------------------------------------------------
-    public void writeFloatROData(String val) {
-        //.section ".rodata"
+    public void writeFloatROData(String val, String register) {
         writeAssembly(AssemblyMsg.RODATA);
-        //.align 4
         writeAssembly(AssemblyMsg.ALIGN_4);
-        //.$$.float.[floatCounter]:
         decreaseIndent();
         floatCounter++;
         String floatLabel = ".$$.float." + floatCounter;
         writeAssembly(AssemblyMsg.LABEL, floatLabel);
         increaseIndent();
-        //.single     val
+
         writeAssembly(AssemblyMsg.DOT_SINGLE, val);
-        //now we save the float into the location f0z
         writeAssembly(AssemblyMsg.NEWLINE);
-        //.section ".text"
         writeAssembly(AssemblyMsg.TEXT);
-        //.align 4
         writeAssembly(AssemblyMsg.ALIGN_4);
-        //set         [floatLabel], %l7
+
         writeAssembly(AssemblyMsg.SET_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, floatLabel, "%l7");
-        //ld [%l7], %f0
         writeAssembly(AssemblyMsg.LD_OP);
-        writeAssembly(AssemblyMsg.TWO_VALS, "[%l7]", "%f0");
+        writeAssembly(AssemblyMsg.TWO_VALS, "[%l7]", register);
     }
 
     //-------------------------------------------------------------------
@@ -394,15 +387,43 @@ public class AssemblyGenerator {
     //      ld          [%l7], %o0
     //-------------------------------------------------------------------
     public void writeLoadExpr(String offset, int oVal){
-        // set         -4, %l7
         writeAssembly(AssemblyMsg.SET_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, "-" + offset, "%l7");
-        // add         %fp, %l7, %l7
         writeAssembly(AssemblyMsg.ADD_OP);
         writeAssembly(AssemblyMsg.THREE_VALS, "%fp", "%l7", "%l7");
-        // ld          [%l7], %o0
         writeAssembly(AssemblyMsg.LD_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, "[%l7]", "%o" + oVal);
+    }
+
+    //-------------------------------------------------------------------
+    // helper method to write out the load block
+    // offset = offset of the expression.
+    // oVal = the type of o we're loading. e.g. %o0, %o1, %o2, etc.
+    //      set         -4, %l7
+    //      add         %fp, %l7, %l7
+    //      ld          [%l7], %o0
+    //-------------------------------------------------------------------
+    public void writeLoadGlobal(String offset, int oVal){
+        writeAssembly(AssemblyMsg.SET_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, offset, "%l7");
+        writeAssembly(AssemblyMsg.ADD_OP);
+        writeAssembly(AssemblyMsg.THREE_VALS, "%g0", "%l7", "%l7");
+        writeAssembly(AssemblyMsg.LD_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, "[%l7]", "%o" + oVal);
+    }
+
+    //-------------------------------------------------------------------
+    // helper method to write out the load block
+    // offset = offset of the expression.
+    // oVal = the type of o we're loading. e.g. %o0, %o1, %o2, etc.
+    //      set         i2, %o1
+    //      add         %g0, %o1, %o1
+    //-------------------------------------------------------------------
+    public void writeLoadGlobalForAssign(String offset){
+        writeAssembly(AssemblyMsg.SET_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, offset, "%o1");
+        writeAssembly(AssemblyMsg.ADD_OP);
+        writeAssembly(AssemblyMsg.THREE_VALS, "%g0", "%o1", "%o1");
     }
 
     //-------------------------------------------------------------------
@@ -438,18 +459,16 @@ public class AssemblyGenerator {
         increaseIndent();
 
         //writes out the start of the initialization
-        // ! b = a
-        // set         -8, %o1
-        // add         %fp, %o1, %o1
-        initStart(desName, exprName, desOffset);
-
-        //call the load code
-        // set         -4, %l7
-        // add         %fp, %l7, %l7
-        // ld          [%l7], %o0
-        writeLoadExpr(exprOffset, 0);
-
-        // st          %o0, [%o1]
+        if(desOffset.equals(desName)){
+            writeLoadGlobalForAssign(desOffset);
+        }else{
+            initStart(desName, exprName, desOffset);
+        }
+        if(exprOffset.equals(exprName)){
+            writeLoadGlobal(exprOffset, 0);
+        }else{
+            writeLoadExpr(exprOffset, 0);
+        }
         writeAssembly(AssemblyMsg.ST_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "[%o1]");
         writeAssembly(AssemblyMsg.NEWLINE);
@@ -460,170 +479,68 @@ public class AssemblyGenerator {
 
     //-------------------------------------------------------------------
     // Method that writes out the the start of all initializations
+    //
+    //set       -desOffset, %o1
+    //add       %fp, %o1, %o1
     //-------------------------------------------------------------------
     public void initStart(String desName, String exprName, String desOffset){
-        // ! desName = exprName
-        writeAssembly(AssemblyMsg.LOCAL_INIT_MSG, desName, exprName);
-
-        //set       -desOffset, %o1
         writeAssembly(AssemblyMsg.SET_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, "-" + desOffset, "%o1");
-
-        //add       %fp, %o1, %o1
         writeAssembly(AssemblyMsg.ADD_OP);
         writeAssembly(AssemblyMsg.THREE_VALS, "%fp", "%o1", "%o1");
     }
 
     //-------------------------------------------------------------------
-    // Method that writes out the assembly for method starts
-    //      ! (a)+(b)
+    // Method that writes out the assembly for arithmetic
+    //      (arithMsgCall)
     //      (writeLoadExpr)
     //      (writeLoadExpr)
-    //      add/sub/(arithCall)
+    //      (arithOpCall)
     //      (additionEndResult)
     //-------------------------------------------------------------------
     public void exprArith(STO a, STO b, STO result, String op){
         increaseIndent();
         increaseIndent();
-        switch(op){
-            case "+":
-                // ! (a)+(b)
-                writeAssembly(AssemblyMsg.ADD_MSG, a.getName(), b.getName());
-                // set         -4, %l7
-                // add         %fp, %l7, %l7
-                // ld          [%l7], %o0
+        //get the comment based on the op
+        arithMsgCall(a.getName(), b.getName(), op);
+        
+        //is a a float?
+        String aType = a.getType().getName();
+        if(!aType.equals("float")){
+            if(a.getOffset().equals(a.getName())){
+                writeLoadGlobal(a.getOffset(), 0);
+            }else{
                 writeLoadExpr(a.getOffset(), 0);
-
-                // set         -8, %l7
-                // add         %fp, %l7, %l7
-                // ld          [%l7], %o1
+            }
+        }
+        else if(aType.equals("float")){
+            if(a.getOffset().equals(a.getName())){
+                writeLoadCout(a.getOffset(), "%g0", "%f0");
+            }else{
+                // writeLoadExpr(a.getOffset(), 0);
+                writeLoadCout("-" + a.getOffset(), "%fp", "%f0");
+            }
+        }
+        //is b a float?
+        String bType = b.getType().getName();
+        if(!bType.equals("float")){
+            if(b.getOffset().equals(b.getName())){
+                writeLoadGlobal(b.getOffset(), 1);
+            }else{
                 writeLoadExpr(b.getOffset(), 1);
-                // add         %o0, %o1, %o0
-                writeAssembly(AssemblyMsg.ADD_OP);
-                writeAssembly(AssemblyMsg.THREE_VALS, "%o0", "%o1", "%o0");
-                break;
-            case "-":
-                // ! (a)-(b)
-                writeAssembly(AssemblyMsg.SUB_MSG, a.getName(), b.getName());
-                // set         -4, %l7      
-                // add         %fp, %l7, %l7
-                // ld          [%l7], %o0
-                writeLoadExpr(a.getOffset(), 0);
-
-                // set         -8, %l7
-                // add         %fp, %l7, %l7
-                // ld          [%l7], %o1
-                writeLoadExpr(b.getOffset(), 1);  
-
-                // add         %o0, %o1, %o0
-                writeAssembly(AssemblyMsg.SUB_OP);
-                writeAssembly(AssemblyMsg.THREE_VALS, "%o0", "%o1", "%o0");  
-                break;
-            case "*":
-                // ! (a)*(b)
-                writeAssembly(AssemblyMsg.MUL_MSG, a.getName(), b.getName());
-
-                // set         -4, %l7
-                // add         %fp, %l7, %l7
-                // ld          [%l7], %o0
-                writeLoadExpr(a.getOffset(), 0);
-
-                // set         -8, %l7
-                // add         %fp, %l7, %l7
-                // ld          [%l7], %o1
-                writeLoadExpr(b.getOffset(), 1);
-
-                arithFuncCall(AssemblyMsg.MUL_OP);
-                break;
-            case "/":
-                // ! (a)/(b)
-                writeAssembly(AssemblyMsg.DIV_MSG, a.getName(), b.getName());
-                // set         -4, %l7
-                // add         %fp, %l7, %l7
-                // ld          [%l7], %o0
-                writeLoadExpr(a.getOffset(), 0);
-
-                // set         -8, %l7
-                // add         %fp, %l7, %l7
-                // ld          [%l7], %o1
-                writeLoadExpr(b.getOffset(), 1);
-
-                arithFuncCall(AssemblyMsg.DIV_OP);
-                break;
-            case "%":
-                // ! (a)%(b)
-                writeAssembly(AssemblyMsg.MOD_MSG, a.getName(), b.getName());
-                // set         -4, %l7
-                // add         %fp, %l7, %l7
-                // ld          [%l7], %o0
-                writeLoadExpr(a.getOffset(), 0);
-
-                // set         -8, %l7
-                // add         %fp, %l7, %l7
-                // ld          [%l7], %o1
-                writeLoadExpr(b.getOffset(), 1);
-
-                arithFuncCall(AssemblyMsg.MOD_OP);
-                break;
-            case "^":
-                // ! (a)^(b)
-                writeAssembly(AssemblyMsg.XOR_MSG, a.getName(), b.getName());
-
-                // set         -4, %l7
-                // add         %fp, %l7, %l7
-                // ld          [%l7], %o0
-                writeLoadExpr(a.getOffset(), 0);
-
-                // set         -8, %l7
-                // add         %fp, %l7, %l7
-                // ld          [%l7], %o1
-                writeLoadExpr(b.getOffset(), 1);
-
-                // add         %o0, %o1, %o0
-                writeAssembly(AssemblyMsg.XOR_OP);
-                writeAssembly(AssemblyMsg.THREE_VALS, "%o0", "%o1", "%o0");
-                break;
-            case "&":
-                // ! (a)^(b)
-                writeAssembly(AssemblyMsg.AND_MSG, a.getName(), b.getName());
-
-                // set         -4, %l7
-                // add         %fp, %l7, %l7
-                // ld          [%l7], %o0
-                writeLoadExpr(a.getOffset(), 0);
-
-                // set         -8, %l7
-                // add         %fp, %l7, %l7
-                // ld          [%l7], %o1
-                writeLoadExpr(b.getOffset(), 1);
-
-                // add         %o0, %o1, %o0
-                writeAssembly(AssemblyMsg.AND_OP);
-                writeAssembly(AssemblyMsg.THREE_VALS, "%o0", "%o1", "%o0");
-                break;
-            case "|":
-                // ! (a)^(b)
-                writeAssembly(AssemblyMsg.OR_MSG, a.getName(), b.getName());
-
-                // set         -4, %l7
-                // add         %fp, %l7, %l7
-                // ld          [%l7], %o0
-                writeLoadExpr(a.getOffset(), 0);
-
-                // set         -8, %l7
-                // add         %fp, %l7, %l7
-                // ld          [%l7], %o1
-                writeLoadExpr(b.getOffset(), 1);
-
-                // add         %o0, %o1, %o0
-                writeAssembly(AssemblyMsg.OR_OP);
-                writeAssembly(AssemblyMsg.THREE_VALS, "%o0", "%o1", "%o0");
-                break;
-            default:
-                System.out.println("not handled");
-                break;
+            }
+        }
+        else if(bType.equals("float")){
+            if(b.getOffset().equals(b.getName())){
+                // writeLoadGlobal(b.getOffset(), 1);
+                writeLoadCout(b.getOffset(), "%g0", "%f1");
+            }else{
+                // writeLoadExpr(b.getOffset(), 1);
+                writeLoadCout("-" + b.getOffset(), "%fp", "%f1");
+            }
         }
         
+        arithOpCall(aType, bType, op);        
 
         //call the part of the addition op that is the same regardless
         //of constant/expr addition or expr/expr addition
@@ -633,150 +550,195 @@ public class AssemblyGenerator {
     }
 
     //-------------------------------------------------------------------
-    // Method that writes out the assembly for method starts
-    //      ! (7)+(a)
-    //      set         7, %o0
+    // Method that writes out the assembly for arithmetic
+    //      (arithMsgCall)
+    //      set 5, %o0
     //      (writeLoadExpr)
+    //      (arithCall)
     //      (additionEndResult)
     //-------------------------------------------------------------------
-    public void constAddition(STO a, String b, STO result, String op){
+    public void constArith(STO a, String b, String bType, STO result, String op, boolean constIsRight){
         increaseIndent();
         increaseIndent();
         //call the part of the addition op that is the same regardless
         //of constant/expr addition or expr/expr addition
+        //get the correct comment message based on operation
+        String lhs;
+        String rhs;
+        if(constIsRight){
+            lhs = a.getName();
+            rhs = b;
+        }
+        else{
+            lhs = b;
+            rhs = a.getName();
+        }
+
+        //get the message for the arithmetic expression
+        arithMsgCall(lhs, rhs, op);
+
+        //based on which side is the constant, load them differently
+        String aType = a.getType().getName();
+        if(constIsRight){
+            //is a a float?
+            if(!aType.equals("float")){
+                if(a.getOffset().equals(a.getName())){
+                    writeLoadGlobal(a.getOffset(), 0);
+                }else{
+                    writeLoadExpr(a.getOffset(), 0);
+                }
+            }
+            else if(aType.equals("float")){
+                if(a.getOffset().equals(a.getName())){
+                    writeLoadCout(a.getOffset(), "%g0", "%f0");
+                }else{
+                    // writeLoadExpr(a.getOffset(), 0);
+                    writeLoadCout("-" + a.getOffset(), "%fp", "%f0");
+                }
+            }
+            //CHECK FOR b'S TYPE AND DO STUFF BASED ON THAT.
+            if(!bType.equals("float")){
+                writeAssembly(AssemblyMsg.SET_OP);
+                writeAssembly(AssemblyMsg.TWO_VALS, b, "%o1");
+            }else if (bType.equals("float")){
+                writeFloatROData(b, "%f1");
+            }
+        }else{
+            if(!bType.equals("float")){
+                writeAssembly(AssemblyMsg.SET_OP);
+                writeAssembly(AssemblyMsg.TWO_VALS, b, "%o0");
+            }else if (bType.equals("float")){
+                writeFloatROData(b, "%f0");
+            }
+            //is a a float?
+            if(!aType.equals("float")){
+                if(a.getOffset().equals(a.getName())){
+                    writeLoadGlobal(a.getOffset(), 0);
+                }else{
+                    writeLoadExpr(a.getOffset(), 0);
+                }
+            }
+            else if(aType.equals("float")){
+                if(a.getOffset().equals(a.getName())){
+                    writeLoadCout(a.getOffset(), "%g0", "%f0");
+                }else{
+                    // writeLoadExpr(a.getOffset(), 0);
+                    writeLoadCout("-" + a.getOffset(), "%fp", "%f0");
+                }
+            }
+        }
+
+
+        //do proper operation based on op
+        arithOpCall(aType, bType, op);
+
+        arithEnd(result);
+        decreaseIndent();
+        decreaseIndent();
+    }
+
+    //-------------------------------------------------------------------
+    // Method that writes out the assembly for arith messages
+    //      ! (a)+(b)
+    //-------------------------------------------------------------------
+    public void arithMsgCall(String lhs, String rhs, String op){
         switch(op){
             case "+":
-                // ! (a)+(b)
-                writeAssembly(AssemblyMsg.ADD_MSG, a.getName(), b);
-                // set         7, %o0
-                writeAssembly(AssemblyMsg.SET_OP);
-                writeAssembly(AssemblyMsg.TWO_VALS, b, "%o0");
-
-                // set         -8, %l7
-                // add         %fp, %l7, %l7
-                // ld          [%l7], %o1
-                writeLoadExpr(a.getOffset(), 1);
-                // add         %o0, %o1, %o0
-                writeAssembly(AssemblyMsg.ADD_OP);
-                writeAssembly(AssemblyMsg.THREE_VALS, "%o0", "%o1", "%o0");
+                writeAssembly(AssemblyMsg.ADD_MSG, lhs, rhs);
                 break;
             case "-":
-                // ! (a)-(b)
-                writeAssembly(AssemblyMsg.SUB_MSG, a.getName(), b);
-                // set         7, %o0
-                writeAssembly(AssemblyMsg.SET_OP);
-                writeAssembly(AssemblyMsg.TWO_VALS, b, "%o0");
-
-                // set         -8, %l7
-                // add         %fp, %l7, %l7
-                // ld          [%l7], %o1
-                writeLoadExpr(a.getOffset(), 1);  
-
-                // add         %o0, %o1, %o0
-                writeAssembly(AssemblyMsg.SUB_OP);
-                writeAssembly(AssemblyMsg.THREE_VALS, "%o0", "%o1", "%o0");  
+                writeAssembly(AssemblyMsg.SUB_MSG, lhs, rhs);  
                 break;
             case "*":
-                // ! (a)*(b)
-                writeAssembly(AssemblyMsg.MUL_MSG, a.getName(), b);
-
-                // set         7, %o0
-                writeAssembly(AssemblyMsg.SET_OP);
-                writeAssembly(AssemblyMsg.TWO_VALS, b, "%o0");
-
-                // set         -8, %l7
-                // add         %fp, %l7, %l7
-                // ld          [%l7], %o1
-                writeLoadExpr(a.getOffset(), 1);
-
-                arithFuncCall(AssemblyMsg.MUL_OP);
+                writeAssembly(AssemblyMsg.MUL_MSG, lhs, rhs);
                 break;
             case "/":
-                // ! (a)/(b)
-                writeAssembly(AssemblyMsg.DIV_MSG, a.getName(), b);
-                // set         7, %o0
-                writeAssembly(AssemblyMsg.SET_OP);
-                writeAssembly(AssemblyMsg.TWO_VALS, b, "%o0");
-
-                // set         -8, %l7
-                // add         %fp, %l7, %l7
-                // ld          [%l7], %o1
-                writeLoadExpr(a.getOffset(), 1);
-
-                arithFuncCall(AssemblyMsg.DIV_OP);
+                writeAssembly(AssemblyMsg.DIV_MSG, lhs, rhs);
                 break;
             case "%":
-                // ! (a)%(b)
-                writeAssembly(AssemblyMsg.MOD_MSG, a.getName(), b);
-                // set         7, %o0
-                writeAssembly(AssemblyMsg.SET_OP);
-                writeAssembly(AssemblyMsg.TWO_VALS, b, "%o0");
+                writeAssembly(AssemblyMsg.MOD_MSG, lhs, rhs);
+                break;
+            case "^":
+                writeAssembly(AssemblyMsg.XOR_MSG, lhs, rhs);
+                break;
+            case "&":
+                writeAssembly(AssemblyMsg.AND_MSG, lhs, rhs);
+                break;
+            case "|":
+                writeAssembly(AssemblyMsg.OR_MSG,  lhs, rhs);
+                break;
+            default:
+                System.out.println("not handled constArith msg");
+                break;
+        }
+    }
 
-                // set         -8, %l7
-                // add         %fp, %l7, %l7
-                // ld          [%l7], %o1
-                writeLoadExpr(a.getOffset(), 1);
 
+    //-------------------------------------------------------------------
+    // Method that writes out the assembly for arithmetic ops
+    //      add or fadds       %o0, %o1, %o0, or %f0, %f1, %f0
+    //-------------------------------------------------------------------
+    public void arithOpCall(String aType, String bType, String op){
+        switch(op){
+            case "+":
+                if(!aType.equals("float") || !bType.equals("float")){
+                    writeAssembly(AssemblyMsg.ADD_OP);
+                    writeAssembly(AssemblyMsg.THREE_VALS, "%o0", "%o1", "%o0");
+                }
+                else if(aType.equals("float")){
+                    writeAssembly(AssemblyMsg.FADDS_OP);
+                    writeAssembly(AssemblyMsg.THREE_VALS, "%f0", "%f1", "%f0");
+                }
+                break;
+            case "-":
+                if(!aType.equals("float") || !bType.equals("float")){
+                    writeAssembly(AssemblyMsg.SUB_OP);
+                    writeAssembly(AssemblyMsg.THREE_VALS, "%o0", "%o1", "%o0");
+                }
+                else if(aType.equals("float")){
+                    writeAssembly(AssemblyMsg.FSUBS_OP);
+                    writeAssembly(AssemblyMsg.THREE_VALS, "%f0", "%f1", "%f0");
+                }
+                break;
+            case "*":
+                // arithFuncCall(AssemblyMsg.MUL_OP);
+                if(!aType.equals("float") || !bType.equals("float")){
+                    arithFuncCall(AssemblyMsg.MUL_OP);
+                }
+                else if(aType.equals("float")){
+                    writeAssembly(AssemblyMsg.FMULS_OP);
+                    writeAssembly(AssemblyMsg.THREE_VALS, "%f0", "%f1", "%f0");
+                }
+                break;
+            case "/":
+                // arithFuncCall(AssemblyMsg.DIV_OP);
+                if(!aType.equals("float") || !bType.equals("float")){
+                    arithFuncCall(AssemblyMsg.DIV_OP);
+                }
+                else if(aType.equals("float")){
+                    writeAssembly(AssemblyMsg.FDIVS_OP);
+                    writeAssembly(AssemblyMsg.THREE_VALS, "%f0", "%f1", "%f0");
+                }
+                break;
+            case "%":
                 arithFuncCall(AssemblyMsg.MOD_OP);
                 break;
             case "^":
-                // ! (a)^(b)
-                writeAssembly(AssemblyMsg.XOR_MSG, a.getName(), b);
-
-                // set         7, %o0
-                writeAssembly(AssemblyMsg.SET_OP);
-                writeAssembly(AssemblyMsg.TWO_VALS, b, "%o0");
-
-                // set         -8, %l7
-                // add         %fp, %l7, %l7
-                // ld          [%l7], %o1
-                writeLoadExpr(a.getOffset(), 1);
-
-                // add         %o0, %o1, %o0
                 writeAssembly(AssemblyMsg.XOR_OP);
                 writeAssembly(AssemblyMsg.THREE_VALS, "%o0", "%o1", "%o0");
                 break;
             case "&":
-                // ! (a)^(b)
-                writeAssembly(AssemblyMsg.AND_MSG, a.getName(), b);
-
-                // set         7, %o0
-                writeAssembly(AssemblyMsg.SET_OP);
-                writeAssembly(AssemblyMsg.TWO_VALS, b, "%o0");
-
-                // set         -8, %l7
-                // add         %fp, %l7, %l7
-                // ld          [%l7], %o1
-                writeLoadExpr(a.getOffset(), 1);
-
-                // add         %o0, %o1, %o0
                 writeAssembly(AssemblyMsg.AND_OP);
                 writeAssembly(AssemblyMsg.THREE_VALS, "%o0", "%o1", "%o0");
                 break;
             case "|":
-                // ! (a)^(b)
-                writeAssembly(AssemblyMsg.OR_MSG, a.getName(), b);
-
-                // set         7, %o0
-                writeAssembly(AssemblyMsg.SET_OP);
-                writeAssembly(AssemblyMsg.TWO_VALS, b, "%o0");
-
-                // set         -8, %l7
-                // add         %fp, %l7, %l7
-                // ld          [%l7], %o1
-                writeLoadExpr(a.getOffset(), 1);
-
-                // add         %o0, %o1, %o0
                 writeAssembly(AssemblyMsg.OR_OP);
                 writeAssembly(AssemblyMsg.THREE_VALS, "%o0", "%o1", "%o0");
                 break;
             default:
-                System.out.println("not handled");
+                System.out.println("not handled exprArith op");
                 break;
         }
-        arithEnd(result);
-        decreaseIndent();
-        decreaseIndent();
     }
 
     //-------------------------------------------------------------------
@@ -796,13 +758,23 @@ public class AssemblyGenerator {
         switch(op){
             case "-":
                 writeAssembly(AssemblyMsg.UNARYNEG_MSG, a.getName());
-                writeLoadExpr(a.getOffset(), 0);
+                if(a.getOffset().equals(a.getName())){
+                    writeLoadGlobal(a.getOffset(), 0);
+                }else{
+                    writeLoadExpr(a.getOffset(), 0);
+                }
+                // writeLoadExpr(a.getOffset(), 0);
                 writeAssembly(AssemblyMsg.UNARY_OP);
                 writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "%o0");
                 break;
             case "+":
                 writeAssembly(AssemblyMsg.UNARYPOS_MSG, a.getName());
-                writeLoadExpr(a.getOffset(), 0);
+                if(a.getOffset().equals(a.getName())){
+                    writeLoadGlobal(a.getOffset(), 0);
+                }else{
+                    writeLoadExpr(a.getOffset(), 0);
+                }
+                // writeLoadExpr(a.getOffset(), 0);
                 writeAssembly(AssemblyMsg.MOV_OP);
                 writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "%o0");
                 break;
@@ -857,7 +829,12 @@ public class AssemblyGenerator {
                 break;
         }
 
-        writeLoadExpr(a.getOffset(), 0);
+        if(a.getOffset().equals(a.getName())){
+            writeLoadGlobal(a.getOffset(), 0);
+        }else{
+            writeLoadExpr(a.getOffset(), 0);
+        }
+        // writeLoadExpr(a.getOffset(), 0);
         writeAssembly(AssemblyMsg.SET_OP);
         writeAssembly(AssemblyMsg.TWO_VALS,  "1", "%o1");
 
@@ -918,15 +895,16 @@ public class AssemblyGenerator {
     //      st          %o0, [%o1]
     //-------------------------------------------------------------------
     public void arithEnd(STO result){
-        // set         -12, %o1
         writeAssembly(AssemblyMsg.SET_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, "-" + result.getOffset(), "%o1");
-        // add         %fp, %o1, %o1
         writeAssembly(AssemblyMsg.ADD_OP);
         writeAssembly(AssemblyMsg.THREE_VALS, "%fp", "%o1", "%o1");
-        // st          %o0, [%o1]
         writeAssembly(AssemblyMsg.ST_OP);
-        writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "[%o1]");
+        if(result.getType().getName().equals("float")){
+            writeAssembly(AssemblyMsg.TWO_VALS, "%f0", "[%o1]");
+        }else{
+            writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "[%o1]");
+        }
         writeAssembly(AssemblyMsg.NEWLINE);
     }
 
@@ -972,13 +950,13 @@ public class AssemblyGenerator {
         writeAssembly(AssemblyMsg.COUT_COMMENT, cur_STO.getName());
         if (cur_STO.isExpr()) {
             // if it's an expr always write the offset
-            writeLoadCout(cur_STO.getOffset(), "%fp", register_string);
+            writeLoadCout("-" + cur_STO.getOffset(), "%fp", register_string);
         } else {
             if (cur_STO.isConst()) {
                 if (cur_STO.getType().isFloat()) {
                     // check for floats to see if we need to print rodata
                     writeAssembly(AssemblyMsg.NEWLINE);
-                    writeFloatROData(value_string);
+                    writeFloatROData(value_string, register_string);
                 } else {
                     writeAssembly(AssemblyMsg.SET_OP);
                     writeAssembly(AssemblyMsg.TWO_VALS, value_string, register_string);
@@ -990,7 +968,7 @@ public class AssemblyGenerator {
                     writeLoadCout(cur_STO.getOffset(), "%g0", register_string);
                 } else {
                     // else it's a local int
-                    writeLoadCout(cur_STO.getOffset(), "%fp", register_string);
+                    writeLoadCout("-" + cur_STO.getOffset(), "%fp", register_string);
                 }
             }
         }
