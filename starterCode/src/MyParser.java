@@ -1203,10 +1203,22 @@ class MyParser extends parser
         }
 
         //THE FOLLOWING SECTION is for assembly writing.
-        String lhsVal = optInitExtractor(a);
-        String lhsValType = a.getType().getName();
-        String rhsVal = optInitExtractor(b);
-        String rhsValType = b.getType().getName();
+        //if we have globals, we want their offsets, not vals so don't make a check
+        //if the offset == their name.
+        String lhsVal = "";
+        String lhsValType = "";
+        if(!a.getName().equals(a.getOffset())){
+            lhsVal = optInitExtractor(a);
+            lhsValType = a.getType().getName();
+        }
+
+        String rhsVal = "";
+        String rhsValType = "";
+        if(!b.getName().equals(b.getOffset())){
+            rhsVal = optInitExtractor(b);
+            rhsValType = b.getType().getName();
+        }
+        
         if(lhsVal.equals("") && rhsVal.equals("")){
             //Increment function's offset by local's size. the set sto's offset
             m_symtab.getFunc().incOffsetCount(result.getType().getSize());

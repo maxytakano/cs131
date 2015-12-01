@@ -34,7 +34,6 @@ class AssemblyMsg{
     public static final String ALIGN_4 = 
     	".align  "+ SEPARATOR + "4\n";
 
-    //possibly unnecessary
     public static final String NEWLINE = 
     	"\n";
 
@@ -53,6 +52,15 @@ class AssemblyMsg{
     //restore
     public static final String RESTORE =
         "restore\n";
+
+    public static final String CMP_LABEL = 
+        ".$$.cmp.";
+
+    public static final String ENDIF_LABEL = 
+        ".$$.endif.";
+
+    public static final String ELSE_LABEL = 
+        ".$$.else.";
 
     /////////////////////////////////////////////////////////////////
     // FILE HEADER FOR THE DATE ALWAYS AT THE TOP of rc.s file
@@ -176,6 +184,8 @@ class AssemblyMsg{
     public static final String POSTINC_MSG   = "! (%s)++\n";
     public static final String PREDEC_MSG    = "! --(%s)\n";
     public static final String POSTDEC_MSG   = "! (%s)--\n";
+
+    public static final String GT_MSG        = "! (%s)>(%s)\n";
 
     /////////////////////////////////////////////////////////////////
     // Ops Initialized Here

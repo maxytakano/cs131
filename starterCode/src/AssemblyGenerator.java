@@ -11,6 +11,7 @@ public class AssemblyGenerator {
     // a counter for float labels. used for local floats
     private int floatCounter = 0;
     private int stringCounter = 0;
+    private int cmpCounter = 0;
 
     // 3
     private FileWriter fileWriter;
@@ -540,7 +541,7 @@ public class AssemblyGenerator {
             }
         }
         
-        arithOpCall(aType, bType, op);        
+        arithOpCall(aType, bType, result.getType().getName(), op);        
 
         //call the part of the addition op that is the same regardless
         //of constant/expr addition or expr/expr addition
@@ -630,7 +631,7 @@ public class AssemblyGenerator {
 
 
         //do proper operation based on op
-        arithOpCall(aType, bType, op);
+        arithOpCall(aType, bType, result.getType().getName(), op);
 
         arithEnd(result);
         decreaseIndent();
@@ -667,6 +668,9 @@ public class AssemblyGenerator {
             case "|":
                 writeAssembly(AssemblyMsg.OR_MSG,  lhs, rhs);
                 break;
+            case ">":
+                writeAssembly(AssemblyMsg.OR_MSG,  lhs, rhs);
+                break;
             default:
                 System.out.println("not handled constArith msg");
                 break;
@@ -678,7 +682,7 @@ public class AssemblyGenerator {
     // Method that writes out the assembly for arithmetic ops
     //      add or fadds       %o0, %o1, %o0, or %f0, %f1, %f0
     //-------------------------------------------------------------------
-    public void arithOpCall(String aType, String bType, String op){
+    public void arithOpCall(String aType, String bType, String resultType, String op){
         switch(op){
             case "+":
                 if(!aType.equals("float") || !bType.equals("float")){
@@ -734,6 +738,11 @@ public class AssemblyGenerator {
             case "|":
                 writeAssembly(AssemblyMsg.OR_OP);
                 writeAssembly(AssemblyMsg.THREE_VALS, "%o0", "%o1", "%o0");
+                break;
+            case ">":
+                cmpCounter++;
+                writeAssembly(AssemblyMsg.CMP_OP);
+                writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "%o1");
                 break;
             default:
                 System.out.println("not handled exprArith op");
