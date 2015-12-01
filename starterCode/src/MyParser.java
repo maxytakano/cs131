@@ -1202,25 +1202,32 @@ class MyParser extends parser
             return result;
         }
 
-        //Increment function's offset by local's size. the set sto's offset
-        m_symtab.getFunc().incOffsetCount(result.getType().getSize());
-        result.setOffset((m_symtab.getFunc().getOffsetCount() + ""));
-
         //THE FOLLOWING SECTION is for assembly writing.
         String lhsVal = optInitExtractor(a);
+        String lhsValType = a.getType().getName();
         String rhsVal = optInitExtractor(b);
+        String rhsValType = b.getType().getName();
         if(lhsVal.equals("") && rhsVal.equals("")){
+            //Increment function's offset by local's size. the set sto's offset
+            m_symtab.getFunc().incOffsetCount(result.getType().getSize());
+            result.setOffset((m_symtab.getFunc().getOffsetCount() + ""));
             //there was no constants, we're dealing wiht only local vars/exprs
             // System.out.println(o.getName());
             assGen.exprArith(a, b, result, o.getName());
         }
         else if(lhsVal.equals("") && !rhsVal.equals("")){
+            //Increment function's offset by local's size. the set sto's offset
+            m_symtab.getFunc().incOffsetCount(result.getType().getSize());
+            result.setOffset((m_symtab.getFunc().getOffsetCount() + ""));
             //rhs is a constant, we have to deal with it differently
-            assGen.constArith(a, rhsVal, result, o.getName(), true);
+            assGen.constArith(a, rhsVal, rhsValType, result, o.getName(), true);
         }
         else if(!lhsVal.equals("") && rhsVal.equals("")){
+            //Increment function's offset by local's size. the set sto's offset
+            m_symtab.getFunc().incOffsetCount(result.getType().getSize());
+            result.setOffset((m_symtab.getFunc().getOffsetCount() + ""));
             //lhs is constant, rhs is not, deal with it same as else if
-            assGen.constArith(b, lhsVal, result, o.getName(), false);
+            assGen.constArith(b, lhsVal, lhsValType, result, o.getName(), false);
         }
         //at this point, 
         //neither a nor b are exprs. they both have vals, but no offset
