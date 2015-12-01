@@ -149,6 +149,7 @@ class AssemblyMsg{
     // Param input stuff initialized
     /////////////////////////////////////////////////////////////////
     public static final String TWO_PARAM = "%s" + SEPARATOR + "%s, %s\n";
+    public static final String ONE_VAL = "%s\n";
     public static final String TWO_VALS = "%s, %s\n";
     public static final String THREE_VALS = "%s, %s, %s\n";
 
@@ -192,6 +193,12 @@ class AssemblyMsg{
     public static final String UNARY_OP     = "neg ";
     public static final String LD_OP        = "ld  ";
     public static final String MOV_OP       = "mov ";
+    public static final String CMP_OP       = "cmp ";
+    public static final String BE_OP        = "be  ";
+    public static final String BL_OP        = "bl  ";
+    public static final String BGE_OP        = "bge ";
+    public static final String BNE_OP        = "bne ";
+
 
     /////////////////////////////////////////////////////////////////
     // Cout stuff here
