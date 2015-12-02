@@ -269,6 +269,7 @@ public class AssemblyGenerator {
         writeAssembly(AssemblyMsg.SAVE, "%sp", "-96", "%sp");
         writeAssembly(AssemblyMsg.RET);
         writeAssembly(AssemblyMsg.RESTORE);
+        decreaseIndent();
     }
 
 
@@ -1387,6 +1388,40 @@ public class AssemblyGenerator {
         decreaseIndent();
         // decreaseIndent();
     }
+
+    //-------------------------------------------------------------------
+    // Write assemby to print an exit with a constant value
+    // ! exit([val])
+    // set         [val], %o0  or (writeLoadCout)
+    // call        exit
+    // nop     
+    //
+    //-------------------------------------------------------------------
+    public void writeExit(STO expr, String val) {
+        // increaseIndent();
+        increaseIndent();
+
+        if(!val.equals("")){
+            writeAssembly(AssemblyMsg.EXIT_MSG, val);
+
+            writeAssembly(AssemblyMsg.SET_OP);
+            writeAssembly(AssemblyMsg.TWO_VALS, val, "%o0");
+        }
+        else if(expr.getName().equals(expr.getOffset())){
+            writeAssembly(AssemblyMsg.EXIT_MSG, expr.getName());
+            writeLoadCout(expr.getOffset(), "%g0", "%o0");
+        }
+        else{
+            writeAssembly(AssemblyMsg.EXIT_MSG, expr.getName());
+            writeLoadCout("-" + expr.getOffset(), "%fp", "%o0");
+        }
+        writeAssembly(AssemblyMsg.FUNC_CALL, "exit");
+        writeAssembly(AssemblyMsg.NOP);
+        writeAssembly(AssemblyMsg.NEWLINE);
+
+        decreaseIndent();
+        // decreaseIndent();
+    } 
 
     // 9
     public void writeAssembly(String template, String ... params) {

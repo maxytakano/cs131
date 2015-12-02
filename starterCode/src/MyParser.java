@@ -1453,6 +1453,12 @@ class MyParser extends parser
             m_nNumErrors++;
             m_errors.print( Formatter.toString(ErrorMsg.error7_Exit, exprType.getName()));
         }
+
+        String val = "";
+        if(!expr.getName().equals(expr.getOffset())){
+            val = optInitExtractor(expr);
+        }
+        assGen.writeExit(expr, val);
     }
 
     // Boolean doRecursiveStructCheck(Type type) {

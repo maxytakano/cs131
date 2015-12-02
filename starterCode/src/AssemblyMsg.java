@@ -148,7 +148,7 @@ class AssemblyMsg{
         "!  End of function %s\n";
 
     public static final String FUNC_CALL = 
-        "call    " + SEPARATOR + "%s\n";
+        "call    " + SEPARATOR + SEPARATOR + "%s\n";
 
     public static final String FUNC_SAVE = 
         "%s = -(92 +  %s) & -8\n";
@@ -191,6 +191,8 @@ class AssemblyMsg{
     public static final String CONST_IF_MSG  = "! if((%s) > (%s))\n";
     public static final String ENDIF_MSG     = "! endif\n";
     public static final String ELSE_MSG      = "! else\n";
+
+    public static final String EXIT_MSG      = "! exit(%s)\n";
 
     /////////////////////////////////////////////////////////////////
     // Ops Initialized Here
