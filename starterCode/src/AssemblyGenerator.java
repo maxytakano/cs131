@@ -253,11 +253,8 @@ public class AssemblyGenerator {
 
         //This section is for the ret, restore stuff
         writeAssembly(AssemblyMsg.FUNC_END, mangledName);
+        functionReturn(mangledName);
         String finiName = mangledName + ".fini";
-        writeAssembly(AssemblyMsg.FUNC_CALL, finiName);
-        writeAssembly(AssemblyMsg.NOP);
-        writeAssembly(AssemblyMsg.RET);
-        writeAssembly(AssemblyMsg.RESTORE);
         writeAssembly(AssemblyMsg.FUNC_SAVE, "SAVE." + mangledName, localOffset);
 
         decreaseIndent();
@@ -275,6 +272,130 @@ public class AssemblyGenerator {
         decreaseIndent();
     }
 
+
+    //-------------------------------------------------------------------
+    // Helper for return section of functions
+    //-------------------------------------------------------------------
+    public void functionReturn(String mangledName) {
+        String finiName = mangledName + ".fini";
+        writeAssembly(AssemblyMsg.FUNC_CALL, finiName);
+        writeAssembly(AssemblyMsg.NOP);
+        writeAssembly(AssemblyMsg.RET);
+        writeAssembly(AssemblyMsg.RESTORE);
+    }
+
+    //-------------------------------------------------------------------
+    // Void return writer
+    //
+    // void ret
+    // ! return;
+    // call        yo.void.fini
+    // nop
+    // ret
+    // restore
+    //-------------------------------------------------------------------
+    public void writeVoidFuncReturn(String mangled_name) {
+        increaseIndent();
+        increaseIndent();
+
+        writeAssembly(AssemblyMsg.VOID_RETURN_COMMENT);
+        functionReturn(mangled_name);
+        writeAssembly(AssemblyMsg.NEWLINE);
+
+        decreaseIndent();
+        decreaseIndent();
+    }
+
+    public void writeFuncReturn(STO cur_STO, String mangled_name, String value_string) {
+        increaseIndent();
+        increaseIndent();
+
+        String register_string = "";
+
+        // 1. Determine type specific strings based on STO type.
+        if (cur_STO.getType().isInt() || cur_STO.getType().isBoolean()) {
+            register_string = "%i0";
+        } else if (cur_STO.getType().isFloat()) {
+            register_string = "%f0";
+        }
+
+        writeAssembly(AssemblyMsg.RETURN_COMMENT, cur_STO.getName());
+        if (cur_STO.isExpr()) {
+            // if it's an expr always write the offset
+            writeLoadCout("-" + cur_STO.getOffset(), "%fp", register_string);
+        } else {
+            if (cur_STO.isConst()) {
+                if (cur_STO.getType().isFloat()) {
+                    // check for floats to see if we need to print rodata
+                    writeAssembly(AssemblyMsg.NEWLINE);
+                    writeFloatROData(value_string, register_string);
+                } else {
+                    writeAssembly(AssemblyMsg.SET_OP);
+                    writeAssembly(AssemblyMsg.TWO_VALS, value_string, register_string);
+                }
+            } else {
+                // Check if it's a global or local var.
+                if (cur_STO.getOffset().equals(cur_STO.getName())) {
+                    // if the name equals the offset it's a global int
+                    writeLoadCout(cur_STO.getOffset(), "%g0", register_string);
+                } else {
+                    // else it's a local int
+                    writeLoadCout("-" + cur_STO.getOffset(), "%fp", register_string);
+                }
+            }
+        }
+
+        // Ending of all return statements
+        functionReturn(mangled_name);
+        writeAssembly(AssemblyMsg.NEWLINE);
+
+        decreaseIndent();
+        decreaseIndent();
+    }
+
+    //-------------------------------------------------------------------
+    // Function calls
+    //
+    // ! yo(...)
+    // call        yo.void
+    // nop
+    // set         -8, %o1
+    // add         %fp, %o1, %o1
+    // st          %o0, [%o1]
+    //-------------------------------------------------------------------
+    public void writeFunctionCall(STO caller) {
+        increaseIndent();
+        increaseIndent();
+
+        String func_name = caller.getName();
+        String offset = "-" + caller.getOffset();
+        String mangled_name = ((FuncSTO) caller).getMangledName();
+        String register_string;
+
+        if (caller.getType().isFloat()) {
+            register_string = "%f0";
+        } else {
+            register_string = "%o0";
+        }
+
+        writeAssembly(AssemblyMsg.FUNC_COMMENT, func_name);
+        writeAssembly(AssemblyMsg.FUNC_CALL, mangled_name);
+        writeAssembly(AssemblyMsg.NOP);
+
+        if (!caller.getType().isVoid()) {
+            writeAssembly(AssemblyMsg.SET_OP);
+            writeAssembly(AssemblyMsg.TWO_VALS, offset, "%o1");
+            writeAssembly(AssemblyMsg.ADD_OP);
+            writeAssembly(AssemblyMsg.THREE_VALS, "%fp", "%o1", "%o1");
+            writeAssembly(AssemblyMsg.ST_OP);
+            writeAssembly(AssemblyMsg.TWO_VALS, register_string, "[%o1]");
+            writeAssembly(AssemblyMsg.NEWLINE);
+        }
+
+        decreaseIndent();
+        decreaseIndent();
+    }
+
     //-------------------------------------------------------------------
     // Method that writes out the parameters for methods
     //      ! Store params
@@ -285,7 +406,6 @@ public class AssemblyGenerator {
         increaseIndent();
         writeAssembly(AssemblyMsg.PARAM_MSG);
         if(params != null){
-            System.out.println("doing jank");
             for(int i = 0; i < params.size(); i++){
                 STO sto = params.get(i);
                 if(sto.getType().getName().equals("int") || sto.getType().getName().equals("bool")){
@@ -962,8 +1082,13 @@ public class AssemblyGenerator {
                     writeAssembly(AssemblyMsg.TWO_VALS, value_string, register_string);
                 }
             } else {
+                // System.out.println("info: ");
+                // System.out.println(cur_STO.getType());
+                // System.out.println(cur_STO.getOffset());
+                // String offset_string;
+
                 // Check if it's a global or local var.
-                if (cur_STO.getOffset().equals(cur_STO.getName())) {
+                if (cur_STO.getOffset() != null && cur_STO.getOffset().equals(cur_STO.getName())) {
                     // if the name equals the offset it's a global int
                     writeLoadCout(cur_STO.getOffset(), "%g0", register_string);
                 } else {
