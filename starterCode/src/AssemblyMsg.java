@@ -187,6 +187,11 @@ class AssemblyMsg{
 
     public static final String GT_MSG        = "! (%s)>(%s)\n";
 
+    public static final String IF_MSG        = "! if(%s)\n";
+    public static final String CONST_IF_MSG  = "! if((%s) > (%s))\n";
+    public static final String ENDIF_MSG     = "! endif\n";
+    public static final String ELSE_MSG      = "! else\n";
+
     /////////////////////////////////////////////////////////////////
     // Ops Initialized Here
     /////////////////////////////////////////////////////////////////
@@ -203,12 +208,16 @@ class AssemblyMsg{
     public static final String UNARY_OP     = "neg ";
     public static final String LD_OP        = "ld  ";
     public static final String MOV_OP       = "mov ";
+
     public static final String CMP_OP       = "cmp ";
     public static final String BE_OP        = "be  ";
     public static final String BL_OP        = "bl  ";
-    public static final String BGE_OP        = "bge ";
-    public static final String BNE_OP        = "bne ";
-
+    public static final String BG_OP        = "bg  ";
+    public static final String BLE_OP       = "ble ";
+    public static final String BGE_OP       = "bge ";
+    public static final String BNE_OP       = "bne ";
+    public static final String BA_OP        = "ba  ";
+    public static final String INC_OP       = "inc ";
 
     public static final String FADDS_OP     = "fadds";
     public static final String FSUBS_OP     = "fsubs";

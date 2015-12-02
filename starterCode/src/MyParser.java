@@ -216,52 +216,7 @@ class MyParser extends parser
         //PART 2 STUFF HERE!!!
         //GLOBAL: Check to see if it's global (has level of 1)
 
-        //value can be either "", or an actual value. if "" it's handled differently in the
-        //assgen
-        String optInitVal = optInitExtractor(optInit);
-        if(m_symtab.getLevel() == 1){
-            //we have a global here
-            assGen.writeGlobalOrStaticVar(id, type, optInitVal, isStatic);
-            // writeGlobalOrStaticVar(id, type, optInit, isStatic);
-            //set the offset to the label of the global
-            sto.setOffset(id);
-        }
-        if (m_symtab.getFunc() != null)
-        {
-            //in here we are part of a method or a struct
-            //if static, we call the globalorstaticvar writing method
-            if(isStatic){
-                String localStaticID = m_symtab.getFunc().getMangledName() + "." + id;
-                assGen.writeGlobalOrStaticVar(localStaticID, type, optInitVal, isStatic);
-                // writeGlobalOrStaticVar(localStaticID, type, optInit, isStatic);
-                //set the offset to the label of the variable since it's a static variable
-                sto.setOffset(localStaticID);
-            }
-            else{
-                //we have a local. Increment function's offset by local's size. the set sto's offset
-                m_symtab.getFunc().incOffsetCount(type.getSize());
-                sto.setOffset((m_symtab.getFunc().getOffsetCount() + ""));
-
-                //inefficient but I want to keep the part 1 and part 2 stuff completely separate
-                if(optInit != null){
-                    //we are initializing the variable some value
-                    if (optInit.isError()) {
-                        //possibly don't have to deal with this since we're only receiving correct code
-                    }
-                    else{
-                        // assGen.writeLocalInit(id, sto.getOffset(), optInitVal, type);
-                        if(!optInitVal.equals("")){
-                            //we have an actual value to put into the var
-                            assGen.writeLocalInit(id, sto.getOffset(), optInitVal, type);
-                        }
-                        else{
-                            //we don't have an actual value, we have an expression
-                            assGen.writeLocalAssign(id, sto.getOffset(), optInit.getName(), optInit.getOffset());
-                        }
-                    } 
-                }
-            }
-        }
+        constOrVarDeclAssembly(id, type, optInit, isStatic, sto);
     }
 
     //----------------------------------------------------------------
@@ -454,7 +409,7 @@ class MyParser extends parser
     //----------------------------------------------------------------
     //
     //----------------------------------------------------------------
-    void DoConstDecl(String id, Type type, STO constExpr)
+    void DoConstDecl(String id, Type type, STO constExpr, boolean isStatic)
     {
         if (m_symtab.accessLocal(id) != null)
         {
@@ -490,7 +445,65 @@ class MyParser extends parser
         }
 
         ConstSTO sto = new ConstSTO(id, type, ((ConstSTO)constExpr).getValue());
+
+        constOrVarDeclAssembly(id, type, constExpr, isStatic, sto);
+
         m_symtab.insert(sto);
+    }
+
+    //----------------------------------------------------------------
+    // helper method to write assembly for a var or const declaration
+    //----------------------------------------------------------------
+    void constOrVarDeclAssembly(String id, Type type, STO optInit, Boolean isStatic, STO sto){
+        //PART 2 STUFF HERE!!!
+        //GLOBAL: Check to see if it's global (has level of 1)
+
+        //value can be either "", or an actual value. if "" it's handled differently in the
+        //assgen
+        String optInitVal = optInitExtractor(optInit);
+        if(m_symtab.getLevel() == 1){
+            //we have a global here
+            assGen.writeGlobalOrStaticVar(id, type, optInitVal, isStatic);
+            // writeGlobalOrStaticVar(id, type, optInit, isStatic);
+            //set the offset to the label of the global
+            sto.setOffset(id);
+        }
+        if (m_symtab.getFunc() != null)
+        {
+            //in here we are part of a method or a struct
+            //if static, we call the globalorstaticvar writing method
+            if(isStatic){
+                String localStaticID = m_symtab.getFunc().getMangledName() + "." + id;
+                assGen.writeGlobalOrStaticVar(localStaticID, type, optInitVal, isStatic);
+                // writeGlobalOrStaticVar(localStaticID, type, optInit, isStatic);
+                //set the offset to the label of the variable since it's a static variable
+                sto.setOffset(localStaticID);
+            }
+            else{
+                //we have a local. Increment function's offset by local's size. the set sto's offset
+                m_symtab.getFunc().incOffsetCount(type.getSize());
+                sto.setOffset((m_symtab.getFunc().getOffsetCount() + ""));
+
+                //inefficient but I want to keep the part 1 and part 2 stuff completely separate
+                if(optInit != null){
+                    //we are initializing the variable some value
+                    if (optInit.isError()) {
+                        //possibly don't have to deal with this since we're only receiving correct code
+                    }
+                    else{
+                        // assGen.writeLocalInit(id, sto.getOffset(), optInitVal, type);
+                        if(!optInitVal.equals("")){
+                            //we have an actual value to put into the var
+                            assGen.writeLocalInit(id, sto.getOffset(), optInitVal, type);
+                        }
+                        else{
+                            //we don't have an actual value, we have an expression
+                            assGen.writeLocalAssign(id, sto.getOffset(), optInit.getName(), optInit.getOffset());
+                        }
+                    } 
+                }
+            }
+        }
     }
 
     //----------------------------------------------------------------
@@ -1218,7 +1231,7 @@ class MyParser extends parser
             rhsVal = optInitExtractor(b);
             rhsValType = b.getType().getName();
         }
-        
+
         if(lhsVal.equals("") && rhsVal.equals("")){
             //Increment function's offset by local's size. the set sto's offset
             m_symtab.getFunc().incOffsetCount(result.getType().getSize());
@@ -1240,6 +1253,10 @@ class MyParser extends parser
             result.setOffset((m_symtab.getFunc().getOffsetCount() + ""));
             //lhs is constant, rhs is not, deal with it same as else if
             assGen.constArith(b, lhsVal, lhsValType, result, o.getName(), false);
+        }
+        else if(!lhsVal.equals("") && !rhsVal.equals("") && o.getName().equals(">")){
+            String resultVal = optInitExtractor(result);
+            assGen.constComparisonAssembly(lhsVal, rhsVal, resultVal, result, o);
         }
         //at this point, 
         //neither a nor b are exprs. they both have vals, but no offset
@@ -1833,6 +1850,20 @@ class MyParser extends parser
                 assGen.writeCoutCall(cur_STO, optInitExtractor(cur_STO));
             }
         }
+    }
+
+    //----------------------------------------------------------------
+    // do assembly for the end of the scope of an if statement
+    //----------------------------------------------------------------
+    void doIfScopeEnd(){
+        assGen.ifScopeEnd();
+    }
+
+    //----------------------------------------------------------------
+    // do assembly for the end of an if statement
+    //----------------------------------------------------------------
+    void doIfElseEnd(){
+        assGen.ifElseEnd();
     }
 
 } /* end of file */

@@ -269,12 +269,12 @@ VarDecl ::=         OptStatic:_1 DecoratedType:_2 T_ID:_3 OptArrayList:_4 OptIni
 
 ConstDecl ::=       OptStatic:_1 T_CONST BasicType:_2 T_ID:_3 T_ASSIGN ConstExpr:_5
                     {:
-                        ((MyParser) parser).DoConstDecl (_3, _2, _5);
+                        ((MyParser) parser).DoConstDecl (_3, _2, _5, _1);
                     :}
                     T_SEMI
     |               OptStatic:_1 T_CONST T_AUTO T_ID:_3 T_ASSIGN ConstExpr:_5
                     {:
-                        ((MyParser) parser).DoConstDecl(_3, _5.getType(), _5);
+                        ((MyParser) parser).DoConstDecl(_3, _5.getType(), _5, _1);
                     :}
                     T_SEMI
     ;
@@ -650,11 +650,20 @@ IfStmt ::=          T_IF Expr:_1
                     {:
                         ((MyParser) parser).doConditionCheck(_1);
                     :}
-                    CodeBlock OptElse
+                    CodeBlock 
+                    {:
+                        ((MyParser) parser).doIfScopeEnd();
+                    :}
+                    OptElse
+                    {:
+                        ((MyParser) parser).doIfElseEnd();
+                    :}
+                    
     ;
 
 
-OptElse ::=         T_ELSE CodeBlock
+OptElse ::=         T_ELSE
+                    CodeBlock
     |               /* empty */
     ;
 

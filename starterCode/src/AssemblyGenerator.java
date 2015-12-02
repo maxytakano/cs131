@@ -2,6 +2,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.Date;
 import java.util.Vector;
+import java.util.Stack;
 
 public class AssemblyGenerator {
     // 1
@@ -12,6 +13,10 @@ public class AssemblyGenerator {
     private int floatCounter = 0;
     private int stringCounter = 0;
     private int cmpCounter = 0;
+    private int ifCounter = 0;
+    private int elseCounter = 0;
+    private Stack ifLabelStack = new Stack();
+    private Stack elseLabelStack = new Stack();
 
     // 3
     private FileWriter fileWriter;
@@ -231,8 +236,6 @@ public class AssemblyGenerator {
         writeAssembly(AssemblyMsg.NEWLINE);
         writeParameters(params);
         writeAssembly(AssemblyMsg.NEWLINE);
-
-        decreaseIndent();
     }
 
     //-------------------------------------------------------------------
@@ -250,7 +253,6 @@ public class AssemblyGenerator {
     //      restore 
     //-------------------------------------------------------------------
     public void writeMethodEnd(String mangledName, String localOffset){
-        increaseIndent();
 
         //This section is for the ret, restore stuff
         writeAssembly(AssemblyMsg.FUNC_END, mangledName);
@@ -260,20 +262,16 @@ public class AssemblyGenerator {
         writeAssembly(AssemblyMsg.RET);
         writeAssembly(AssemblyMsg.RESTORE);
         writeAssembly(AssemblyMsg.FUNC_SAVE, "SAVE." + mangledName, localOffset);
+        writeAssembly(AssemblyMsg.NEWLINE);
 
         decreaseIndent();
-
         //Here's the section with all the fini messages
         writeAssembly(AssemblyMsg.LABEL, finiName);
-
         increaseIndent();
 
         writeAssembly(AssemblyMsg.SAVE, "%sp", "-96", "%sp");
-        writeAssembly(AssemblyMsg.NEWLINE);
         writeAssembly(AssemblyMsg.RET);
         writeAssembly(AssemblyMsg.RESTORE);
-
-        decreaseIndent();
     }
 
     //-------------------------------------------------------------------
@@ -303,7 +301,6 @@ public class AssemblyGenerator {
                 }
             }
         }
-        decreaseIndent();
     }
 
     //-------------------------------------------------------------------
@@ -314,7 +311,6 @@ public class AssemblyGenerator {
     //      //st          %o0, [%o1]
     //-------------------------------------------------------------------
     public void writeLocalInit(String name, String offset, String val, Type type){
-        increaseIndent();
         increaseIndent();
 
         writeAssembly(AssemblyMsg.LOCAL_INIT_MSG, name, val);
@@ -341,7 +337,6 @@ public class AssemblyGenerator {
             writeAssembly(AssemblyMsg.NEWLINE);
         }
 
-        decreaseIndent();
         decreaseIndent();
     }
 
@@ -457,7 +452,6 @@ public class AssemblyGenerator {
     //-------------------------------------------------------------------
     public void writeLocalAssign(String desName, String desOffset, String exprName, String exprOffset){
         increaseIndent();
-        increaseIndent();
 
         //writes out the start of the initialization
         if(desOffset.equals(desName)){
@@ -474,7 +468,6 @@ public class AssemblyGenerator {
         writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "[%o1]");
         writeAssembly(AssemblyMsg.NEWLINE);
 
-        decreaseIndent();
         decreaseIndent();
     }
 
@@ -497,10 +490,10 @@ public class AssemblyGenerator {
     //      (writeLoadExpr)
     //      (writeLoadExpr)
     //      (arithOpCall)
-    //      (additionEndResult)
+    //      (arithEnd)   or  (comparisonEnd)
     //-------------------------------------------------------------------
     public void exprArith(STO a, STO b, STO result, String op){
-        increaseIndent();
+        // increaseIndent();
         increaseIndent();
         //get the comment based on the op
         arithMsgCall(a.getName(), b.getName(), op);
@@ -541,13 +534,78 @@ public class AssemblyGenerator {
             }
         }
         
-        arithOpCall(aType, bType, result.getType().getName(), op);        
+        arithOpCall(aType, bType, result, op);        
 
         //call the part of the addition op that is the same regardless
         //of constant/expr addition or expr/expr addition
-        arithEnd(result);
+        switch(op){
+            case "+":
+            case "-":
+            case "*":
+            case "/":
+            case "%":
+            case "^":
+            case "&":
+            case "|":
+                arithEnd(result);
+                break;
+            case ">":
+                elseBranchAssembly(result);
+                break;
+            default:
+                System.out.println("not handled constArith msg");
+                break;
+        }
+
+        // decreaseIndent();
         decreaseIndent();
-        decreaseIndent();
+    }
+
+    //-------------------------------------------------------------------
+    // Method that writes out the assembly for comparisons
+    //      ! if ( ([lhs])>([rhs]) )
+    //      set         [resultVal], %o0
+    //      cmp         %o0, %g0
+    //      be          .$$.else.1
+    //      nop  
+    //-------------------------------------------------------------------
+    public void constComparisonAssembly(String lhs, String rhs, String resultVal, STO result, BinaryOp op){
+        writeAssembly(AssemblyMsg.CONST_IF_MSG, lhs, rhs);
+        writeAssembly(AssemblyMsg.SET_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, resultVal, "%o0");
+
+        // //push on the ifEndLabel
+        // cmpCounter++;
+        // String beTarget = AssemblyMsg.CMP_LABEL + cmpCounter;
+        //push the ifEndLabel onto the stack so that when the scope ends
+        //we know which label to use.
+        ifCounter++;
+        String ifEndLabel = AssemblyMsg.ENDIF_LABEL + ifCounter;
+        ifLabelStack.push(ifEndLabel);
+
+        //push on the else label stuff
+        elseCounter++;
+        String beTarget = AssemblyMsg.ELSE_LABEL + elseCounter;
+        //push onto stack so that we can keep track of else scopes
+        elseLabelStack.push(beTarget);
+        writeAssembly(AssemblyMsg.CMP_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "%g0");
+        writeAssembly(AssemblyMsg.BE_OP);
+        writeAssembly(AssemblyMsg.ONE_VAL, beTarget);
+        writeAssembly(AssemblyMsg.NOP);
+        writeAssembly(AssemblyMsg.NEWLINE);
+    }
+
+    //-------------------------------------------------------------------
+    // Method that writes out the assembly for comparisons
+    //      (comparisonEnd)
+    //-------------------------------------------------------------------
+    public void elseBranchAssembly(STO result){
+        elseCounter++;
+        String beTarget = AssemblyMsg.ELSE_LABEL + elseCounter;
+        //push onto stack so that we can keep track of else scopes
+        elseLabelStack.push(beTarget);
+        comparisonEnd(result, beTarget);
     }
 
     //-------------------------------------------------------------------
@@ -556,10 +614,10 @@ public class AssemblyGenerator {
     //      set 5, %o0
     //      (writeLoadExpr)
     //      (arithCall)
-    //      (additionEndResult)
+    //      (arithEnd)   or  (comparisonEnd)
     //-------------------------------------------------------------------
     public void constArith(STO a, String b, String bType, STO result, String op, boolean constIsRight){
-        increaseIndent();
+        // increaseIndent();
         increaseIndent();
         //call the part of the addition op that is the same regardless
         //of constant/expr addition or expr/expr addition
@@ -593,7 +651,6 @@ public class AssemblyGenerator {
                 if(a.getOffset().equals(a.getName())){
                     writeLoadCout(a.getOffset(), "%g0", "%f0");
                 }else{
-                    // writeLoadExpr(a.getOffset(), 0);
                     writeLoadCout("-" + a.getOffset(), "%fp", "%f0");
                 }
             }
@@ -604,7 +661,8 @@ public class AssemblyGenerator {
             }else if (bType.equals("float")){
                 writeFloatROData(b, "%f1");
             }
-        }else{
+        }
+        else{
             if(!bType.equals("float")){
                 writeAssembly(AssemblyMsg.SET_OP);
                 writeAssembly(AssemblyMsg.TWO_VALS, b, "%o0");
@@ -614,27 +672,44 @@ public class AssemblyGenerator {
             //is a a float?
             if(!aType.equals("float")){
                 if(a.getOffset().equals(a.getName())){
-                    writeLoadGlobal(a.getOffset(), 0);
+                    writeLoadGlobal(a.getOffset(), 1);
                 }else{
-                    writeLoadExpr(a.getOffset(), 0);
+                    writeLoadExpr(a.getOffset(), 1);
                 }
             }
             else if(aType.equals("float")){
                 if(a.getOffset().equals(a.getName())){
-                    writeLoadCout(a.getOffset(), "%g0", "%f0");
+                    writeLoadCout(a.getOffset(), "%g0", "%f1");
                 }else{
-                    // writeLoadExpr(a.getOffset(), 0);
-                    writeLoadCout("-" + a.getOffset(), "%fp", "%f0");
+                    writeLoadCout("-" + a.getOffset(), "%fp", "%f1");
                 }
             }
         }
 
 
         //do proper operation based on op
-        arithOpCall(aType, bType, result.getType().getName(), op);
+        arithOpCall(aType, bType, result, op);
 
-        arithEnd(result);
-        decreaseIndent();
+        switch(op){
+            case "+":
+            case "-":
+            case "*":
+            case "/":
+            case "%":
+            case "^":
+            case "&":
+            case "|":
+                arithEnd(result);
+                break;
+            case ">":
+                elseBranchAssembly(result);
+                break;
+            default:
+                System.out.println("not handled constArith msg");
+                break;
+        }
+
+        // decreaseIndent();
         decreaseIndent();
     }
 
@@ -669,7 +744,7 @@ public class AssemblyGenerator {
                 writeAssembly(AssemblyMsg.OR_MSG,  lhs, rhs);
                 break;
             case ">":
-                writeAssembly(AssemblyMsg.OR_MSG,  lhs, rhs);
+                writeAssembly(AssemblyMsg.GT_MSG,  lhs, rhs);
                 break;
             default:
                 System.out.println("not handled constArith msg");
@@ -682,7 +757,8 @@ public class AssemblyGenerator {
     // Method that writes out the assembly for arithmetic ops
     //      add or fadds       %o0, %o1, %o0, or %f0, %f1, %f0
     //-------------------------------------------------------------------
-    public void arithOpCall(String aType, String bType, String resultType, String op){
+    public void arithOpCall(String aType, String bType, STO result, String op){
+        String resultType = result.getType().getName();
         switch(op){
             case "+":
                 if(!aType.equals("float") || !bType.equals("float")){
@@ -741,13 +817,51 @@ public class AssemblyGenerator {
                 break;
             case ">":
                 cmpCounter++;
-                writeAssembly(AssemblyMsg.CMP_OP);
-                writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "%o1");
+                String bleTarget = AssemblyMsg.CMP_LABEL + cmpCounter;
+                //push the ifEndLabel onto the stack so that when the scope ends
+                //we know which label to use.
+                ifCounter++;
+                String ifEndLabel = AssemblyMsg.ENDIF_LABEL + ifCounter;
+                ifLabelStack.push(ifEndLabel);
+                conditionalAssemblyStart(bleTarget, result.getOffset()); 
                 break;
             default:
                 System.out.println("not handled exprArith op");
                 break;
         }
+    }
+
+    //-------------------------------------------------------------------
+    // Method that writes out the assembly for a conditional expression call
+    //     cmp         %o0, %o1
+    //     ble         [bleTarget]
+    //     mov         %g0, %o0
+    //     inc         %o0
+    // [bleTarget]:
+    //     set         [resultOffset], %o1
+    //     add         %fp, %o1, %o1
+    //     st          %o0, [%o1]
+    //-------------------------------------------------------------------
+    public void conditionalAssemblyStart(String bleTarget, String resultOffset){
+        writeAssembly(AssemblyMsg.CMP_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "%o1");
+        writeAssembly(AssemblyMsg.BLE_OP);
+        writeAssembly(AssemblyMsg.ONE_VAL, bleTarget);
+        writeAssembly(AssemblyMsg.MOV_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, "%g0", "%o0");
+        writeAssembly(AssemblyMsg.INC_OP);
+        writeAssembly(AssemblyMsg.ONE_VAL, "%o0");
+
+        decreaseIndent();
+        writeAssembly(AssemblyMsg.LABEL, bleTarget);
+        increaseIndent();
+        writeAssembly(AssemblyMsg.SET_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, "-" + resultOffset, "%o1");
+        writeAssembly(AssemblyMsg.ADD_OP);
+        writeAssembly(AssemblyMsg.THREE_VALS, "%fp", "%o1", "%o1");
+        writeAssembly(AssemblyMsg.ST_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "[%o1]");
+        writeAssembly(AssemblyMsg.NEWLINE);
     }
 
     //-------------------------------------------------------------------
@@ -762,7 +876,7 @@ public class AssemblyGenerator {
     //-------------------------------------------------------------------
     public void exprUnarySign(STO a, STO result, String op){
         increaseIndent();
-        increaseIndent();
+        // increaseIndent();
 
         switch(op){
             case "-":
@@ -793,7 +907,7 @@ public class AssemblyGenerator {
         }
 
         arithEnd(result);
-        decreaseIndent();
+        // decreaseIndent();
         decreaseIndent();
     }
 
@@ -817,7 +931,7 @@ public class AssemblyGenerator {
 
         //load the expression first
         increaseIndent();
-        increaseIndent();
+        // increaseIndent();
 
         switch(op){
             case "++":
@@ -892,14 +1006,14 @@ public class AssemblyGenerator {
         writeAssembly(AssemblyMsg.TWO_VALS, "%o2", "[%o1]");
 
 
-        decreaseIndent();
+        // decreaseIndent();
         decreaseIndent();
     }
 
     //-------------------------------------------------------------------
     // Method that writes out the common assembly found at end of
     // all additions
-    //      set         -12, %o1
+    //      set         [resultOffset], %o1
     //      add         %fp, %o1, %o1
     //      st          %o0, [%o1]
     //-------------------------------------------------------------------
@@ -914,6 +1028,80 @@ public class AssemblyGenerator {
         }else{
             writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "[%o1]");
         }
+        writeAssembly(AssemblyMsg.NEWLINE);
+    }
+
+    //-------------------------------------------------------------------
+    // Method that writes out the common assembly found at end of
+    // all comparisons
+    //     (MSG)
+    //     [writeLoadCout]
+    //     cmp         %o0, %g0
+    //     be          [beTarget]
+    //     nop 
+    //
+    //-------------------------------------------------------------------
+    public void comparisonEnd(STO result, String beTarget){
+        writeAssembly(AssemblyMsg.IF_MSG, result.getName());
+        writeLoadCout("-"+result.getOffset(), "%fp", "%o0");
+        writeAssembly(AssemblyMsg.CMP_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "%g0");
+        writeAssembly(AssemblyMsg.BE_OP);
+        writeAssembly(AssemblyMsg.ONE_VAL, beTarget);
+        writeAssembly(AssemblyMsg.NOP);
+        writeAssembly(AssemblyMsg.NEWLINE);
+        increaseIndent();
+    }
+
+    //-------------------------------------------------------------------
+    // Method that writes out the assembly found at end of an if scope
+    //          ba       .$$.endif.4
+    //          nop    
+    //  
+    //          ! else
+    //     .$$.else.4:
+    //-------------------------------------------------------------------
+    public void ifScopeEnd(){
+        increaseIndent();
+        writeAssembly(AssemblyMsg.BA_OP);
+        //pop the label for the end of this scope
+        String endifTarget = "";
+        if(!ifLabelStack.isEmpty()){
+            endifTarget = (String) ifLabelStack.pop();
+        }
+        //then push it back onto the stack since we need it when we do the 
+        //exit label for the if statement
+        ifLabelStack.push(endifTarget);
+        writeAssembly(AssemblyMsg.ONE_VAL, endifTarget);
+        writeAssembly(AssemblyMsg.NOP);
+        writeAssembly(AssemblyMsg.NEWLINE);
+        decreaseIndent();
+        writeAssembly(AssemblyMsg.ELSE_MSG);
+        decreaseIndent();
+        //pop the label for the end of this scope
+        String elseTarget = "";
+        if(!elseLabelStack.isEmpty()){
+            elseTarget = (String) elseLabelStack.pop();
+        }
+        writeAssembly(AssemblyMsg.LABEL, elseTarget);
+        writeAssembly(AssemblyMsg.NEWLINE);
+        increaseIndent();
+    }
+
+    //-------------------------------------------------------------------
+    // Method that writes out the assembly found at end of an if statement
+    //          ! endif
+    //     .$$.endif.4:  
+    //-------------------------------------------------------------------
+    public void ifElseEnd(){
+        writeAssembly(AssemblyMsg.ENDIF_MSG);
+        decreaseIndent();
+        //pop the label for the end of this scope
+        String endifTarget = "";
+        if(!ifLabelStack.isEmpty()){
+            endifTarget = (String) ifLabelStack.pop();
+        }
+        writeAssembly(AssemblyMsg.LABEL, endifTarget);
         writeAssembly(AssemblyMsg.NEWLINE);
     }
 
@@ -954,7 +1142,7 @@ public class AssemblyGenerator {
 
         // 2. Write the common assembly with type specific strings.
         increaseIndent();
-        increaseIndent();
+        // increaseIndent();
 
         writeAssembly(AssemblyMsg.COUT_COMMENT, cur_STO.getName());
         if (cur_STO.isExpr()) {
@@ -995,7 +1183,7 @@ public class AssemblyGenerator {
 
         writeAssembly(AssemblyMsg.NOP);
         writeAssembly(AssemblyMsg.NEWLINE);
-        decreaseIndent();
+        // decreaseIndent();
         decreaseIndent();
     }
 
@@ -1014,7 +1202,7 @@ public class AssemblyGenerator {
     //-------------------------------------------------------------------
     public void writePrintString(String string_name) {
         increaseIndent();
-        increaseIndent();
+        // increaseIndent();
 
         writeStringROData(string_name);
         writeAssembly(AssemblyMsg.NEWLINE);
@@ -1032,7 +1220,7 @@ public class AssemblyGenerator {
         writeAssembly(AssemblyMsg.NOP);
         writeAssembly(AssemblyMsg.NEWLINE);
 
-        decreaseIndent();
+        // decreaseIndent();
         decreaseIndent();
     }
 
@@ -1060,7 +1248,7 @@ public class AssemblyGenerator {
     // nop
     //-------------------------------------------------------------------
     public void writeEndl() {
-        increaseIndent();
+        // increaseIndent();
         increaseIndent();
 
         writeAssembly(AssemblyMsg.COUT_ENDL);
@@ -1072,7 +1260,7 @@ public class AssemblyGenerator {
         writeAssembly(AssemblyMsg.NEWLINE);
 
         decreaseIndent();
-        decreaseIndent();
+        // decreaseIndent();
     }
 
     // 9
