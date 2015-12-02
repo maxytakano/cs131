@@ -955,6 +955,10 @@ class MyParser extends parser
             return new ErrorSTO(sto.getName());
         }
 
+        // incrementing 
+        m_symtab.getFunc().incOffsetCount(sto.getType().getSize());
+        sto.setOffset((m_symtab.getFunc().getOffsetCount() + ""));
+
         /* Check 9b */
         FuncSTO func = (FuncSTO) sto;
         Vector<FuncSTO> overloads = func.getOverloads();
@@ -971,6 +975,7 @@ class MyParser extends parser
                     returnSTO.setIsModifiable(true);
                 }
 
+                returnSTO.setOffset((m_symtab.getFunc().getOffsetCount() + ""));
                 return returnSTO;
             } else {
                 // No exact match, throw illegal overload call error
@@ -1043,6 +1048,11 @@ class MyParser extends parser
                 returnSTO.setIsModifiable(true);
             }
 
+            // p2 generate assembly for regular function call
+            assGen.writeFunctionCall(sto);
+
+            // Set up for using the return value
+            returnSTO.setOffset((m_symtab.getFunc().getOffsetCount() + ""));
             return returnSTO;
         }
     }
@@ -1408,10 +1418,25 @@ class MyParser extends parser
         // if (curlevel == 2) {
         // compare current level, to the current func's inner level (directly inside)
         if (curlevel == m_symtab.getFunc().getInnerLevel()) {   // extension to work at any nesting (maybe)
-            
             m_symtab.getFunc().setHasTopReturn(true);
         }
     }
+
+    // takes in an expr or a null expr for void returns
+    void parseReturnStmt(STO cur_STO) {
+        FuncSTO curFunc = m_symtab.getFunc();
+        String value = optInitExtractor(cur_STO);
+        String mangled_name = curFunc.getMangledName();
+
+        if (cur_STO.getType().isNullPointer()) {
+            // void return case
+            assGen.writeVoidFuncReturn(mangled_name);
+            return;
+        }
+
+        assGen.writeFuncReturn(cur_STO, mangled_name, value);
+    }
+
 
     // ** Phase 1 Check 7** /
     //----------------------------------------------------------------

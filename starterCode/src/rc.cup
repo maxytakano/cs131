@@ -719,12 +719,15 @@ ReturnStmt ::=      T_RETURN T_SEMI
                         ((MyParser) parser).doReturnVoidCheck();
                         // Always try to set the hastopfunction flag
                         ((MyParser) parser).setFunctionReturn();
+                        ExprSTO voidExpr = new ExprSTO ("nullptr", new NullPointerType(), false, false); 
+                        ((MyParser) parser).parseReturnStmt(voidExpr);
                     :}
     |               T_RETURN Expr:_1 T_SEMI
                     {:
                         ((MyParser) parser).doReturnTypeCheck(_1);
                         // Always try to set the hastopfunction flag
                         ((MyParser) parser).setFunctionReturn();
+                        ((MyParser) parser).parseReturnStmt(_1);
                     :}
     ;
 

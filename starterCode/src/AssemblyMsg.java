@@ -227,14 +227,19 @@ class AssemblyMsg{
     /////////////////////////////////////////////////////////////////
     // Cout stuff here
     /////////////////////////////////////////////////////////////////
-
     // messages used for cout
     public static final String COUT_ENDL = "! cout << endl\n";
     public static final String COUT_COMMENT = "! cout << %s\n";
-    // public static final String COUT_BOOL = "! cout << %s\n";
-
     // function consts
     public static final String PRINTF = "printf";
+
+    /////////////////////////////////////////////////////////////////
+    // Function stuff here
+    /////////////////////////////////////////////////////////////////
+    public static final String FUNC_COMMENT = "! %s(...)\n";
+    public static final String VOID_RETURN_COMMENT = "! return;\n";
+    public static final String RETURN_COMMENT = "! return %s;\n";
+    
 }
 
 
