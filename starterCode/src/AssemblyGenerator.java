@@ -425,6 +425,7 @@ public class AssemblyGenerator {
         increaseIndent();
 
         writeAssembly(AssemblyMsg.LOCAL_INIT_MSG, name, val);
+        System.out.println("initializing local: " + name +" with value: " + val);
 
         if(offset.equals(name)){
             writeLoadGlobalForAssign(offset);
@@ -565,6 +566,8 @@ public class AssemblyGenerator {
         increaseIndent();
 
         //writes out the start of the initialization
+        writeAssembly(AssemblyMsg.LOCAL_INIT_MSG, desName, exprName);
+
         if(desOffset.equals(desName)){
             writeLoadGlobalForAssign(desOffset);
         }else{
@@ -610,11 +613,31 @@ public class AssemblyGenerator {
         
         //is a a float?
         String aType = a.getType().getName();
+        String resultType = result.getType().getName();
         if(!aType.equals("float")){
             if(a.getOffset().equals(a.getName())){
                 writeLoadGlobal(a.getOffset(), 0);
             }else{
                 writeLoadExpr(a.getOffset(), 0);
+            }
+            if(resultType.equals("float")){
+                // set         -8, %l7
+                // add         %fp, %l7, %l7
+                // st          %o0, [%l7]
+                // ld          [%l7], %f0
+                // fitos       %f0, %f0
+
+                // set         |offset|, %o1
+                // add         |add_name|, %o1, %o1
+                // st          |reg_name|, [%o1]
+                //-------------------------------------------------------------------
+                // public void writeStore(String offset, String add_name, String reg_name) {
+                writeStore("-" + result.getOffset(), "%fp", "%o0");
+                writeAssembly(AssemblyMsg.LD_OP);
+                writeAssembly(AssemblyMsg.TWO_VALS, "[%l7]", "%f0");
+                writeAssembly(AssemblyMsg.FITOS_OP);
+                writeAssembly(AssemblyMsg.TWO_VALS, "%f0", "%f0");
+
             }
         }
         else if(aType.equals("float")){
@@ -868,7 +891,7 @@ public class AssemblyGenerator {
         String resultType = result.getType().getName();
         switch(op){
             case "+":
-                if(!aType.equals("float") || !bType.equals("float")){
+                if(!aType.equals("float") && !bType.equals("float")){
                     writeAssembly(AssemblyMsg.ADD_OP);
                     writeAssembly(AssemblyMsg.THREE_VALS, "%o0", "%o1", "%o0");
                 }
@@ -878,7 +901,7 @@ public class AssemblyGenerator {
                 }
                 break;
             case "-":
-                if(!aType.equals("float") || !bType.equals("float")){
+                if(!aType.equals("float") && !bType.equals("float")){
                     writeAssembly(AssemblyMsg.SUB_OP);
                     writeAssembly(AssemblyMsg.THREE_VALS, "%o0", "%o1", "%o0");
                 }
@@ -889,7 +912,7 @@ public class AssemblyGenerator {
                 break;
             case "*":
                 // arithFuncCall(AssemblyMsg.MUL_OP);
-                if(!aType.equals("float") || !bType.equals("float")){
+                if(!aType.equals("float") && !bType.equals("float")){
                     arithFuncCall(AssemblyMsg.MUL_OP);
                 }
                 else if(aType.equals("float")){
@@ -899,7 +922,7 @@ public class AssemblyGenerator {
                 break;
             case "/":
                 // arithFuncCall(AssemblyMsg.DIV_OP);
-                if(!aType.equals("float") || !bType.equals("float")){
+                if(!aType.equals("float") && !bType.equals("float")){
                     arithFuncCall(AssemblyMsg.DIV_OP);
                 }
                 else if(aType.equals("float")){
@@ -1059,6 +1082,8 @@ public class AssemblyGenerator {
             }else{
                 writeLoadExpr(a.getOffset(), 0);
             }
+            writeAssembly(AssemblyMsg.SET_OP);
+            writeAssembly(AssemblyMsg.TWO_VALS,  "1", "%o1");
         }
         else if(aType.equals("float")){
             if(a.getOffset().equals(a.getName())){
@@ -1066,37 +1091,66 @@ public class AssemblyGenerator {
             }else{
                 writeLoadCout("-" + a.getOffset(), "%fp", "%f0");
             }
+            writeFloatROData("1.0", "%f1");
         }
-        // writeLoadExpr(a.getOffset(), 0);
-        writeAssembly(AssemblyMsg.SET_OP);
-        writeAssembly(AssemblyMsg.TWO_VALS,  "1", "%o1");
+        
 
         switch(op){
             case "++":
-                writeAssembly(AssemblyMsg.ADD_OP);
-                writeAssembly(AssemblyMsg.THREE_VALS, "%o0","%o1","%o2");
+                if(!aType.equals("float")){
+                    writeAssembly(AssemblyMsg.ADD_OP);
+                    writeAssembly(AssemblyMsg.THREE_VALS, "%o0","%o1","%o2");
 
-                if(isPre){
-                    writeStore("-" + result.getOffset(), "%fp", "%o2");
-                }else{
-                    writeStore("-" + result.getOffset(), "%fp", "%o0");
+                    if(isPre){
+                        writeStore("-" + result.getOffset(), "%fp", "%o2");
+                    }else{
+                        writeStore("-" + result.getOffset(), "%fp", "%o0");
+                    }
+                }
+                else if(aType.equals("float")){
+                    writeAssembly(AssemblyMsg.FADDS_OP);
+                    writeAssembly(AssemblyMsg.THREE_VALS, "%f0","%f1","%f2");
+
+                    if(isPre){
+                        writeStore("-" + result.getOffset(), "%fp", "%f2");
+                    }else{
+                        writeStore("-" + result.getOffset(), "%fp", "%f0");
+                    }
                 }
                 break;
             case "--":
-                writeAssembly(AssemblyMsg.SUB_OP);
-                writeAssembly(AssemblyMsg.THREE_VALS, "%o0","%o1","%o2");
+                if(!aType.equals("float")){
+                    writeAssembly(AssemblyMsg.SUB_OP);
+                    writeAssembly(AssemblyMsg.THREE_VALS, "%o0","%o1","%o2");
 
-                if(isPre){
-                    writeStore("-" + result.getOffset(), "%fp", "%o2");
-                }else{
-                    writeStore("-" + result.getOffset(), "%fp", "%o0");
+                    if(isPre){
+                        writeStore("-" + result.getOffset(), "%fp", "%o2");
+                    }else{
+                        writeStore("-" + result.getOffset(), "%fp", "%o0");
+                    }
                 }
+                else if(aType.equals("float")){
+                    writeAssembly(AssemblyMsg.FSUBS_OP);
+                    writeAssembly(AssemblyMsg.THREE_VALS, "%f0","%f1","%f2");
+
+                    if(isPre){
+                        writeStore("-" + result.getOffset(), "%fp", "%f2");
+                    }else{
+                        writeStore("-" + result.getOffset(), "%fp", "%f0");
+                    }
+                }
+                
                 break;
             default:
                 break;
         }
 
-        writeStore("-" + a.getOffset(), "%fp", "%o2");
+        if(!aType.equals("float")){
+            writeStore("-" + a.getOffset(), "%fp", "%o2");
+        }
+        else if(aType.equals("float")){
+            writeStore("-" + a.getOffset(), "%fp", "%f2");
+        }
 
         decreaseIndent();
     }

@@ -225,6 +225,7 @@ class AssemblyMsg{
     public static final String FSUBS_OP     = "fsubs";
     public static final String FMULS_OP     = "fmuls";
     public static final String FDIVS_OP     = "fdivs";
+    public static final String FITOS_OP     = "fitos";
 
     /////////////////////////////////////////////////////////////////
     // Cout stuff here
