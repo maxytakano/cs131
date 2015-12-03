@@ -1883,6 +1883,10 @@ class MyParser extends parser
         }
     }
 
+    void parseCINStmt(STO cur_STO) {
+        assGen.writeCINCall(cur_STO);
+    }
+
     //----------------------------------------------------------------
     // do assembly for the end of the scope of an if statement
     //----------------------------------------------------------------

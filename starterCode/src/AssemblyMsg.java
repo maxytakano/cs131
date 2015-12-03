@@ -236,12 +236,18 @@ class AssemblyMsg{
     public static final String PRINTF = "printf";
 
     /////////////////////////////////////////////////////////////////
+    // CIN stuff here
+    /////////////////////////////////////////////////////////////////
+    public static final String CIN_COMMENT = "! cin << %s\n";
+
+
+    /////////////////////////////////////////////////////////////////
     // Function stuff here
     /////////////////////////////////////////////////////////////////
     public static final String FUNC_COMMENT = "! %s(...)\n";
     public static final String VOID_RETURN_COMMENT = "! return;\n";
     public static final String RETURN_COMMENT = "! return %s;\n";
-    
+
 }
 
 

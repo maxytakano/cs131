@@ -382,12 +382,7 @@ public class AssemblyGenerator {
         writeAssembly(AssemblyMsg.NOP);
 
         if (!caller.getType().isVoid()) {
-            writeAssembly(AssemblyMsg.SET_OP);
-            writeAssembly(AssemblyMsg.TWO_VALS, offset, "%o1");
-            writeAssembly(AssemblyMsg.ADD_OP);
-            writeAssembly(AssemblyMsg.THREE_VALS, "%fp", "%o1", "%o1");
-            writeAssembly(AssemblyMsg.ST_OP);
-            writeAssembly(AssemblyMsg.TWO_VALS, register_string, "[%o1]");
+            writeStore(offset, "%fp", register_string);
             writeAssembly(AssemblyMsg.NEWLINE);
         }
 
@@ -975,12 +970,7 @@ public class AssemblyGenerator {
         decreaseIndent();
         writeAssembly(AssemblyMsg.LABEL, bleTarget);
         increaseIndent();
-        writeAssembly(AssemblyMsg.SET_OP);
-        writeAssembly(AssemblyMsg.TWO_VALS, "-" + resultOffset, "%o1");
-        writeAssembly(AssemblyMsg.ADD_OP);
-        writeAssembly(AssemblyMsg.THREE_VALS, "%fp", "%o1", "%o1");
-        writeAssembly(AssemblyMsg.ST_OP);
-        writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "[%o1]");
+        writeStore("-" + resultOffset, "%fp", "%o0");
         writeAssembly(AssemblyMsg.NEWLINE);
     }
 
@@ -1097,47 +1087,28 @@ public class AssemblyGenerator {
                 writeAssembly(AssemblyMsg.ADD_OP);
                 writeAssembly(AssemblyMsg.THREE_VALS, "%o0","%o1","%o2");
 
-                writeAssembly(AssemblyMsg.SET_OP);
-                writeAssembly(AssemblyMsg.TWO_VALS, "-" + result.getOffset(), "%o1");
-                writeAssembly(AssemblyMsg.ADD_OP);
-                writeAssembly(AssemblyMsg.THREE_VALS, "%fp", "%o1", "%o1");
                 if(isPre){
-                    writeAssembly(AssemblyMsg.ST_OP);
-                    writeAssembly(AssemblyMsg.TWO_VALS, "%o2", "[%o1]");
+                    writeStore("-" + result.getOffset(), "%fp", "%o2");
                 }else{
-                    writeAssembly(AssemblyMsg.ST_OP);
-                    writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "[%o1]");
+                    writeStore("-" + result.getOffset(), "%fp", "%o0");
                 }
                 break;
             case "--":
                 writeAssembly(AssemblyMsg.SUB_OP);
                 writeAssembly(AssemblyMsg.THREE_VALS, "%o0","%o1","%o2");
 
-                writeAssembly(AssemblyMsg.SET_OP);
-                writeAssembly(AssemblyMsg.TWO_VALS, "-" + result.getOffset(), "%o1");
-                writeAssembly(AssemblyMsg.ADD_OP);
-                writeAssembly(AssemblyMsg.THREE_VALS, "%fp", "%o1", "%o1");
                 if(isPre){
-                    writeAssembly(AssemblyMsg.ST_OP);
-                    writeAssembly(AssemblyMsg.TWO_VALS, "%o2", "[%o1]");
+                    writeStore("-" + result.getOffset(), "%fp", "%o2");
                 }else{
-                    writeAssembly(AssemblyMsg.ST_OP);
-                    writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "[%o1]");
+                    writeStore("-" + result.getOffset(), "%fp", "%o0");
                 }
                 break;
             default:
                 break;
         }
 
-        writeAssembly(AssemblyMsg.SET_OP);
-        writeAssembly(AssemblyMsg.TWO_VALS, "-" + a.getOffset(), "%o1");
-        writeAssembly(AssemblyMsg.ADD_OP);
-        writeAssembly(AssemblyMsg.THREE_VALS, "%fp", "%o1", "%o1");
-        writeAssembly(AssemblyMsg.ST_OP);
-        writeAssembly(AssemblyMsg.TWO_VALS, "%o2", "[%o1]");
+        writeStore("-" + a.getOffset(), "%fp", "%o2");
 
-
-        // decreaseIndent();
         decreaseIndent();
     }
 
@@ -1324,6 +1295,44 @@ public class AssemblyGenerator {
     }
 
     //-------------------------------------------------------------------
+    // Write assembly for a CIN
+    //-------------------------------------------------------------------
+    public void writeCINCall(STO cur_STO) {
+        increaseIndent();
+
+        String call_string;
+        String add_string;
+        String register_string;
+
+        // Check for float vs int
+        if (cur_STO.getType().isFloat()) {
+            call_string = "inputFloat";
+            register_string = "%f0";
+        } else if (cur_STO.getType().isInt()) {
+            call_string = "inputInt";
+            register_string = "%o0";
+        } else {
+            call_string = "Error: not int or float";
+            register_string = "Error: not int or float";
+        }
+
+        // Check for global vs local
+        if (cur_STO.getOffset() != null && cur_STO.getOffset().equals(cur_STO.getName())) {
+            add_string = "%g0";
+        } else {
+            add_string = "%fp";
+        }
+
+        writeAssembly(AssemblyMsg.CIN_COMMENT, cur_STO.getName());
+        writeAssembly(AssemblyMsg.FUNC_CALL, call_string);
+        writeAssembly(AssemblyMsg.NOP);
+        writeStore("-" + cur_STO.getOffset(), add_string, register_string);
+        writeAssembly(AssemblyMsg.NEWLINE);
+
+        decreaseIndent();
+    }
+
+    //-------------------------------------------------------------------
     // Write assemby to print a string
     //
     //     (string rodata)
@@ -1375,6 +1384,23 @@ public class AssemblyGenerator {
         writeAssembly(AssemblyMsg.LD_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, "[%l7]", reg_name);
     }
+
+    //-------------------------------------------------------------------
+    // Helper: Write assemby to store a var into a register
+    //
+    // set         |offset|, %o1
+    // add         |add_name|, %o1, %o1
+    // st          |reg_name|, [%o1]
+    //-------------------------------------------------------------------
+    public void writeStore(String offset, String add_name, String reg_name) {
+        writeAssembly(AssemblyMsg.SET_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, offset, "%o1");
+        writeAssembly(AssemblyMsg.ADD_OP);
+        writeAssembly(AssemblyMsg.THREE_VALS, add_name, "%o1", "%o1");
+        writeAssembly(AssemblyMsg.ST_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, reg_name, "[%o1]");
+    }
+
 
     //-------------------------------------------------------------------
     // Write assemby to print a endl
