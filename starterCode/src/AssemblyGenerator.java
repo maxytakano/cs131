@@ -296,18 +296,15 @@ public class AssemblyGenerator {
     //-------------------------------------------------------------------
     public void writeVoidFuncReturn(String mangled_name) {
         increaseIndent();
-        increaseIndent();
 
         writeAssembly(AssemblyMsg.VOID_RETURN_COMMENT);
         functionReturn(mangled_name);
         writeAssembly(AssemblyMsg.NEWLINE);
 
         decreaseIndent();
-        decreaseIndent();
     }
 
     public void writeFuncReturn(STO cur_STO, String mangled_name, String value_string) {
-        increaseIndent();
         increaseIndent();
 
         String register_string = "";
@@ -349,7 +346,6 @@ public class AssemblyGenerator {
         functionReturn(mangled_name);
         writeAssembly(AssemblyMsg.NEWLINE);
 
-        decreaseIndent();
         decreaseIndent();
     }
 
@@ -608,7 +604,6 @@ public class AssemblyGenerator {
     //      (arithEnd)   or  (comparisonEnd)
     //-------------------------------------------------------------------
     public void exprArith(STO a, STO b, STO result, String op){
-        // increaseIndent();
         increaseIndent();
         //get the comment based on the op
         arithMsgCall(a.getName(), b.getName(), op);
@@ -672,7 +667,6 @@ public class AssemblyGenerator {
                 break;
         }
 
-        // decreaseIndent();
         decreaseIndent();
     }
 
@@ -732,7 +726,6 @@ public class AssemblyGenerator {
     //      (arithEnd)   or  (comparisonEnd)
     //-------------------------------------------------------------------
     public void constArith(STO a, String b, String bType, STO result, String op, boolean constIsRight){
-        // increaseIndent();
         increaseIndent();
         //call the part of the addition op that is the same regardless
         //of constant/expr addition or expr/expr addition
@@ -824,7 +817,6 @@ public class AssemblyGenerator {
                 break;
         }
 
-        // decreaseIndent();
         decreaseIndent();
     }
 
@@ -986,7 +978,6 @@ public class AssemblyGenerator {
     //-------------------------------------------------------------------
     public void exprUnarySign(STO a, STO result, String op){
         increaseIndent();
-        // increaseIndent();
 
         switch(op){
             case "-":
@@ -1017,7 +1008,6 @@ public class AssemblyGenerator {
         }
 
         arithEnd(result);
-        // decreaseIndent();
         decreaseIndent();
     }
 
@@ -1041,7 +1031,6 @@ public class AssemblyGenerator {
 
         //load the expression first
         increaseIndent();
-        // increaseIndent();
 
         switch(op){
             case "++":
@@ -1244,7 +1233,6 @@ public class AssemblyGenerator {
 
         // 2. Write the common assembly with type specific strings.
         increaseIndent();
-        // increaseIndent();
 
         writeAssembly(AssemblyMsg.COUT_COMMENT, cur_STO.getName());
         if (cur_STO.isExpr()) {
@@ -1290,7 +1278,6 @@ public class AssemblyGenerator {
 
         writeAssembly(AssemblyMsg.NOP);
         writeAssembly(AssemblyMsg.NEWLINE);
-        // decreaseIndent();
         decreaseIndent();
     }
 
@@ -1347,7 +1334,6 @@ public class AssemblyGenerator {
     //-------------------------------------------------------------------
     public void writePrintString(String string_name) {
         increaseIndent();
-        // increaseIndent();
 
         writeStringROData(string_name);
         writeAssembly(AssemblyMsg.NEWLINE);
@@ -1365,7 +1351,6 @@ public class AssemblyGenerator {
         writeAssembly(AssemblyMsg.NOP);
         writeAssembly(AssemblyMsg.NEWLINE);
 
-        // decreaseIndent();
         decreaseIndent();
     }
 
@@ -1410,7 +1395,6 @@ public class AssemblyGenerator {
     // nop
     //-------------------------------------------------------------------
     public void writeEndl() {
-        // increaseIndent();
         increaseIndent();
 
         writeAssembly(AssemblyMsg.COUT_ENDL);
@@ -1422,7 +1406,6 @@ public class AssemblyGenerator {
         writeAssembly(AssemblyMsg.NEWLINE);
 
         decreaseIndent();
-        // decreaseIndent();
     }
 
     //-------------------------------------------------------------------
@@ -1434,7 +1417,6 @@ public class AssemblyGenerator {
     //
     //-------------------------------------------------------------------
     public void writeExit(STO expr, String val) {
-        // increaseIndent();
         increaseIndent();
 
         if(!val.equals("")){
@@ -1456,7 +1438,6 @@ public class AssemblyGenerator {
         writeAssembly(AssemblyMsg.NEWLINE);
 
         decreaseIndent();
-        // decreaseIndent();
     } 
 
     // 9
