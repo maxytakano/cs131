@@ -363,7 +363,7 @@ public class AssemblyGenerator {
     // add         %fp, %o1, %o1
     // st          %o0, [%o1]
     //-------------------------------------------------------------------
-    public void writeFunctionCall(STO caller) {
+    public void writeFunctionCall(STO caller, Vector<STO> args) {
         increaseIndent();
         increaseIndent();
 
@@ -379,6 +379,9 @@ public class AssemblyGenerator {
         }
 
         writeAssembly(AssemblyMsg.FUNC_COMMENT, func_name);
+
+        writeFuncCallParams(args);
+
         writeAssembly(AssemblyMsg.FUNC_CALL, mangled_name);
         writeAssembly(AssemblyMsg.NOP);
 
@@ -389,6 +392,83 @@ public class AssemblyGenerator {
 
         decreaseIndent();
         decreaseIndent();
+    }
+
+    // Function to create params for function calls
+    public void writeFuncCallParams(Vector<STO> params) {
+        if (params == null) {
+            return;
+        }
+
+        int param_number = 0;
+
+        for (int i = 0; i < params.size(); i++) {
+            STO cur_STO = params.get(i);
+
+            String register_string = "";
+
+            // 1. Determine type specific strings based on STO type.
+            if (cur_STO.getType().isInt() || cur_STO.getType().isBoolean()) {
+                register_string = "%o" + param_number;
+            } else if (cur_STO.getType().isFloat()) {
+                register_string = "%f" + param_number;
+            }
+
+            writeAssembly(AssemblyMsg.ARG_COMMENT);
+            if (cur_STO.isExpr()) {
+                // if it's an expr always write the offset
+                writeLoadCout("-" + cur_STO.getOffset(), "%fp", register_string);
+            } else {
+                if (cur_STO.isConst()) {
+                    if (cur_STO.getType().isFloat()) {
+                        // check for floats to see if we need to print rodata
+                        writeAssembly(AssemblyMsg.NEWLINE);
+                        writeFloatROData( ((ConstSTO)cur_STO).getFloatValue() + "", register_string );
+                    } else {
+                        writeAssembly(AssemblyMsg.SET_OP);
+                        writeAssembly(AssemblyMsg.TWO_VALS, ((ConstSTO)cur_STO).getIntValue() + "", register_string);
+                    }
+                } else {
+                    // Check if it's a global or local var.
+                    if (cur_STO.getOffset().equals(cur_STO.getName())) {
+                        // if the name equals the offset it's a global int
+                        writeLoadCout(cur_STO.getOffset(), "%g0", register_string);
+                    } else {
+                        // else it's a local int
+                        writeLoadCout("-" + cur_STO.getOffset(), "%fp", register_string);
+                    }
+                }
+            }
+
+            writeAssembly(AssemblyMsg.NEWLINE);
+        }
+
+
+    //     ! a <- in1
+    //     set         -4, %l7
+    //     add         %fp, %l7, %l7
+    //     ld          [%l7], %o0
+    //     ! b <- 7
+    //     set         7, %o1
+    //     ! c <- in2
+    //     set         -8, %o2
+    //     add         %fp, %o2, %o2
+    //     ! d <- f1
+    //     set         -12, %l7
+    //     add         %fp, %l7, %l7
+    //     ld          [%l7], %f3
+    //     ! e <- 5.0
+
+    //     .section    ".rodata"
+    //     .align      4
+    // .$$.float.2:
+    //     .single     0r5.0
+
+    //     .section    ".text"
+    //     .align      4
+    //     set         .$$.float.2, %l7
+    //     ld          [%l7], %f4
+        
     }
 
     //-------------------------------------------------------------------

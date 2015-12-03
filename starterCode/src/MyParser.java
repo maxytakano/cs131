@@ -1049,7 +1049,7 @@ class MyParser extends parser
             }
 
             // p2 generate assembly for regular function call
-            assGen.writeFunctionCall(sto);
+            assGen.writeFunctionCall(sto, args);
 
             // Set up for using the return value
             returnSTO.setOffset((m_symtab.getFunc().getOffsetCount() + ""));
