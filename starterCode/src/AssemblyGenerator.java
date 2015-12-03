@@ -365,7 +365,6 @@ public class AssemblyGenerator {
     //-------------------------------------------------------------------
     public void writeFunctionCall(STO caller) {
         increaseIndent();
-        increaseIndent();
 
         String func_name = caller.getName();
         String offset = "-" + caller.getOffset();
@@ -392,7 +391,6 @@ public class AssemblyGenerator {
             writeAssembly(AssemblyMsg.NEWLINE);
         }
 
-        decreaseIndent();
         decreaseIndent();
     }
 
@@ -422,6 +420,7 @@ public class AssemblyGenerator {
                 }
             }
         }
+        decreaseIndent();
     }
 
     //-------------------------------------------------------------------
@@ -1073,10 +1072,21 @@ public class AssemblyGenerator {
                 break;
         }
 
-        if(a.getOffset().equals(a.getName())){
-            writeLoadGlobal(a.getOffset(), 0);
-        }else{
-            writeLoadExpr(a.getOffset(), 0);
+        String aType = a.getType().getName();
+
+        if(!aType.equals("float")){
+            if(a.getOffset().equals(a.getName())){
+                writeLoadGlobal(a.getOffset(), 0);
+            }else{
+                writeLoadExpr(a.getOffset(), 0);
+            }
+        }
+        else if(aType.equals("float")){
+            if(a.getOffset().equals(a.getName())){
+                writeLoadCout(a.getOffset(), "%g0", "%f0");
+            }else{
+                writeLoadCout("-" + a.getOffset(), "%fp", "%f0");
+            }
         }
         // writeLoadExpr(a.getOffset(), 0);
         writeAssembly(AssemblyMsg.SET_OP);
