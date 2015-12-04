@@ -378,8 +378,10 @@ public class AssemblyGenerator {
 
         if (!caller.getType().isVoid()) {
             writeStore(offset, "%fp", register_string);
-            writeAssembly(AssemblyMsg.NEWLINE);
+            // writeAssembly(AssemblyMsg.NEWLINE);
         }
+        writeAssembly(AssemblyMsg.NEWLINE);
+
 
         decreaseIndent();
     }
