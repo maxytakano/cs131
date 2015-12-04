@@ -994,6 +994,10 @@ class MyParser extends parser
                 }
 
                 returnSTO.setOffset(("-" + m_symtab.getFunc().getOffsetCount() + ""));
+
+                // p2 writing
+                assGen.writeFunctionCall(matchingFunc, args, matchingFunc.getParameters());
+
                 return returnSTO;
             } else {
                 // No exact match, throw illegal overload call error
