@@ -303,6 +303,9 @@ StructdefDecl ::=   T_STRUCTDEF T_ID_U:_1 T_LBRACE
                         if (!((MyParser) parser).checkForCtor(_1)) {
                             ((MyParser) parser).createDefaultCtor(_1);
                         }
+                        if (!((MyParser) parser).checkForDtor(_1)) {
+                            ((MyParser) parser).createDefaultDtor(_1);
+                        }
                     :}
                     OptFieldFuncsList
                     {:
@@ -369,6 +372,9 @@ DtorDef ::=         T_TILDE T_ID_U:_3
                     {:
                         ((MyParser) parser).SaveLineNum ();
                         ((MyParser) parser).DoFuncDecl_1("~" + _3, new VoidType(), false, true);
+
+                        ((MyParser) parser).DoFormalParams(null, _3);
+                        // ((MyParser) parser).DoDtorAssParse();  // dont need to check overwritten dtors?
                     :}
                     T_LPAREN T_RPAREN T_LBRACE OptStmtList T_RBRACE
                     {:
@@ -732,7 +738,10 @@ ReturnStmt ::=      T_RETURN T_SEMI
     ;
 
 
-ReadStmt ::=        T_CIN T_ISTREAM Designator T_SEMI
+ReadStmt ::=        T_CIN T_ISTREAM Designator:_1 T_SEMI
+                    {:
+                        ((MyParser) parser).parseCINStmt(_1);
+                    :}
     ;
 
 
@@ -1067,7 +1076,7 @@ Designator2 ::=     Designator2:_1 T_DOT T_ID:_3
                     :}
     |               Designator2:_1 T_LPAREN OptExprList:_2 T_RPAREN
                     {:
-                        RESULT = ((MyParser) parser).DoFuncCall(_1, _2);
+                        RESULT = ((MyParser) parser).DoFuncCall(_1, _2, null, null);
                     :}
     |               Designator3:_1
                     {:
