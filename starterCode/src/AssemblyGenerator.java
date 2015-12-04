@@ -196,6 +196,9 @@ public class AssemblyGenerator {
                     writeAssembly(AssemblyMsg.DOT_WORD, val);
                     break;
                 case "float":
+                    if(!val.contains(".")){
+                        val += ".0";
+                    }
                     writeAssembly(AssemblyMsg.DOT_SINGLE, val);
                     break;
                 default:
@@ -542,6 +545,10 @@ public class AssemblyGenerator {
         writeAssembly(AssemblyMsg.LABEL, floatLabel);
         increaseIndent();
 
+        //hacking my way down town, parsing fast, test case pass, and I'm statically bound
+        if(!val.contains(".")){
+            val += ".0";
+        }
         writeAssembly(AssemblyMsg.DOT_SINGLE, val);
         writeAssembly(AssemblyMsg.NEWLINE);
         writeAssembly(AssemblyMsg.TEXT);
