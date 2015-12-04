@@ -148,7 +148,7 @@ class AssemblyMsg{
         "!  End of function %s\n";
 
     public static final String FUNC_CALL = 
-        "call    " + SEPARATOR + SEPARATOR + "%s\n";
+        "call    " + SEPARATOR + "%s\n";
 
     public static final String FUNC_SAVE = 
         "%s = -(92 +  %s) & -8\n";
@@ -248,6 +248,7 @@ class AssemblyMsg{
     public static final String FUNC_COMMENT = "! %s(...)\n";
     public static final String VOID_RETURN_COMMENT = "! return;\n";
     public static final String RETURN_COMMENT = "! return %s;\n";
+    public static final String ARG_COMMENT = "! %s <- %s\n";
 
 }
 

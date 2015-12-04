@@ -345,7 +345,7 @@ class MyParser extends parser
             else{
                 //we have a local. Increment function's offset by local's size. the set sto's offset
                 m_symtab.getFunc().incOffsetCount(sto.getType().getSize());
-                sto.setOffset((m_symtab.getFunc().getOffsetCount() + ""));
+                sto.setOffset(("-" + m_symtab.getFunc().getOffsetCount() + ""));
             }
         }
 
@@ -482,7 +482,7 @@ class MyParser extends parser
             else{
                 //we have a local. Increment function's offset by local's size. the set sto's offset
                 m_symtab.getFunc().incOffsetCount(type.getSize());
-                sto.setOffset((m_symtab.getFunc().getOffsetCount() + ""));
+                sto.setOffset(("-" + m_symtab.getFunc().getOffsetCount() + ""));
 
                 //inefficient but I want to keep the part 1 and part 2 stuff completely separate
                 if(optInit != null){
@@ -498,7 +498,8 @@ class MyParser extends parser
                         }
                         else{
                             //we don't have an actual value, we have an expression
-                            assGen.writeLocalAssign(id, sto.getOffset(), optInit.getName(), optInit.getOffset());
+                            // assGen.writeLocalAssign(id, sto.getOffset(), optInit.getName(), optInit.getOffset());
+                            assGen.writeLocalAssign(id, sto, optInit);
                         }
                     } 
                 }
@@ -746,7 +747,9 @@ class MyParser extends parser
         // end new
 
         FuncSTO candidateFunc = m_symtab.getFunc();
+        setParamOffsets(params);
         candidateFunc.setParameters(params);
+
 
         // 1. Null check to see if there is a existing function or not.
         if (existingFunc != null) {
@@ -787,6 +790,20 @@ class MyParser extends parser
         }
         else{
             assGen.writeMethodStart("", candidateFunc.getMangledName(), candidateFunc.getParameters());
+        }
+    }
+
+    void setParamOffsets(Vector<STO> params) {
+        int offset = 68;
+
+        if (params == null) {
+            return;
+        }
+
+        STO cur_param;
+        for (int i = 0; i < params.size(); i++) {
+            cur_param = params.get(i);
+            cur_param.setOffset( (offset + (i * 4)) + "");
         }
     }
 
@@ -932,7 +949,8 @@ class MyParser extends parser
             }
             else{
                 //we don't have an actual value, we have an expression
-                assGen.writeLocalAssign(stoDes.getName(), stoDes.getOffset(), stoExpr.getName(), stoExpr.getOffset());
+                // assGen.writeLocalAssign(stoDes.getName(), stoDes.getOffset(), stoExpr.getName(), stoExpr.getOffset());
+                assGen.writeLocalAssign(stoDes.getName(), stoDes, stoExpr);
             }
 
             return newVar;
@@ -957,7 +975,7 @@ class MyParser extends parser
 
         // incrementing 
         m_symtab.getFunc().incOffsetCount(sto.getType().getSize());
-        sto.setOffset((m_symtab.getFunc().getOffsetCount() + ""));
+        sto.setOffset(("-" + m_symtab.getFunc().getOffsetCount() + ""));
 
         /* Check 9b */
         FuncSTO func = (FuncSTO) sto;
@@ -975,7 +993,7 @@ class MyParser extends parser
                     returnSTO.setIsModifiable(true);
                 }
 
-                returnSTO.setOffset((m_symtab.getFunc().getOffsetCount() + ""));
+                returnSTO.setOffset(("-" + m_symtab.getFunc().getOffsetCount() + ""));
                 return returnSTO;
             } else {
                 // No exact match, throw illegal overload call error
@@ -1049,10 +1067,10 @@ class MyParser extends parser
             }
 
             // p2 generate assembly for regular function call
-            assGen.writeFunctionCall(sto);
+            assGen.writeFunctionCall(sto, args, params);
 
             // Set up for using the return value
-            returnSTO.setOffset((m_symtab.getFunc().getOffsetCount() + ""));
+            returnSTO.setOffset(("-" + m_symtab.getFunc().getOffsetCount() + ""));
             return returnSTO;
         }
     }
@@ -1245,7 +1263,7 @@ class MyParser extends parser
         if(lhsVal.equals("") && rhsVal.equals("")){
             //Increment function's offset by local's size. the set sto's offset
             m_symtab.getFunc().incOffsetCount(result.getType().getSize());
-            result.setOffset((m_symtab.getFunc().getOffsetCount() + ""));
+            result.setOffset(("-" + m_symtab.getFunc().getOffsetCount() + ""));
             //there was no constants, we're dealing wiht only local vars/exprs
             // System.out.println(o.getName());
             assGen.exprArith(a, b, result, o.getName());
@@ -1253,14 +1271,14 @@ class MyParser extends parser
         else if(lhsVal.equals("") && !rhsVal.equals("")){
             //Increment function's offset by local's size. the set sto's offset
             m_symtab.getFunc().incOffsetCount(result.getType().getSize());
-            result.setOffset((m_symtab.getFunc().getOffsetCount() + ""));
+            result.setOffset(("-" + m_symtab.getFunc().getOffsetCount() + ""));
             //rhs is a constant, we have to deal with it differently
             assGen.constArith(a, rhsVal, rhsValType, result, o.getName(), true);
         }
         else if(!lhsVal.equals("") && rhsVal.equals("")){
             //Increment function's offset by local's size. the set sto's offset
             m_symtab.getFunc().incOffsetCount(result.getType().getSize());
-            result.setOffset((m_symtab.getFunc().getOffsetCount() + ""));
+            result.setOffset(("-" + m_symtab.getFunc().getOffsetCount() + ""));
             //lhs is constant, rhs is not, deal with it same as else if
             assGen.constArith(b, lhsVal, lhsValType, result, o.getName(), false);
         }
@@ -1294,7 +1312,7 @@ class MyParser extends parser
 
         if(m_symtab.getFunc() != null){
             m_symtab.getFunc().incOffsetCount(result.getType().getSize());
-            result.setOffset((m_symtab.getFunc().getOffsetCount() + ""));
+            result.setOffset(("-" + m_symtab.getFunc().getOffsetCount() + ""));
             // System.out.println(o.getName());
             //true = postincrement
             //false = preincrement
@@ -1331,7 +1349,7 @@ class MyParser extends parser
             String unaryVal = optInitExtractor(a);
             if(unaryVal.equals("")){
                 m_symtab.getFunc().incOffsetCount(result.getType().getSize());
-                result.setOffset((m_symtab.getFunc().getOffsetCount() + ""));
+                result.setOffset(("-" + m_symtab.getFunc().getOffsetCount() + ""));
                 //there was no constants, we're dealing wiht only local vars/exprs
                 // System.out.println(o.getName());
                 assGen.exprUnarySign(a, result, o.getName());
