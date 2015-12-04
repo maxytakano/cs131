@@ -26,6 +26,9 @@ class MyParser extends parser
 
     private AssemblyGenerator assGen;
 
+    private int struct_counter = 0;
+
+
     //----------------------------------------------------------------
     //
     //----------------------------------------------------------------
@@ -207,8 +210,11 @@ class MyParser extends parser
         }
 
         VarSTO sto = new VarSTO(id, type);
+        if (sto.getType().isStruct()) {
+            // set the struct number for declaration/end of structs
+            sto.setStructNumber(++struct_counter);
+        }
         m_symtab.insert(sto);
-
 
         //----------------------------------------------------------------
         // TO DEAL WITH STATIC, WE NEED TO PASS IT IN FIRST
@@ -480,9 +486,14 @@ class MyParser extends parser
                 sto.setOffset(localStaticID);
             }
             else{
-                //we have a local. Increment function's offset by local's size. the set sto's offset
-                m_symtab.getFunc().incOffsetCount(type.getSize());
-                sto.setOffset(("-" + m_symtab.getFunc().getOffsetCount() + ""));
+                if (type.isStruct()) {
+                    // size already set in ctor call for structs
+
+                } else {
+                    //we have a local. Increment function's offset by local's size. the set sto's offset
+                    m_symtab.getFunc().incOffsetCount(type.getSize());
+                    sto.setOffset(("-" + m_symtab.getFunc().getOffsetCount() + ""));
+                }
 
                 //inefficient but I want to keep the part 1 and part 2 stuff completely separate
                 if(optInit != null){
@@ -502,6 +513,11 @@ class MyParser extends parser
                             assGen.writeLocalAssign(id, sto, optInit);
                         }
                     } 
+                } else {
+
+                    // m_symtab.getFunc().incOffsetCount(type.getSize());
+                    // sto.setOffset( "-" + m_symtab.getFunc().getOffsetCount() );
+                    assGen.writeStructInit("-" + m_symtab.getFunc().getOffsetCount(), ((VarSTO) sto).getStructNumber() + "");
                 }
             }
         }
@@ -566,6 +582,10 @@ class MyParser extends parser
             sto = (VarSTO)makeAnArray(id, type, arraySizes);
             m_symtab.getStructType().addSize( ((ConstSTO)getObjSize(sto)).getIntValue() );
         }
+
+        m_symtab.getStructType().incOffsetCount(type.getSize());
+        sto.setOffset(m_symtab.getStructType().getOffsetCount() + "");
+
         m_symtab.insert(sto);
     }
 
@@ -580,12 +600,34 @@ class MyParser extends parser
         }
     }
 
+    Boolean checkForDtor(String id) {
+        if (m_symtab.accessLocal(id) == null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     //----------------------------------------------------------------
     // Creates a default ctor for the current struct
     //----------------------------------------------------------------
     void createDefaultCtor(String id) {
-        FuncSTO sto = new FuncSTO(id, new VoidType(), false);
+        FuncSTO sto = new FuncSTO(id + "." + id, new VoidType(), false);
         m_symtab.insert(sto);
+
+        assGen.writeMethodStart(sto, false, true);
+        assGen.writeMethodEnd(sto.getMangledName(), sto.getOffsetCount() + "", null);
+    }
+
+    //----------------------------------------------------------------
+    // Creates a default ctor for the current struct
+    //----------------------------------------------------------------
+    void createDefaultDtor(String id) {
+        FuncSTO sto = new FuncSTO(id + ".~" + id, new VoidType(), false);
+        m_symtab.insert(sto);
+
+        assGen.writeMethodStart(sto, false, true);
+        assGen.writeMethodEnd(sto.getMangledName(), sto.getOffsetCount() + "", null);
     }
 
     //----------------------------------------------------------------
@@ -595,34 +637,21 @@ class MyParser extends parser
         STO structCtor;
 
         // Check if we are in a struct, and the name is the same, if so
-        // use the current structs ctor. 
+        // use the current structs ctor.
         if (m_symtab.getStructType() != null) {
             if (m_symtab.getStructType().getName() == structType.getName()) {
                 structCtor = m_symtab.getStructType().getCtor();
-                DoFuncCall(structCtor, params);
+                // P2TODO: might need to pass something other than null here
+                DoFuncCall(structCtor, params, structType, null);
                 return;
             }
-        } 
+        }
 
         STO structSTO = m_symtab.access(structType.getName());
         structCtor = ((StructType)structSTO.getType()).getCtor();
         // STO structCtor = m_symtab.getStructType().getCtor();
-        DoFuncCall(structCtor, params);
+        DoFuncCall(structCtor, params, structType, structSTO);
     }
-
-    //----------------------------------------------------------------
-    // Check 14
-    //----------------------------------------------------------------
-    // void doNewCtorCall(STO sto, Vector<STO> params) {
-    //     Type structType = ((PointerType)sto.getType()).getNextLevel();
-    //     if (!structType.isStruct()) {
-    //         return;
-    //     }
-
-    //     STO structSTO = m_symtab.access(structType.getName());
-    //     STO structCtor = ((StructType)structSTO.getType()).getCtor();
-    //     DoFuncCall(structCtor, params);
-    // }
 
     STO getThis() {
         // Create the R - value with the current struct type
@@ -670,7 +699,7 @@ class MyParser extends parser
 
             if (isDtor) {
                 // if we are a dtor and passed all checks, insert into symtab safely.
-                FuncSTO sto = new FuncSTO(id, returnType, returnByReference);
+                FuncSTO sto = new FuncSTO(structType.getName() + "." + id, returnType, returnByReference);
                 m_symtab.setFunc(sto);
                 m_symtab.insert(sto);
                 m_symtab.openScope();
@@ -707,6 +736,9 @@ class MyParser extends parser
             }
         }
 
+        if (structType != null) {
+            id = structType.getName() + "." + id;
+        } 
         FuncSTO sto = new FuncSTO(id, returnType, returnByReference);
         m_symtab.setFunc(sto);
     }
@@ -784,13 +816,17 @@ class MyParser extends parser
 
         //4. added in the code for the assembly. Call the function declaration method here to 
         //   write the assembly for a function declaration
-        if(existingFunc == null){
-            assGen.writeMethodStart(candidateFunc.getName(), candidateFunc.getMangledName(), 
-                                    candidateFunc.getParameters());
-        }
-        else{
-            assGen.writeMethodStart("", candidateFunc.getMangledName(), candidateFunc.getParameters());
-        }
+        // if(existingFunc == null){
+        //     assGen.writeMethodStart(candidateFunc.getName(), candidateFunc.getMangledName(), 
+        //                             candidateFunc.getParameters());
+        // }
+        // else{
+        //     assGen.writeMethodStart("", candidateFunc.getMangledName(), candidateFunc.getParameters());
+        // }
+
+        boolean overload_flag = (existingFunc != null);
+        boolean struct_flag = (m_symtab.getStructType() != null);
+        assGen.writeMethodStart(candidateFunc, overload_flag, struct_flag);
     }
 
     void setParamOffsets(Vector<STO> params) {
@@ -838,7 +874,20 @@ class MyParser extends parser
             m_nNumErrors++;
             m_errors.print(ErrorMsg.error6c_Return_missing);
         }
-        assGen.writeMethodEnd(curFunc.getMangledName(), curFunc.getOffsetCount() + "");
+
+        // need the Struct type, the struct's dtor, and the corresponding ctor/dtor#
+        Scope curScope = m_symtab.getScope();
+        Vector<STO> locals = curScope.getLocals();
+        Vector<STO> structs_found = new Vector<STO>();
+        STO cur_STO;
+        for (int i = 0; i < locals.size(); i++) {
+            cur_STO = locals.get(i);
+            if (cur_STO.getType().isStruct()) {
+                structs_found.addElement(cur_STO);
+            }
+        }
+
+        assGen.writeMethodEnd(curFunc.getMangledName(), curFunc.getOffsetCount() + "", structs_found);
         m_symtab.closeScope();
         m_symtab.setFunc(null);
     }
@@ -960,7 +1009,7 @@ class MyParser extends parser
     //----------------------------------------------------------------
     //
     //----------------------------------------------------------------
-    STO DoFuncCall(STO sto, Vector<STO> args)
+    STO DoFuncCall(STO sto, Vector<STO> args, Type structType, STO struct_STO)
     {
         // Check if the function is an error
         if (sto.isError()) {
@@ -996,7 +1045,11 @@ class MyParser extends parser
                 returnSTO.setOffset(("-" + m_symtab.getFunc().getOffsetCount() + ""));
 
                 // p2 writing
-                assGen.writeFunctionCall(matchingFunc, args, matchingFunc.getParameters());
+                if (struct_STO != null) {
+                    m_symtab.getFunc().incOffsetCount(structType.getSize());
+                    matchingFunc.setOffset( "-" + m_symtab.getFunc().getOffsetCount() );
+                }
+                assGen.writeFunctionCall(matchingFunc, args, matchingFunc.getParameters(), structType);
 
                 return returnSTO;
             } else {
@@ -1071,7 +1124,11 @@ class MyParser extends parser
             }
 
             // p2 generate assembly for regular function call
-            assGen.writeFunctionCall(sto, args, params);
+            if (struct_STO != null) {
+                m_symtab.getFunc().incOffsetCount(structType.getSize());
+                sto.setOffset( "-" + m_symtab.getFunc().getOffsetCount() );
+            }
+            assGen.writeFunctionCall(sto, args, params, structType);
 
             // Set up for using the return value
             returnSTO.setOffset(("-" + m_symtab.getFunc().getOffsetCount() + ""));
@@ -1633,7 +1690,7 @@ class MyParser extends parser
 
             STO structSTO = m_symtab.access(structType.getName());
             STO structCtor = ((StructType)structSTO.getType()).getCtor();
-            DoFuncCall(structCtor, params);
+            DoFuncCall(structCtor, params, structType, structSTO);
         }
     }
 
@@ -1662,7 +1719,7 @@ class MyParser extends parser
 
             STO structSTO = m_symtab.access(structType.getName());
             STO structCtor = ((StructType)structSTO.getType()).getCtor();
-            DoFuncCall(structCtor, params);
+            DoFuncCall(structCtor, params, structType, structSTO);
         }
     }
 

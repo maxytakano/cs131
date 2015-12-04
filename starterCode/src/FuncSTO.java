@@ -245,7 +245,9 @@ class FuncSTO extends STO
 	//----------------------------------------------------------------
 	public String getMangledName(){
 		StringBuilder mangledName = new StringBuilder();
-		mangledName.append(this.getName());
+		String name_result = this.getName().replace('~', '$');
+		mangledName.append(name_result);
+		// mangledName.append(this.getName());
 
 		if(m_parameters == null){
 			mangledName.append(".void");

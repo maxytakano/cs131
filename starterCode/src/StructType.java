@@ -9,6 +9,8 @@
 class StructType extends CompositeType
 {
 	private Scope m_structScope;
+	private int offsetCount;
+
 
 	//----------------------------------------------------------------
 	// Constructor for the Struct type. All Struct are 0 bits long
@@ -66,7 +68,13 @@ class StructType extends CompositeType
 	// Check 14a
 	//----------------------------------------------------------------
 	public STO getCtor() {
-		return m_structScope.access(getName());
+		// return m_structScope.access(getName());
+		return m_structScope.access(getName() + "." + getName());
+	}
+
+	// p2 method attempt to return dtor for the struct
+	public STO getDtor() {
+		return m_structScope.access(getName() + ".~" + getName());
 	}
 
 	//----------------------------------------------------------------
@@ -87,6 +95,14 @@ class StructType extends CompositeType
 	public void addSize(int size) {
 		int curSize = getSize();
 		setSize(curSize + size);
+	}
+
+	public int getOffsetCount(){
+		return offsetCount;
+	}
+
+	public void incOffsetCount(int inc){
+		offsetCount += inc;
 	}
 
 }
