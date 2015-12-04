@@ -18,6 +18,9 @@ public class AssemblyGenerator {
     private Stack ifLabelStack = new Stack();
     private Stack elseLabelStack = new Stack();
 
+
+    private int ctorDtorCounter = 0;
+
     // 3
     private FileWriter fileWriter;
 
@@ -210,6 +213,48 @@ public class AssemblyGenerator {
         decreaseIndent();
     }
 
+    //     .section    ".bss"
+    //     .align      4
+    // .$$.ctorDtor.1:
+    //     .skip       4
+
+    //     .section    ".text"
+    //     .align      4
+        
+    //     set         .$$.ctorDtor.1, %o0
+    //     set         -16, %o1
+    //     add         %fp, %o1, %o1
+    //     st          %o1, [%o0]
+    //-------------------------------------------------------------------
+    // Method that writes out the assembly for any global or static vars
+    //-------------------------------------------------------------------
+    public void writeStructInit(String offset) {
+        increaseIndent();
+
+        String ctorDtor_label = ".$$.ctorDtor." + ++ctorDtorCounter;
+
+        //if there's no value, go into bss, otherwise data
+        writeAssembly(AssemblyMsg.BSS);
+
+        writeAssembly(AssemblyMsg.ALIGN_4);
+
+        //don't do the global key word if it's static
+        decreaseIndent();
+        writeAssembly(AssemblyMsg.LABEL, ctorDtor_label);
+        increaseIndent();
+        writeAssembly(AssemblyMsg.SKIP, "4");
+        writeAssembly(AssemblyMsg.NEWLINE);
+
+        writeAssembly(AssemblyMsg.TEXT);
+        writeAssembly(AssemblyMsg.ALIGN_4);
+
+        writeAssembly(AssemblyMsg.SET_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, ctorDtor_label, "%o0");
+        writeStoreStruct(offset, "%fp", "%o1");
+
+        decreaseIndent();
+    }
+
 
     //-------------------------------------------------------------------
     // Method that writes out the assembly for method starts
@@ -222,9 +267,14 @@ public class AssemblyGenerator {
     //      (writeparameters)
     //
     //-------------------------------------------------------------------
-    public void writeMethodStart(String funcName, String mangledName, Vector<STO> params){
-        boolean declared = funcName.equals("");
-        if(!declared){
+    public void writeMethodStart(FuncSTO func_STO, boolean overload_flag, boolean struct_flag) {
+        String funcName = func_STO.getName();
+        String mangledName = func_STO.getMangledName();
+
+
+        if (struct_flag) {
+
+        } else if(!overload_flag){
             writeAssembly(AssemblyMsg.NEWLINE);
             increaseIndent();
             writeAssembly(AssemblyMsg.DOT_GLOBAL, funcName);
@@ -237,7 +287,7 @@ public class AssemblyGenerator {
         writeAssembly(AssemblyMsg.TWO_VALS, "SAVE." + mangledName, "%g1");
         writeAssembly(AssemblyMsg.SAVE, "%sp", "%g1", "%sp");
         writeAssembly(AssemblyMsg.NEWLINE);
-        writeParameters(params);
+        writeParameters(func_STO.getParameters());
         writeAssembly(AssemblyMsg.NEWLINE);
     }
 
@@ -355,7 +405,7 @@ public class AssemblyGenerator {
     // add         %fp, %o1, %o1
     // st          %o0, [%o1]
     //-------------------------------------------------------------------
-    public void writeFunctionCall(STO caller, Vector<STO> args, Vector<STO> params) {
+    public void writeFunctionCall(STO caller, Vector<STO> args, Vector<STO> params, Type structType) {
         increaseIndent();
 
         String func_name = caller.getName();
@@ -372,6 +422,13 @@ public class AssemblyGenerator {
         writeAssembly(AssemblyMsg.FUNC_COMMENT, func_name);
 
         writeFuncCallArgs(args, params);
+        if (structType != null) {
+            // String struct_offset = "-" + ((StructType)structType).getOffsetCount();
+            writeAssembly(AssemblyMsg.SET_OP);
+            writeAssembly(AssemblyMsg.TWO_VALS, offset, "%o0");
+            writeAssembly(AssemblyMsg.ADD_OP);
+            writeAssembly(AssemblyMsg.THREE_VALS, "%fp", "%o0", "%o0");
+        }
 
         writeAssembly(AssemblyMsg.FUNC_CALL, mangled_name);
         writeAssembly(AssemblyMsg.NOP);
@@ -1472,6 +1529,16 @@ public class AssemblyGenerator {
         writeAssembly(AssemblyMsg.THREE_VALS, add_name, "%o1", "%o1");
         writeAssembly(AssemblyMsg.ST_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, reg_name, "[%o1]");
+    }
+
+    // just for structs
+    public void writeStoreStruct(String offset, String add_name, String reg_name) {
+        writeAssembly(AssemblyMsg.SET_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, offset, "%o1");
+        writeAssembly(AssemblyMsg.ADD_OP);
+        writeAssembly(AssemblyMsg.THREE_VALS, add_name, "%o1", "%o1");
+        writeAssembly(AssemblyMsg.ST_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, reg_name, "[%o0]");
     }
 
 
