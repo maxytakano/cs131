@@ -835,7 +835,12 @@ Expr0 ::=           Expr0:_1 T_OR Expr1:_3
     ;
 
 
-Expr1 ::=           Expr1:_1 T_AND Expr2:_3
+Expr1 ::=           Expr1:_1 
+                    T_AND 
+                    {:
+                        ((MyParser) parser).doLeftShortCircuit(_1, "&&");
+                    :}
+                    Expr2:_3
                     {:
                         RESULT = ((MyParser) parser).doBinaryExpr(_1, new AndOp("&&"), _3);
                     :}

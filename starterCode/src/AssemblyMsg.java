@@ -62,6 +62,18 @@ class AssemblyMsg{
     public static final String ELSE_LABEL = 
         ".$$.else.";
 
+    public static final String ANDOR_LABEL = 
+        ".$$.andorSkip.";
+
+    public static final String ANDOREND_LBL = 
+        ".$$.andorEnd.";
+
+    public static final String LOOPCHECK_LBL = 
+        ".$$.loopCheck.";
+
+    public static final String LOOPEND_LBL = 
+        ".$$.loopEnd.";
+
     /////////////////////////////////////////////////////////////////
     // FILE HEADER FOR THE DATE ALWAYS AT THE TOP of rc.s file
     /////////////////////////////////////////////////////////////////
@@ -186,13 +198,22 @@ class AssemblyMsg{
     public static final String POSTDEC_MSG   = "! (%s)--\n";
 
     public static final String GT_MSG        = "! (%s)>(%s)\n";
+    public static final String GTE_MSG       = "! (%s)>=(%s)\n";
+    public static final String LT_MSG        = "! (%s)<(%s)\n";
+    public static final String LTE_MSG       = "! (%s)<=(%s)\n";
+    public static final String EQ_MSG        = "! (%s)==(%s)\n";
+    public static final String NOTEQ_MSG     = "! (%s)!=(%s)\n";
 
     public static final String IF_MSG        = "! if(%s)\n";
     public static final String CONST_IF_MSG  = "! if((%s) > (%s))\n";
     public static final String ENDIF_MSG     = "! endif\n";
     public static final String ELSE_MSG      = "! else\n";
+    public static final String WHILE_MSG     = "! while(...)\n";
 
     public static final String EXIT_MSG      = "! exit(%s)\n";
+
+    public static final String LHS_SHORT_CIRC= "! Short Circuit LHS\n";
+    public static final String RHS_SHORT_CIRC= "! Short Circuit RHS\n";
 
     /////////////////////////////////////////////////////////////////
     // Ops Initialized Here
@@ -220,6 +241,14 @@ class AssemblyMsg{
     public static final String BNE_OP       = "bne ";
     public static final String BA_OP        = "ba  ";
     public static final String INC_OP       = "inc ";
+
+    public static final String FCMPS_OP     = "fcmps";
+    public static final String FBLE_OP      = "fble";
+    public static final String FBGE_OP      = "fbge";
+    public static final String FBL_OP       = "fbl";
+    public static final String FBG_OP       = "fbg";
+    public static final String FBNE_OP      = "fbne";
+    public static final String FBE_OP       = "fbe ";
 
     public static final String FADDS_OP     = "fadds";
     public static final String FSUBS_OP     = "fsubs";
