@@ -1251,40 +1251,50 @@ class MyParser extends parser
         //if we have globals, we want their offsets, not vals so don't make a check
         //if the offset == their name.
         String lhsVal = "";
-        String lhsValType = "";
+        String lhsValType = a.getType().getName();
         if(!a.getName().equals(a.getOffset())){
             lhsVal = optInitExtractor(a);
-            lhsValType = a.getType().getName();
         }
 
         String rhsVal = "";
-        String rhsValType = "";
+        String rhsValType = b.getType().getName();
         if(!b.getName().equals(b.getOffset())){
             rhsVal = optInitExtractor(b);
-            rhsValType = b.getType().getName();
         }
 
         if(lhsVal.equals("") && rhsVal.equals("")){
             //Increment function's offset by local's size. the set sto's offset
             m_symtab.getFunc().incOffsetCount(result.getType().getSize());
             result.setOffset(("-" + m_symtab.getFunc().getOffsetCount() + ""));
+            if(!lhsValType.equals(rhsValType)){
+                //we need type promotion, so extra offset required.
+                m_symtab.getFunc().incOffsetCount(result.getType().getSize());
+            }
             //there was no constants, we're dealing wiht only local vars/exprs
             // System.out.println(o.getName());
-            assGen.exprArith(a, b, result, o.getName());
+            assGen.exprArith(a, b, result, o.getName(), "-" + m_symtab.getFunc().getOffsetCount());
         }
         else if(lhsVal.equals("") && !rhsVal.equals("")){
             //Increment function's offset by local's size. the set sto's offset
             m_symtab.getFunc().incOffsetCount(result.getType().getSize());
             result.setOffset(("-" + m_symtab.getFunc().getOffsetCount() + ""));
+            if(!lhsValType.equals(rhsValType)){
+                //we need type promotion, so extra offset required.
+                m_symtab.getFunc().incOffsetCount(result.getType().getSize());
+            }
             //rhs is a constant, we have to deal with it differently
-            assGen.constArith(a, rhsVal, rhsValType, result, o.getName(), true);
+            assGen.constArith(a, rhsVal, rhsValType, result, o.getName(), true, "-" + m_symtab.getFunc().getOffsetCount());
         }
         else if(!lhsVal.equals("") && rhsVal.equals("")){
             //Increment function's offset by local's size. the set sto's offset
             m_symtab.getFunc().incOffsetCount(result.getType().getSize());
             result.setOffset(("-" + m_symtab.getFunc().getOffsetCount() + ""));
+            if(!lhsValType.equals(rhsValType)){
+                //we need type promotion, so extra offset required.
+                m_symtab.getFunc().incOffsetCount(result.getType().getSize());
+            }
             //lhs is constant, rhs is not, deal with it same as else if
-            assGen.constArith(b, lhsVal, lhsValType, result, o.getName(), false);
+            assGen.constArith(b, lhsVal, lhsValType, result, o.getName(), false, "-" + m_symtab.getFunc().getOffsetCount());
         }
         else if(!lhsVal.equals("") && !rhsVal.equals("") && o.getName().equals(">")){
             String resultVal = optInitExtractor(result);

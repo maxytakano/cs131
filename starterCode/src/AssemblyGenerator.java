@@ -497,7 +497,7 @@ public class AssemblyGenerator {
         increaseIndent();
 
         writeAssembly(AssemblyMsg.LOCAL_INIT_MSG, name, val);
-        System.out.println("initializing local: " + name +" with value: " + val);
+        // System.out.println("initializing local: " + name +" with value: " + val);
 
         if(offset.equals(name)){
             writeLoadGlobalForAssign(offset);
@@ -646,6 +646,8 @@ public class AssemblyGenerator {
 
         //writes out the start of the initialization
         writeAssembly(AssemblyMsg.LOCAL_INIT_MSG, desName, exprName);
+        // System.out.println("In writeLocalAssign assigning to: " + desName);
+        // System.out.println("In writeLocalAssign with des type: " + des_STO.getType().getName());
 
         if(desOffset.equals(desName)){
             writeLoadGlobalForAssign(desOffset);
@@ -653,11 +655,31 @@ public class AssemblyGenerator {
             initStart(desName, exprName, desOffset);
         }
 
-        writeLoadBlock(expr_STO, "%o0");
+        // writeLoadBlock(expr_STO, "%o0");
         
-        writeAssembly(AssemblyMsg.ST_OP);
-        writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "[%o1]");
-        writeAssembly(AssemblyMsg.NEWLINE);
+        // writeAssembly(AssemblyMsg.ST_OP);
+        // writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "[%o1]");
+        // writeAssembly(AssemblyMsg.NEWLINE);
+
+        if(!des_STO.getType().getName().equals("float")){
+            writeLoadBlock(expr_STO, "%o0");
+
+            writeAssembly(AssemblyMsg.ST_OP);
+            writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "[%o1]");
+            writeAssembly(AssemblyMsg.NEWLINE);
+        }
+        else{
+            writeLoadBlock(expr_STO, "%f0");
+
+            if(!expr_STO.getType().getName().equals("float")){
+                writeAssembly(AssemblyMsg.FITOS_OP);
+                writeAssembly(AssemblyMsg.TWO_VALS, "%f0", "%f0");
+            }
+
+            writeAssembly(AssemblyMsg.ST_OP);
+            writeAssembly(AssemblyMsg.TWO_VALS, "%f0", "[%o1]");
+            writeAssembly(AssemblyMsg.NEWLINE);
+        }
 
         decreaseIndent();
     }
@@ -683,7 +705,7 @@ public class AssemblyGenerator {
     //      (arithOpCall)
     //      (arithEnd)   or  (comparisonEnd)
     //-------------------------------------------------------------------
-    public void exprArith(STO a, STO b, STO result, String op){
+    public void exprArith(STO a, STO b, STO result, String op, String promotionOffset){
         increaseIndent();
         //get the comment based on the op
         arithMsgCall(a.getName(), b.getName(), op);
@@ -695,22 +717,7 @@ public class AssemblyGenerator {
             writeLoadBlock(a, "%o0");
 
             if(resultType.equals("float")){
-                // set         -8, %l7
-                // add         %fp, %l7, %l7
-                // st          %o0, [%l7]
-                // ld          [%l7], %f0
-                // fitos       %f0, %f0
-
-                // set         |offset|, %o1
-                // add         |add_name|, %o1, %o1
-                // st          |reg_name|, [%o1]
-                //-------------------------------------------------------------------
-                // public void writeStore(String offset, String add_name, String reg_name) {
-                writeStore(result.getOffset(), "%fp", "%o0");
-                writeAssembly(AssemblyMsg.LD_OP);
-                writeAssembly(AssemblyMsg.TWO_VALS, "[%l7]", "%f0");
-                writeAssembly(AssemblyMsg.FITOS_OP);
-                writeAssembly(AssemblyMsg.TWO_VALS, "%f0", "%f0");
+                promotionAssembly(promotionOffset, 0);
 
             }
         }
@@ -721,6 +728,10 @@ public class AssemblyGenerator {
         String bType = b.getType().getName();
         if(!bType.equals("float")){
             writeLoadBlock(b, "%o1");
+            if(resultType.equals("float")){
+                promotionAssembly(promotionOffset, 1);
+
+            }
         }
         else if(bType.equals("float")){
             writeLoadBlock(b, "%f1");
@@ -750,6 +761,26 @@ public class AssemblyGenerator {
         }
 
         decreaseIndent();
+    }
+    //-------------------------------------------------------------------
+    // Method to write assembly for when type promotion occurs.
+    // set         -8, %l7
+    // add         %fp, %l7, %l7
+    // st          %o0, [%l7]
+    // ld          [%l7], %f0
+    // fitos       %f0, %f0
+    //-------------------------------------------------------------------
+    public void promotionAssembly(String promotionOffset, int regNum){
+        writeAssembly(AssemblyMsg.SET_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, promotionOffset, "%l7");
+        writeAssembly(AssemblyMsg.ADD_OP);
+        writeAssembly(AssemblyMsg.THREE_VALS, "%fp", "%l7", "%l7");
+        writeAssembly(AssemblyMsg.ST_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, "%o" + regNum, "[%l7]");
+        writeAssembly(AssemblyMsg.LD_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, "[%l7]", "%f" + regNum);
+        writeAssembly(AssemblyMsg.FITOS_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, "%f" + regNum, "%f" + regNum);
     }
 
     //-------------------------------------------------------------------
@@ -807,7 +838,7 @@ public class AssemblyGenerator {
     //      (arithCall)
     //      (arithEnd)   or  (comparisonEnd)
     //-------------------------------------------------------------------
-    public void constArith(STO a, String b, String bType, STO result, String op, boolean constIsRight){
+    public void constArith(STO a, String b, String bType, STO result, String op, boolean constIsRight, String promotionOffset){
         increaseIndent();
         //call the part of the addition op that is the same regardless
         //of constant/expr addition or expr/expr addition
@@ -828,10 +859,14 @@ public class AssemblyGenerator {
 
         //based on which side is the constant, load them differently
         String aType = a.getType().getName();
+        String resultType = result.getType().getName();
         if(constIsRight){
             //is a a float?
             if(!aType.equals("float")){
                 writeLoadBlock(a, "%o0");
+                if(resultType.equals("float")){
+                    promotionAssembly(promotionOffset, 0);
+                }
             }
             else if(aType.equals("float")){
                 writeLoadBlock(a, "%f0");
@@ -854,6 +889,9 @@ public class AssemblyGenerator {
             //is a a float?
             if(!aType.equals("float")){
                 writeLoadBlock(a, "%o1");
+                if(resultType.equals("float")){
+                    promotionAssembly(promotionOffset, 1);
+                }
             }
             else if(aType.equals("float")){
                 writeLoadBlock(a, "%f1");
@@ -935,41 +973,41 @@ public class AssemblyGenerator {
         String resultType = result.getType().getName();
         switch(op){
             case "+":
-                if(!aType.equals("float") && !bType.equals("float")){
+                if(!resultType.equals("float")){
                     writeAssembly(AssemblyMsg.ADD_OP);
                     writeAssembly(AssemblyMsg.THREE_VALS, "%o0", "%o1", "%o0");
                 }
-                else if(aType.equals("float")){
+                else if(resultType.equals("float")){
                     writeAssembly(AssemblyMsg.FADDS_OP);
                     writeAssembly(AssemblyMsg.THREE_VALS, "%f0", "%f1", "%f0");
                 }
                 break;
             case "-":
-                if(!aType.equals("float") && !bType.equals("float")){
+                if(!resultType.equals("float")){
                     writeAssembly(AssemblyMsg.SUB_OP);
                     writeAssembly(AssemblyMsg.THREE_VALS, "%o0", "%o1", "%o0");
                 }
-                else if(aType.equals("float")){
+                else if(resultType.equals("float")){
                     writeAssembly(AssemblyMsg.FSUBS_OP);
                     writeAssembly(AssemblyMsg.THREE_VALS, "%f0", "%f1", "%f0");
                 }
                 break;
             case "*":
                 // arithFuncCall(AssemblyMsg.MUL_OP);
-                if(!aType.equals("float") && !bType.equals("float")){
+                if(!resultType.equals("float")){
                     arithFuncCall(AssemblyMsg.MUL_OP);
                 }
-                else if(aType.equals("float")){
+                else if(resultType.equals("float")){
                     writeAssembly(AssemblyMsg.FMULS_OP);
                     writeAssembly(AssemblyMsg.THREE_VALS, "%f0", "%f1", "%f0");
                 }
                 break;
             case "/":
                 // arithFuncCall(AssemblyMsg.DIV_OP);
-                if(!aType.equals("float") && !bType.equals("float")){
+                if(!resultType.equals("float")){
                     arithFuncCall(AssemblyMsg.DIV_OP);
                 }
-                else if(aType.equals("float")){
+                else if(resultType.equals("float")){
                     writeAssembly(AssemblyMsg.FDIVS_OP);
                     writeAssembly(AssemblyMsg.THREE_VALS, "%f0", "%f1", "%f0");
                 }
