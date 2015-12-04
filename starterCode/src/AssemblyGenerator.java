@@ -566,40 +566,6 @@ public class AssemblyGenerator {
     // helper method to write out the load block
     // offset = offset of the expression.
     // oVal = the type of o we're loading. e.g. %o0, %o1, %o2, etc.
-    //      set         -4, %l7
-    //      add         %fp, %l7, %l7
-    //      ld          [%l7], %o0
-    //-------------------------------------------------------------------
-    public void writeLoadExpr(String offset, int oVal){
-        writeAssembly(AssemblyMsg.SET_OP);
-        writeAssembly(AssemblyMsg.TWO_VALS, offset, "%l7");
-        writeAssembly(AssemblyMsg.ADD_OP);
-        writeAssembly(AssemblyMsg.THREE_VALS, "%fp", "%l7", "%l7");
-        writeAssembly(AssemblyMsg.LD_OP);
-        writeAssembly(AssemblyMsg.TWO_VALS, "[%l7]", "%o" + oVal);
-    }
-
-    //-------------------------------------------------------------------
-    // helper method to write out the load block
-    // offset = offset of the expression.
-    // oVal = the type of o we're loading. e.g. %o0, %o1, %o2, etc.
-    //      set         -4, %l7
-    //      add         %fp, %l7, %l7
-    //      ld          [%l7], %o0
-    //-------------------------------------------------------------------
-    public void writeLoadGlobal(String offset, int oVal){
-        writeAssembly(AssemblyMsg.SET_OP);
-        writeAssembly(AssemblyMsg.TWO_VALS, offset, "%l7");
-        writeAssembly(AssemblyMsg.ADD_OP);
-        writeAssembly(AssemblyMsg.THREE_VALS, "%g0", "%l7", "%l7");
-        writeAssembly(AssemblyMsg.LD_OP);
-        writeAssembly(AssemblyMsg.TWO_VALS, "[%l7]", "%o" + oVal);
-    }
-
-    //-------------------------------------------------------------------
-    // helper method to write out the load block
-    // offset = offset of the expression.
-    // oVal = the type of o we're loading. e.g. %o0, %o1, %o2, etc.
     //      set         i2, %o1
     //      add         %g0, %o1, %o1
     //-------------------------------------------------------------------
