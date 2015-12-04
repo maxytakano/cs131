@@ -15,8 +15,14 @@ public class AssemblyGenerator {
     private int cmpCounter = 0;
     private int ifCounter = 0;
     private int elseCounter = 0;
+    private int andorCounter = 0;
+    private int loopCheckCounter = 0;
     private Stack ifLabelStack = new Stack();
     private Stack elseLabelStack = new Stack();
+    private Stack andorLabelStack = new Stack();
+    private Stack andorEndStack = new Stack();
+    private Stack loopCheckStack = new Stack();
+    private Stack loopEndStack = new Stack();
 
 
     private int ctorDtorCounter = 0;
@@ -41,8 +47,8 @@ public class AssemblyGenerator {
 
             //write out all the local vars at the top
             if(AssemblyMsg.START_VAR_NAME_ARRAY.length != AssemblyMsg.START_VAR_ASCIZ_ARRAY.length){
-                System.out.println("What the hell did you do? START_VAR_ASCIZ_ARRAY and START_VAR_NAME_ARRAY should be" +
-                                    " the same size!");
+                // System.out.println("What the hell did you do? START_VAR_ASCIZ_ARRAY and START_VAR_NAME_ARRAY should be" +
+                                    // " the same size!");
                 //close the file to prevent any unintended bugs
                 dispose();
                 System.exit(1);
@@ -205,7 +211,7 @@ public class AssemblyGenerator {
                     writeAssembly(AssemblyMsg.DOT_SINGLE, val);
                     break;
                 default:
-                    System.out.println("more needs to be added.");
+                    // System.out.println("more needs to be added.");
             }
         }
         writeAssembly(AssemblyMsg.TEXT);
@@ -623,6 +629,40 @@ public class AssemblyGenerator {
     // helper method to write out the load block
     // offset = offset of the expression.
     // oVal = the type of o we're loading. e.g. %o0, %o1, %o2, etc.
+    //      set         -4, %l7
+    //      add         %fp, %l7, %l7
+    //      ld          [%l7], %o0
+    //-------------------------------------------------------------------
+    public void writeLoadExpr(String offset, int oVal){
+        writeAssembly(AssemblyMsg.SET_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, offset, "%l7");
+        writeAssembly(AssemblyMsg.ADD_OP);
+        writeAssembly(AssemblyMsg.THREE_VALS, "%fp", "%l7", "%l7");
+        writeAssembly(AssemblyMsg.LD_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, "[%l7]", "%o" + oVal);
+    }
+
+    //-------------------------------------------------------------------
+    // helper method to write out the load block
+    // offset = offset of the expression.
+    // oVal = the type of o we're loading. e.g. %o0, %o1, %o2, etc.
+    //      set         -4, %l7
+    //      add         %fp, %l7, %l7
+    //      ld          [%l7], %o0
+    //-------------------------------------------------------------------
+    public void writeLoadGlobal(String offset, int oVal){
+        writeAssembly(AssemblyMsg.SET_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, offset, "%l7");
+        writeAssembly(AssemblyMsg.ADD_OP);
+        writeAssembly(AssemblyMsg.THREE_VALS, "%g0", "%l7", "%l7");
+        writeAssembly(AssemblyMsg.LD_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, "[%l7]", "%o" + oVal);
+    }
+
+    //-------------------------------------------------------------------
+    // helper method to write out the load block
+    // offset = offset of the expression.
+    // oVal = the type of o we're loading. e.g. %o0, %o1, %o2, etc.
     //      set         i2, %o1
     //      add         %g0, %o1, %o1
     //-------------------------------------------------------------------
@@ -728,7 +768,7 @@ public class AssemblyGenerator {
     //      (arithOpCall)
     //      (arithEnd)   or  (comparisonEnd)
     //-------------------------------------------------------------------
-    public void exprArith(STO a, STO b, STO result, String op, String promotionOffset){
+    public void exprArith(STO a, STO b, STO result, String op, String promotionOffset, int whileFlag){
         increaseIndent();
         //get the comment based on the op
         arithMsgCall(a.getName(), b.getName(), op);
@@ -760,7 +800,7 @@ public class AssemblyGenerator {
             writeLoadBlock(b, "%f1");
         }
 
-        arithOpCall(aType, bType, result, op);
+        arithOpCall(aType, bType, result, op, whileFlag);
 
         //call the part of the addition op that is the same regardless
         //of constant/expr addition or expr/expr addition
@@ -776,10 +816,16 @@ public class AssemblyGenerator {
                 arithEnd(result);
                 break;
             case ">":
+            case "<":
+            case ">=":
+            case "<=":
+            case "==":
+            case "!=":
+            // case "&&":
                 elseBranchAssembly(result);
                 break;
             default:
-                System.out.println("not handled constArith msg");
+                // System.out.println("not handled constArith msg");
                 break;
         }
 
@@ -814,8 +860,13 @@ public class AssemblyGenerator {
     //      be          .$$.else.1
     //      nop  
     //-------------------------------------------------------------------
-    public void constComparisonAssembly(String lhs, String rhs, String resultVal, STO result, BinaryOp op){
-        writeAssembly(AssemblyMsg.CONST_IF_MSG, lhs, rhs);
+    public void constComparisonAssembly(String lhs, String rhs, String resultVal, STO result, BinaryOp op, int whileFlag){
+        if(whileFlag == -1){
+            writeAssembly(AssemblyMsg.CONST_IF_MSG, lhs, rhs);
+        }
+        else{
+            writeAssembly(AssemblyMsg.WHILE_MSG);
+        }
         writeAssembly(AssemblyMsg.SET_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, resultVal, "%o0");
 
@@ -861,7 +912,7 @@ public class AssemblyGenerator {
     //      (arithCall)
     //      (arithEnd)   or  (comparisonEnd)
     //-------------------------------------------------------------------
-    public void constArith(STO a, String b, String bType, STO result, String op, boolean constIsRight, String promotionOffset){
+    public void constArith(STO a, String b, String bType, STO result, String op, boolean constIsRight, String promotionOffset, int whileFlag){
         increaseIndent();
         //call the part of the addition op that is the same regardless
         //of constant/expr addition or expr/expr addition
@@ -924,7 +975,7 @@ public class AssemblyGenerator {
 
 
         //do proper operation based on op
-        arithOpCall(aType, bType, result, op);
+        arithOpCall(aType, bType, result, op, whileFlag);
 
         switch(op){
             case "+":
@@ -938,10 +989,16 @@ public class AssemblyGenerator {
                 arithEnd(result);
                 break;
             case ">":
+            case "<":
+            case ">=":
+            case "<=":
+            case "==":
+            case "!=":
+            // case "&&":
                 elseBranchAssembly(result);
                 break;
             default:
-                System.out.println("not handled constArith msg");
+                // System.out.println("not handled constArith msg");
                 break;
         }
 
@@ -981,8 +1038,26 @@ public class AssemblyGenerator {
             case ">":
                 writeAssembly(AssemblyMsg.GT_MSG,  lhs, rhs);
                 break;
+            case "<":
+                writeAssembly(AssemblyMsg.LT_MSG, lhs, rhs);
+                break;
+            case ">=":
+                writeAssembly(AssemblyMsg.GTE_MSG, lhs, rhs);
+                break;
+            case "<=":
+                writeAssembly(AssemblyMsg.LTE_MSG, lhs, rhs);
+                break;
+            case "==":
+                writeAssembly(AssemblyMsg.EQ_MSG, lhs, rhs);
+                break;
+            case "!=":
+                writeAssembly(AssemblyMsg.NOTEQ_MSG, lhs, rhs);
+                break;
+            // case "&&":
+            //     writeAssembly(AssemblyMsg.RHS_SHORT_CIRC);
+            //     break;
             default:
-                System.out.println("not handled constArith msg");
+                // System.out.println("not handled constArith msg");
                 break;
         }
     }
@@ -992,7 +1067,7 @@ public class AssemblyGenerator {
     // Method that writes out the assembly for arithmetic ops
     //      add or fadds       %o0, %o1, %o0, or %f0, %f1, %f0
     //-------------------------------------------------------------------
-    public void arithOpCall(String aType, String bType, STO result, String op){
+    public void arithOpCall(String aType, String bType, STO result, String op, int whileFlag){
         String resultType = result.getType().getName();
         switch(op){
             case "+":
@@ -1051,25 +1126,104 @@ public class AssemblyGenerator {
                 writeAssembly(AssemblyMsg.THREE_VALS, "%o0", "%o1", "%o0");
                 break;
             case ">":
+            case "<":
+            case ">=":
+            case "<=":
+            case "==":
+            case "!=":
                 cmpCounter++;
                 String bleTarget = AssemblyMsg.CMP_LABEL + cmpCounter;
                 //push the ifEndLabel onto the stack so that when the scope ends
                 //we know which label to use.
+                if(whileFlag == -1)
                 ifCounter++;
                 String ifEndLabel = AssemblyMsg.ENDIF_LABEL + ifCounter;
                 ifLabelStack.push(ifEndLabel);
-                conditionalAssemblyStart(bleTarget, result.getOffset()); 
+                String branchOption = comparisonChooser(op, bleTarget, aType, bType);
+
+                if(aType.equals("float") || bType.equals("float")){
+                    conditionalFloatAssemblyStart(branchOption, bleTarget, result);
+                }
+                else{
+                    conditionalAssemblyStart(branchOption, bleTarget, result); 
+                }
+                break;
+            case "&&":
+                // String andorLable = "";
+                // String andorEndLabel = "";
+                // if(!andorLabelStack.isEmpty()){
+                //     andorLable = (String) andorLabelStack.pop();
+                // }
+                // if(!andorEndStack.isEmpty()){
+                //     andorEndLabel = (String) andorEndStack.pop();
+                // }
+                // decreaseIndent();
+                // writeAssembly(AssemblyMsg.LABEL, andorLable);
+                // increaseIndent();
+                // writeAssembly(AssemblyMsg.MOV_OP);
+                // writeAssembly(AssemblyMsg.TWO_VALS, "0", "%o0");
+                // decreaseIndent();
+                // writeAssembly(AssemblyMsg.LABEL, andorEndLabel);
+                // increaseIndent();
+                // writeStore(result.getOffset(), "%fp", "%o0");
+                // writeAssembly(AssemblyMsg.NEWLINE);
                 break;
             default:
-                System.out.println("not handled exprArith op");
+                // System.out.println("not handled exprArith op");
                 break;
+        }
+    }
+
+    //-------------------------------------------------------------------
+    // Method that chooses which comparison op to use
+    //-------------------------------------------------------------------  
+    public String comparisonChooser(String op, String bleTarget, String aType, String bType){
+        switch(op){
+            case ">":
+                if(aType.equals("float") || bType.equals("float")){
+                    return AssemblyMsg.FBLE_OP;
+                }else{
+                    return AssemblyMsg.BLE_OP;
+                }
+            case "<":
+                if(aType.equals("float") || bType.equals("float")){
+                    return AssemblyMsg.FBGE_OP;
+                }else{
+                    return AssemblyMsg.BGE_OP;
+                }
+            case ">=":
+                if(aType.equals("float") || bType.equals("float")){
+                    return AssemblyMsg.FBL_OP;
+                }else{
+                    return AssemblyMsg.BL_OP;
+                }
+            case "<=":
+                if(aType.equals("float") || bType.equals("float")){
+                    return AssemblyMsg.FBG_OP;
+                }else{
+                    return AssemblyMsg.BG_OP;
+                }
+            case "==":
+                if(aType.equals("float") || bType.equals("float")){
+                    return AssemblyMsg.FBNE_OP;
+                }else{
+                    return AssemblyMsg.BNE_OP;
+                }
+            case "!=":
+                if(aType.equals("float") || bType.equals("float")){
+                    return AssemblyMsg.FBE_OP;
+                }else{
+                    return AssemblyMsg.BE_OP;
+                }
+            default:
+                return "";
         }
     }
 
     //-------------------------------------------------------------------
     // Method that writes out the assembly for a conditional expression call
     //     cmp         %o0, %o1
-    //     ble         [bleTarget]
+    //     [branchOption]         [bleTarget]
     //     mov         %g0, %o0
     //     inc         %o0
     // [bleTarget]:
@@ -1077,10 +1231,42 @@ public class AssemblyGenerator {
     //     add         %fp, %o1, %o1
     //     st          %o0, [%o1]
     //-------------------------------------------------------------------
-    public void conditionalAssemblyStart(String bleTarget, String resultOffset){
+    public void conditionalAssemblyStart(String branchOption, String bleTarget, STO result){
+        String resultOffset = result.getOffset();
         writeAssembly(AssemblyMsg.CMP_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "%o1");
-        writeAssembly(AssemblyMsg.BLE_OP);
+        writeAssembly(branchOption);
+        writeAssembly(AssemblyMsg.ONE_VAL, bleTarget);
+        writeAssembly(AssemblyMsg.MOV_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, "%g0", "%o0");
+        writeAssembly(AssemblyMsg.INC_OP);
+        writeAssembly(AssemblyMsg.ONE_VAL, "%o0");
+
+        decreaseIndent();
+        writeAssembly(AssemblyMsg.LABEL, bleTarget);
+        increaseIndent();
+        writeStore(resultOffset, "%fp", "%o0");
+        writeAssembly(AssemblyMsg.NEWLINE);
+    }
+
+    //-------------------------------------------------------------------
+    // Method that writes out the assembly for a conditional float call\
+    //     fcmps       %f0, %f1
+    //     nop     
+    //     [branchOption]        [bleTarget]
+    //     mov         %g0, %o0
+    //     inc         %o0
+    // [bleTarget]:
+    //     set         [resultOffset], %o1
+    //     add         %fp, %o1, %o1
+    //     st          %o0, [%o1]
+    //-------------------------------------------------------------------
+    public void conditionalFloatAssemblyStart(String branchOption, String bleTarget, STO result){
+        String resultOffset = result.getOffset();
+        writeAssembly(AssemblyMsg.FCMPS_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, "%f0", "%f1");
+        writeAssembly(AssemblyMsg.NOP);
+        writeAssembly(branchOption);
         writeAssembly(AssemblyMsg.ONE_VAL, bleTarget);
         writeAssembly(AssemblyMsg.MOV_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, "%g0", "%o0");
@@ -1121,7 +1307,7 @@ public class AssemblyGenerator {
                 writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "%o0");
                 break;
             default:
-                System.out.println("Shouldn't be here in exprUnary");
+                // System.out.println("Shouldn't be here in exprUnary");
                 break;
         }
 
@@ -1590,6 +1776,43 @@ public class AssemblyGenerator {
 
         decreaseIndent();
     } 
+
+    //-------------------------------------------------------------------
+    // Write assemby to print an exit with a constant value
+    // ! Short Circuit LHS
+    // set         -28, %l7
+    // add         %fp, %l7, %l7
+    // ld          [%l7], %o0
+    // cmp         %o0, %g0
+    // be          .$$.andorSkip.1  
+    // nop
+    //-------------------------------------------------------------------
+    public void doLHSShortCircuit(STO expr, String op){
+        // System.out.println("lhs short circuts 1");
+        switch(op){
+            case "&&":
+            // System.out.println("lhs short circuts 2");
+                writeAssembly(AssemblyMsg.LHS_SHORT_CIRC);
+                writeLoadBlock(expr, "%o0");
+                writeAssembly(AssemblyMsg.CMP_OP);
+                writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "%g0");
+                
+                andorCounter++;
+                String andorSkip = AssemblyMsg.ANDOR_LABEL + andorCounter;
+                String andorEnd = AssemblyMsg.ANDOREND_LBL + andorCounter;
+                andorLabelStack.push(andorSkip);
+                writeAssembly(AssemblyMsg.BE_OP);
+                writeAssembly(AssemblyMsg.ONE_VAL, andorSkip);
+                writeAssembly(AssemblyMsg.NOP);
+                writeAssembly(AssemblyMsg.NEWLINE);
+                decreaseIndent();
+                break;
+            case "||":
+                break;
+            default:
+                break;
+        }
+    }
 
     // 9
     public void writeAssembly(String template, String ... params) {
