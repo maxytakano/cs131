@@ -1941,6 +1941,14 @@ class MyParser extends parser
         // assGen.doLHSShortCircuit(expr, op);
     }
 
+    void ifPush(){
+        assGen.ifLabelPush();
+    }
+
+    void whilePush(){
+        assGen.whileLabelPush();
+    }
+
 } /* end of file */
 
 

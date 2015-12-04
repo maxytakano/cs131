@@ -23,6 +23,7 @@ public class AssemblyGenerator {
     private Stack andorEndStack = new Stack();
     private Stack loopCheckStack = new Stack();
     private Stack loopEndStack = new Stack();
+    private Stack ifWhileStack = new Stack();
 
     // 3
     private FileWriter fileWriter;
@@ -818,6 +819,35 @@ public class AssemblyGenerator {
         // String beTarget = AssemblyMsg.CMP_LABEL + cmpCounter;
         //push the ifEndLabel onto the stack so that when the scope ends
         //we know which label to use.
+        // ifCounter++;
+        // String ifEndLabel = AssemblyMsg.ENDIF_LABEL + ifCounter;
+        // ifLabelStack.push(ifEndLabel);
+
+        // //push on the else label stuff
+        // elseCounter++;
+        String beTarget = AssemblyMsg.ELSE_LABEL + elseCounter;
+        String target = "";
+        int ifOrWhileChecker = (int) ifWhileStack.pop();
+        if(ifOrWhileChecker == 0){
+            if(!ifLabelStack.isEmpty()){
+                target = (String) elseLabelStack.pop();
+            }
+        } else {
+            if(!loopCheckStack.isEmpty()){
+                target = (String) loopCheckStack.pop();
+            }
+        }
+        // //push onto stack so that we can keep track of else scopes
+        // elseLabelStack.push(beTarget);
+        writeAssembly(AssemblyMsg.CMP_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "%g0");
+        writeAssembly(AssemblyMsg.BE_OP);
+        writeAssembly(AssemblyMsg.ONE_VAL, target);
+        writeAssembly(AssemblyMsg.NOP);
+        writeAssembly(AssemblyMsg.NEWLINE);
+    }
+
+    public void ifLabelPush(){
         ifCounter++;
         String ifEndLabel = AssemblyMsg.ENDIF_LABEL + ifCounter;
         ifLabelStack.push(ifEndLabel);
@@ -827,12 +857,21 @@ public class AssemblyGenerator {
         String beTarget = AssemblyMsg.ELSE_LABEL + elseCounter;
         //push onto stack so that we can keep track of else scopes
         elseLabelStack.push(beTarget);
-        writeAssembly(AssemblyMsg.CMP_OP);
-        writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "%g0");
-        writeAssembly(AssemblyMsg.BE_OP);
-        writeAssembly(AssemblyMsg.ONE_VAL, beTarget);
-        writeAssembly(AssemblyMsg.NOP);
-        writeAssembly(AssemblyMsg.NEWLINE);
+
+        ifWhileStack.push(0);
+    }
+
+    public void whileLabelPush(){
+        loopCheckCounter++;
+        String whileEndLabel = AssemblyMsg.LOOPCHECK_LBL + loopCheckCounter;
+        loopCheckStack.push(whileEndLabel);
+
+        //push on the else label stuff
+        String beTarget = AssemblyMsg.LOOPEND_LBL + loopCheckCounter;
+        //push onto stack so that we can keep track of else scopes
+        loopEndStack.push(beTarget);
+
+        ifWhileStack.push(1);
     }
 
     //-------------------------------------------------------------------
@@ -840,11 +879,25 @@ public class AssemblyGenerator {
     //      (comparisonEnd)
     //-------------------------------------------------------------------
     public void elseBranchAssembly(STO result){
-        elseCounter++;
+        // elseCounter++;
         String beTarget = AssemblyMsg.ELSE_LABEL + elseCounter;
-        //push onto stack so that we can keep track of else scopes
-        elseLabelStack.push(beTarget);
-        comparisonEnd(result, beTarget);
+        String target = "";
+        int ifOrWhileChecker = 0;
+        if(!ifWhileStack.isEmpty()){
+            ifOrWhileChecker = (int) ifWhileStack.pop();
+        }
+        if(ifOrWhileChecker == 0){
+            if(!ifLabelStack.isEmpty()){
+                target = (String) elseLabelStack.pop();
+            }
+        } else {
+            if(!loopCheckStack.isEmpty()){
+                target = (String) loopCheckStack.pop();
+            }
+        }
+        // //push onto stack so that we can keep track of else scopes
+        // elseLabelStack.push(beTarget);
+        comparisonEnd(result, target);
     }
 
     //-------------------------------------------------------------------
@@ -1078,10 +1131,9 @@ public class AssemblyGenerator {
                 String bleTarget = AssemblyMsg.CMP_LABEL + cmpCounter;
                 //push the ifEndLabel onto the stack so that when the scope ends
                 //we know which label to use.
-                if(whileFlag == -1)
-                ifCounter++;
-                String ifEndLabel = AssemblyMsg.ENDIF_LABEL + ifCounter;
-                ifLabelStack.push(ifEndLabel);
+                // ifCounter++;
+                // String ifEndLabel = AssemblyMsg.ENDIF_LABEL + ifCounter;
+                // ifLabelStack.push(ifEndLabel);
                 String branchOption = comparisonChooser(op, bleTarget, aType, bType);
 
                 if(aType.equals("float") || bType.equals("float")){
@@ -1422,26 +1474,40 @@ public class AssemblyGenerator {
         increaseIndent();
         writeAssembly(AssemblyMsg.BA_OP);
         //pop the label for the end of this scope
-        String endifTarget = "";
-        if(!ifLabelStack.isEmpty()){
-            endifTarget = (String) ifLabelStack.pop();
+        String target = "";
+        // int ifOrWhileChecker = (int) ifWhileStack.pop();
+        int ifOrWhileChecker = 0;
+        if(!ifWhileStack.isEmpty()){
+            ifOrWhileChecker = (int) ifWhileStack.pop();
+        }
+        if(ifOrWhileChecker == 0){
+            if(!ifLabelStack.isEmpty()){
+                target = (String) ifLabelStack.pop();
+            }
+        } else {
+            if(!loopCheckStack.isEmpty()){
+                target = (String) loopCheckStack.pop();
+            }
         }
         //then push it back onto the stack since we need it when we do the 
         //exit label for the if statement
-        ifLabelStack.push(endifTarget);
-        writeAssembly(AssemblyMsg.ONE_VAL, endifTarget);
+        ifLabelStack.push(target);
+        writeAssembly(AssemblyMsg.ONE_VAL, target);
         writeAssembly(AssemblyMsg.NOP);
         writeAssembly(AssemblyMsg.NEWLINE);
         decreaseIndent();
-        writeAssembly(AssemblyMsg.ELSE_MSG);
-        decreaseIndent();
-        //pop the label for the end of this scope
-        String elseTarget = "";
-        if(!elseLabelStack.isEmpty()){
-            elseTarget = (String) elseLabelStack.pop();
+        if(ifOrWhileChecker == 0){
+            writeAssembly(AssemblyMsg.ELSE_MSG);
+            decreaseIndent();
+            //pop the label for the end of this scope
+            String elseTarget = "";
+            if(!elseLabelStack.isEmpty()){
+                elseTarget = (String) elseLabelStack.pop();
+            }
+
+            writeAssembly(AssemblyMsg.LABEL, elseTarget);
+            writeAssembly(AssemblyMsg.NEWLINE);
         }
-        writeAssembly(AssemblyMsg.LABEL, elseTarget);
-        writeAssembly(AssemblyMsg.NEWLINE);
         increaseIndent();
     }
 
