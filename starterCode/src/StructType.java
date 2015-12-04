@@ -72,6 +72,11 @@ class StructType extends CompositeType
 		return m_structScope.access(getName() + "." + getName());
 	}
 
+	// p2 method attempt to return dtor for the struct
+	public STO getDtor() {
+		return m_structScope.access(getName() + ".~" + getName());
+	}
+
 	//----------------------------------------------------------------
 	// Check 14b
 	//----------------------------------------------------------------

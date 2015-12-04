@@ -9,6 +9,7 @@ import java.math.BigDecimal;
 class VarSTO extends STO
 {
 	private Boolean m_passByReference;
+	private int struct_number = 0;
 
 	private BigDecimal		m_value;
 
@@ -106,8 +107,16 @@ class VarSTO extends STO
 	//----------------------------------------------------------------
 	//
 	//----------------------------------------------------------------
-	public float getFloatValue() 
+	public float getFloatValue()
 	{
 		return m_value.floatValue();
+	}
+
+	public void setStructNumber(int val) {
+		struct_number = val;
+	}
+
+	public int getStructNumber() {
+		return struct_number;
 	}
 }

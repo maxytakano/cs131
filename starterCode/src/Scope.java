@@ -51,4 +51,9 @@ class Scope
 	{
 		m_lstLocals.addElement(sto);
 	}
+
+	// p2 getter used for seeing which structs in the scope need to be dealloced
+	public Vector<STO> getLocals() {
+		return m_lstLocals;
+	}
 }

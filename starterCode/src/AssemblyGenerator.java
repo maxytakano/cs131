@@ -24,9 +24,6 @@ public class AssemblyGenerator {
     private Stack loopCheckStack = new Stack();
     private Stack loopEndStack = new Stack();
 
-
-    private int ctorDtorCounter = 0;
-
     // 3
     private FileWriter fileWriter;
 
@@ -234,10 +231,10 @@ public class AssemblyGenerator {
     //-------------------------------------------------------------------
     // Method that writes out the assembly for any global or static vars
     //-------------------------------------------------------------------
-    public void writeStructInit(String offset) {
+    public void writeStructInit(String offset, String struct_number) {
         increaseIndent();
 
-        String ctorDtor_label = ".$$.ctorDtor." + ++ctorDtorCounter;
+        String ctorDtor_label = ".$$.ctorDtor." + struct_number;
 
         //if there's no value, go into bss, otherwise data
         writeAssembly(AssemblyMsg.BSS);
@@ -311,7 +308,7 @@ public class AssemblyGenerator {
     //      ret     
     //      restore 
     //-------------------------------------------------------------------
-    public void writeMethodEnd(String mangledName, String localOffset){
+    public void writeMethodEnd(String mangledName, String localOffset, Vector<STO> structs_found) {
 
         //This section is for the ret, restore stuff
         writeAssembly(AssemblyMsg.FUNC_END, mangledName);
@@ -326,9 +323,64 @@ public class AssemblyGenerator {
         increaseIndent();
 
         writeAssembly(AssemblyMsg.SAVE, "%sp", "-96", "%sp");
+
+        if (structs_found != null) {
+            
+
+            STO cur_STO;
+            StructType struct_type;
+            FuncSTO struct_dtor;
+            String dtor_string;
+            String struct_number;
+            // print out assembly to dtor all structs in the function.
+            // might need to iterate backwards since it's in reverse order
+            for (int i = structs_found.size() - 1; i >= 0; i--) {
+                // figure out params for assembly
+                cur_STO = structs_found.get(i);
+                struct_type = ((StructType)cur_STO.getType());
+                struct_dtor = ((FuncSTO)struct_type.getDtor());
+                dtor_string = struct_dtor.getMangledName();
+                struct_number = ((VarSTO) cur_STO).getStructNumber() + "";
+
+                // write the struct ending block
+                writeStructEnding(struct_number, dtor_string);
+            }
+        }
+
         writeAssembly(AssemblyMsg.RET);
         writeAssembly(AssemblyMsg.RESTORE);
         decreaseIndent();
+    }
+
+    //     set         .$$.ctorDtor.4, %o0
+    //     ld          [%o0], %o0
+    //     cmp         %o0, %g0
+    //     be          .$$.ctorDtor.4.fini.skip
+    //     nop
+    //     call        STRUCTY.$STRUCTY.void
+    //     nop
+    //     set         .$$.ctorDtor.4, %o0
+    //     st          %g0, [%o0]
+    // .$$.ctorDtor.4.fini.skip:
+    public void writeStructEnding(String struct_number, String dtor_string) {
+        writeAssembly(AssemblyMsg.SET_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, ".$$.ctorDtor." + struct_number, "%o0");
+        writeAssembly(AssemblyMsg.LD_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, "[%o0]", "%o0");
+        writeAssembly(AssemblyMsg.CMP_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "%g0");
+        writeAssembly(AssemblyMsg.BE_OP);
+        writeAssembly(AssemblyMsg.ONE_VAL, ".$$.ctorDtor." + struct_number + ".fini.skip");
+        writeAssembly(AssemblyMsg.NOP);
+        writeAssembly(AssemblyMsg.FUNC_CALL, dtor_string);
+        writeAssembly(AssemblyMsg.NOP);
+        writeAssembly(AssemblyMsg.SET_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, ".$$.ctorDtor." + struct_number, "%o0");
+        writeAssembly(AssemblyMsg.ST_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, "%g0", "[%o0]");
+        decreaseIndent();
+        writeAssembly(AssemblyMsg.LABEL, ".$$.ctorDtor." + struct_number + ".fini.skip");
+        increaseIndent();
     }
 
 

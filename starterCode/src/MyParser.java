@@ -26,6 +26,9 @@ class MyParser extends parser
 
     private AssemblyGenerator assGen;
 
+    private int struct_counter = 0;
+
+
     //----------------------------------------------------------------
     //
     //----------------------------------------------------------------
@@ -207,6 +210,10 @@ class MyParser extends parser
         }
 
         VarSTO sto = new VarSTO(id, type);
+        if (sto.getType().isStruct()) {
+            // set the struct number for declaration/end of structs
+            sto.setStructNumber(++struct_counter);
+        }
         m_symtab.insert(sto);
 
         //----------------------------------------------------------------
@@ -510,8 +517,7 @@ class MyParser extends parser
 
                     // m_symtab.getFunc().incOffsetCount(type.getSize());
                     // sto.setOffset( "-" + m_symtab.getFunc().getOffsetCount() );
-                    
-                    assGen.writeStructInit("-" + m_symtab.getFunc().getOffsetCount());
+                    assGen.writeStructInit("-" + m_symtab.getFunc().getOffsetCount(), ((VarSTO) sto).getStructNumber() + "");
                 }
             }
         }
@@ -610,7 +616,7 @@ class MyParser extends parser
         m_symtab.insert(sto);
 
         assGen.writeMethodStart(sto, false, true);
-        assGen.writeMethodEnd(sto.getMangledName(), sto.getOffsetCount() + "");
+        assGen.writeMethodEnd(sto.getMangledName(), sto.getOffsetCount() + "", null);
     }
 
     //----------------------------------------------------------------
@@ -621,7 +627,7 @@ class MyParser extends parser
         m_symtab.insert(sto);
 
         assGen.writeMethodStart(sto, false, true);
-        assGen.writeMethodEnd(sto.getMangledName(), sto.getOffsetCount() + "");
+        assGen.writeMethodEnd(sto.getMangledName(), sto.getOffsetCount() + "", null);
     }
 
     //----------------------------------------------------------------
@@ -868,7 +874,20 @@ class MyParser extends parser
             m_nNumErrors++;
             m_errors.print(ErrorMsg.error6c_Return_missing);
         }
-        assGen.writeMethodEnd(curFunc.getMangledName(), curFunc.getOffsetCount() + "");
+
+        // need the Struct type, the struct's dtor, and the corresponding ctor/dtor#
+        Scope curScope = m_symtab.getScope();
+        Vector<STO> locals = curScope.getLocals();
+        Vector<STO> structs_found = new Vector<STO>();
+        STO cur_STO;
+        for (int i = 0; i < locals.size(); i++) {
+            cur_STO = locals.get(i);
+            if (cur_STO.getType().isStruct()) {
+                structs_found.addElement(cur_STO);
+            }
+        }
+
+        assGen.writeMethodEnd(curFunc.getMangledName(), curFunc.getOffsetCount() + "", structs_found);
         m_symtab.closeScope();
         m_symtab.setFunc(null);
     }
