@@ -1355,7 +1355,7 @@ class MyParser extends parser
         }
         else if(!lhsVal.equals("") && !rhsVal.equals("") && o.getName().equals(">")){
             String resultVal = optInitExtractor(result);
-            assGen.constComparisonAssembly(lhsVal, rhsVal, resultVal, result, o);
+            assGen.constComparisonAssembly(lhsVal, rhsVal, resultVal, a, b, result, o);
         }
         //at this point, 
         //neither a nor b are exprs. they both have vals, but no offset
@@ -1995,7 +1995,20 @@ class MyParser extends parser
     //----------------------------------------------------------------
     void doLeftShortCircuit(STO expr, String op){
         // System.out.println("lhs short circuts");
-        // assGen.doLHSShortCircuit(expr, op);
+        if(expr.getOffset() == null){
+            m_symtab.getFunc().incOffsetCount(expr.getType().getSize());
+            expr.setOffset(("-" + m_symtab.getFunc().getOffsetCount() + ""));
+        }
+        assGen.doLHSShortCircuit(expr, op);
+    }
+
+    void doRightShortCircuit(STO expr, String op){
+        // System.out.println("lhs short circuts");
+        assGen.doRHSShortCircuit(expr, op);
+    }
+
+    void doEndShortCircuit(STO expr, String op){
+        assGen.doEndShortCircuit(expr, op);
     }
 
     void ifPush(){
@@ -2016,6 +2029,10 @@ class MyParser extends parser
 
     void doConAss(){
         assGen.doConAss();
+    }
+
+    void doIfExprEnd(STO result){
+        assGen.elseBranchAssembly(result);
     }
 
 } /* end of file */

@@ -659,6 +659,7 @@ IfStmt ::=          T_IF
                     Expr:_1
                     {:
                         ((MyParser) parser).doConditionCheck(_1);
+                        ((MyParser) parser).doIfExprEnd(_1);
                     :}
                     CodeBlock 
                     {:
@@ -846,9 +847,16 @@ Expr ::=            Designator:_1 T_ASSIGN Expr:_2
     ;
 
 
-Expr0 ::=           Expr0:_1 T_OR Expr1:_3
+Expr0 ::=           Expr0:_1 
+                    T_OR 
+                    {:
+                        ((MyParser) parser).doLeftShortCircuit(_1, "||");
+                    :}
+                    Expr1:_3
                     {:
                         RESULT = ((MyParser) parser).doBinaryExpr(_1, new AndOp("||"), _3);
+                        ((MyParser) parser).doRightShortCircuit(_3, "||");
+                        ((MyParser) parser).doEndShortCircuit(_3, "||");
                     :}
     |               Expr1:_1
                     {:
@@ -865,6 +873,8 @@ Expr1 ::=           Expr1:_1
                     Expr2:_3
                     {:
                         RESULT = ((MyParser) parser).doBinaryExpr(_1, new AndOp("&&"), _3);
+                        ((MyParser) parser).doRightShortCircuit(_3, "&&");
+                        ((MyParser) parser).doEndShortCircuit(_3, "&&");
                     :}
     |               Expr2:_1
                     {:

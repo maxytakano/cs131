@@ -826,31 +826,35 @@ public class AssemblyGenerator {
         //get the comment based on the op
         arithMsgCall(a.getName(), b.getName(), op);
         
-        //is a a float?
-        String aType = a.getType().getName();
-        String resultType = result.getType().getName();
-        if(!aType.equals("float")){
-            writeLoadBlock(a, "%o0");
+        String aType = "";
+        String bType = "";
+        if(!op.equals("&&") || !op.equals("||")){
+            //is a a float?
+            aType = a.getType().getName();
+            String resultType = result.getType().getName();
+            if(!aType.equals("float")){
+                writeLoadBlock(a, "%o0");
 
-            if(resultType.equals("float")){
-                promotionAssembly(promotionOffset, 0);
+                if(resultType.equals("float")){
+                    promotionAssembly(promotionOffset, 0);
 
+                }
             }
-        }
-        else if(aType.equals("float")){
-            writeLoadBlock(a, "%f0");
-        }
-        //is b a float?
-        String bType = b.getType().getName();
-        if(!bType.equals("float")){
-            writeLoadBlock(b, "%o1");
-            if(resultType.equals("float")){
-                promotionAssembly(promotionOffset, 1);
-
+            else if(aType.equals("float")){
+                writeLoadBlock(a, "%f0");
             }
-        }
-        else if(bType.equals("float")){
-            writeLoadBlock(b, "%f1");
+            //is b a float?
+            bType = b.getType().getName();
+            if(!bType.equals("float")){
+                writeLoadBlock(b, "%o1");
+                if(resultType.equals("float")){
+                    promotionAssembly(promotionOffset, 1);
+
+                }
+            }
+            else if(bType.equals("float")){
+                writeLoadBlock(b, "%f1");
+            }
         }
 
         arithOpCall(aType, bType, result, op);
@@ -875,7 +879,7 @@ public class AssemblyGenerator {
             case "==":
             case "!=":
             // case "&&":
-                elseBranchAssembly(result);
+                // elseBranchAssembly(result);
                 break;
             default:
                 // System.out.println("not handled constArith msg");
@@ -913,7 +917,7 @@ public class AssemblyGenerator {
     //      be          .$$.else.1
     //      nop  
     //-------------------------------------------------------------------
-    public void constComparisonAssembly(String lhs, String rhs, String resultVal, STO result, BinaryOp op){
+    public void constComparisonAssembly(String lhs, String rhs, String resultVal, STO a, STO b, STO result, BinaryOp op){
         writeAssembly(AssemblyMsg.CONST_IF_MSG, lhs, rhs);
         writeAssembly(AssemblyMsg.SET_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, resultVal, "%o0");
@@ -936,6 +940,7 @@ public class AssemblyGenerator {
         }
         writeAssembly(AssemblyMsg.CMP_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "%g0");
+
         writeAssembly(AssemblyMsg.BE_OP);
 
         writeAssembly(AssemblyMsg.ONE_VAL, beTarget);
@@ -1058,7 +1063,7 @@ public class AssemblyGenerator {
             case "==":
             case "!=":
             // case "&&":
-                elseBranchAssembly(result);
+                // elseBranchAssembly(result);
                 break;
             default:
                 // System.out.println("not handled constArith msg");
@@ -1116,9 +1121,12 @@ public class AssemblyGenerator {
             case "!=":
                 writeAssembly(AssemblyMsg.NOTEQ_MSG, lhs, rhs);
                 break;
-            // case "&&":
-            //     writeAssembly(AssemblyMsg.RHS_SHORT_CIRC);
-            //     break;
+            case "&&":
+                writeAssembly(AssemblyMsg.ANDAND_MSG, lhs, rhs);
+                break;
+            case "||":
+                writeAssembly(AssemblyMsg.OROR_MSG, lhs, rhs);
+                break;
             default:
                 // System.out.println("not handled constArith msg");
                 break;
@@ -1210,26 +1218,6 @@ public class AssemblyGenerator {
                 else{
                     conditionalAssemblyStart(branchOption, bleTarget, result); 
                 }
-                break;
-            case "&&":
-                // String andorLable = "";
-                // String andorEndLabel = "";
-                // if(!andorLabelStack.isEmpty()){
-                //     andorLable = (String) andorLabelStack.pop();
-                // }
-                // if(!andorEndStack.isEmpty()){
-                //     andorEndLabel = (String) andorEndStack.pop();
-                // }
-                // decreaseIndent();
-                // writeAssembly(AssemblyMsg.LABEL, andorLable);
-                // increaseIndent();
-                // writeAssembly(AssemblyMsg.MOV_OP);
-                // writeAssembly(AssemblyMsg.TWO_VALS, "0", "%o0");
-                // decreaseIndent();
-                // writeAssembly(AssemblyMsg.LABEL, andorEndLabel);
-                // increaseIndent();
-                // writeStore(result.getOffset(), "%fp", "%o0");
-                // writeAssembly(AssemblyMsg.NEWLINE);
                 break;
             default:
                 // System.out.println("not handled exprArith op");
@@ -1414,6 +1402,9 @@ public class AssemblyGenerator {
                     writeAssembly(AssemblyMsg.POSTDEC_MSG, a.getName());
                 }
                 break;
+            case "!":
+                writeAssembly(AssemblyMsg.NOT_MSG, a.getName());
+                break;
             default:
                 break;
         }
@@ -1422,8 +1413,10 @@ public class AssemblyGenerator {
 
         if(!aType.equals("float")){
             writeLoadBlock(a, "%o0");
-            writeAssembly(AssemblyMsg.SET_OP);
-            writeAssembly(AssemblyMsg.TWO_VALS,  "1", "%o1");
+            if(!op.equals("!")){
+                writeAssembly(AssemblyMsg.SET_OP);
+                writeAssembly(AssemblyMsg.TWO_VALS,  "1", "%o1");
+            }
         }
         else if(aType.equals("float")){
             writeLoadBlock(a, "%f0");
@@ -1451,6 +1444,14 @@ public class AssemblyGenerator {
                         writeStore(result.getOffset(), "%fp", "%f0");
                     }
                 }
+                
+                if(!aType.equals("float")){
+                    writeStore(a.getOffset(), "%fp", "%o2");
+                }
+                else if(aType.equals("float")){
+                    writeStore(a.getOffset(), "%fp", "%f2");
+                }
+
                 break;
             case "--":
                 if(!aType.equals("float")){
@@ -1472,16 +1473,39 @@ public class AssemblyGenerator {
                     }
                 }
                 
+                if(!aType.equals("float")){
+                    writeStore(a.getOffset(), "%fp", "%o2");
+                }
+                else if(aType.equals("float")){
+                    writeStore(a.getOffset(), "%fp", "%f2");
+                }
+
+                break;
+            case "!":
+                // set         -20, %l7
+                // add         %fp, %l7, %l7
+                // ld          [%l7], %o0
+                // xor         %o0, 1, %o0
+                // set         -24, %o1
+                // add         %fp, %o1, %o1
+                // st          %o0, [%o1]
+                if(!aType.equals("float")){
+                    writeAssembly(AssemblyMsg.XOR_OP);
+                    writeAssembly(AssemblyMsg.THREE_VALS, "%o0","1","%o0");
+                }
+                else if(aType.equals("float")){
+                    writeAssembly(AssemblyMsg.FSUBS_OP);
+                    writeAssembly(AssemblyMsg.THREE_VALS, "%f0","%f1","%f2");
+                }
+                if(!aType.equals("float")){
+                    writeStore(result.getOffset(), "%fp", "%o0");
+                }
+                else if(aType.equals("float")){
+                    writeStore(result.getOffset(), "%fp", "%f0");
+                }
                 break;
             default:
                 break;
-        }
-
-        if(!aType.equals("float")){
-            writeStore(a.getOffset(), "%fp", "%o2");
-        }
-        else if(aType.equals("float")){
-            writeStore(a.getOffset(), "%fp", "%f2");
         }
 
         decreaseIndent();
@@ -1752,10 +1776,13 @@ public class AssemblyGenerator {
         writeAssembly(AssemblyMsg.THREE_VALS, add_name, "%l7", "%l7");
         if (cur_STO.isVar()) {
             // System.out.println("was a varSTO: " + cur_STO.getName() + " / " + cur_STO.getType());
-            if ( ((VarSTO)cur_STO).getPassByReference() ) {
-                // need to dereference once
-                writeAssembly(AssemblyMsg.LD_OP);
-                writeAssembly(AssemblyMsg.TWO_VALS, "[%l7]", "%l7");
+            try{
+                if ( ((VarSTO)cur_STO).getPassByReference() ) {
+                    // need to dereference once
+                    writeAssembly(AssemblyMsg.LD_OP);
+                    writeAssembly(AssemblyMsg.TWO_VALS, "[%l7]", "%l7");
+                }
+            }catch(Exception e){
             }
         } else {
             // System.out.println("not a varSTO: " + cur_STO.getName() + " / " + cur_STO.getType());
@@ -1852,29 +1879,111 @@ public class AssemblyGenerator {
     //-------------------------------------------------------------------
     public void doLHSShortCircuit(STO expr, String op){
         // System.out.println("lhs short circuts 1");
+        increaseIndent();
+        writeAssembly(AssemblyMsg.LHS_SHORT_CIRC);
+        writeLoadBlock(expr, "%o0");
+        writeAssembly(AssemblyMsg.CMP_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "%g0");
+        
+        andorCounter++;
+        String andorSkip = AssemblyMsg.ANDOR_LABEL + andorCounter;
+        String andorEnd = AssemblyMsg.ANDOREND_LBL + andorCounter;
         switch(op){
             case "&&":
             // System.out.println("lhs short circuts 2");
-                writeAssembly(AssemblyMsg.LHS_SHORT_CIRC);
-                writeLoadBlock(expr, "%o0");
-                writeAssembly(AssemblyMsg.CMP_OP);
-                writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "%g0");
-                
-                andorCounter++;
-                String andorSkip = AssemblyMsg.ANDOR_LABEL + andorCounter;
-                String andorEnd = AssemblyMsg.ANDOREND_LBL + andorCounter;
-                andorLabelStack.push(andorSkip);
                 writeAssembly(AssemblyMsg.BE_OP);
-                writeAssembly(AssemblyMsg.ONE_VAL, andorSkip);
-                writeAssembly(AssemblyMsg.NOP);
-                writeAssembly(AssemblyMsg.NEWLINE);
-                decreaseIndent();
                 break;
             case "||":
+                writeAssembly(AssemblyMsg.BNE_OP);
                 break;
             default:
                 break;
         }
+        writeAssembly(AssemblyMsg.ONE_VAL, andorSkip);
+        writeAssembly(AssemblyMsg.NOP);
+        writeAssembly(AssemblyMsg.NEWLINE);
+        decreaseIndent();
+    }
+
+    public void doRHSShortCircuit(STO expr, String op){
+        // System.out.println("lhs short circuts 1");
+        increaseIndent();
+        writeAssembly(AssemblyMsg.RHS_SHORT_CIRC);
+        if(expr.getOffset()!= null){
+            writeLoadBlock(expr, "%o0");
+        }
+        writeAssembly(AssemblyMsg.CMP_OP);
+        writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "%g0");
+        
+        String andorSkip = AssemblyMsg.ANDOR_LABEL + andorCounter;
+        String andorEnd = AssemblyMsg.ANDOREND_LBL + andorCounter;
+        switch(op){
+            case "&&":
+            // System.out.println("lhs short circuts 2");
+                writeAssembly(AssemblyMsg.BE_OP);
+                break;
+            case "||":
+                writeAssembly(AssemblyMsg.BNE_OP);
+                break;
+            default:
+                break;
+        }
+        writeAssembly(AssemblyMsg.ONE_VAL, andorSkip);
+        writeAssembly(AssemblyMsg.NOP);
+        decreaseIndent();
+    }
+
+    // ba          .$$.andorEnd.2
+    //     mov         1, %o0
+    // .$$.andorSkip.2:
+    //     mov         0, %o0
+    // .$$.andorEnd.2:
+    //     set         -36, %o1
+    //     add         %fp, %o1, %o1
+    //     st          %o0, [%o1]
+
+    public void doEndShortCircuit(STO expr, String op){
+        // System.out.println("lhs short circuts 1");
+        increaseIndent();
+        writeAssembly(AssemblyMsg.BA_OP);
+        String andorSkip = AssemblyMsg.ANDOR_LABEL + andorCounter;
+        String andorEnd = AssemblyMsg.ANDOREND_LBL + andorCounter;
+        writeAssembly(AssemblyMsg.ONE_VAL, andorEnd);
+
+        writeAssembly(AssemblyMsg.MOV_OP);
+        switch(op){
+            case "&&":
+            // System.out.println("lhs short circuts 2");
+                writeAssembly(AssemblyMsg.TWO_VALS, "1", "%o0");
+                decreaseIndent();
+                writeAssembly(AssemblyMsg.LABEL, andorSkip);
+                increaseIndent();
+                writeAssembly(AssemblyMsg.MOV_OP);
+                writeAssembly(AssemblyMsg.TWO_VALS, "0", "%o0");
+                break;
+            case "||":
+                writeAssembly(AssemblyMsg.TWO_VALS, "0", "%o0");
+                decreaseIndent();
+                writeAssembly(AssemblyMsg.LABEL, andorSkip);
+                increaseIndent();
+                writeAssembly(AssemblyMsg.MOV_OP);
+                writeAssembly(AssemblyMsg.TWO_VALS, "1", "%o0");
+                break;
+            default:
+                break;
+        }
+        decreaseIndent();
+        writeAssembly(AssemblyMsg.LABEL, andorEnd);
+        increaseIndent();
+
+        int newOffset = 0;
+        try{
+            newOffset =Integer.parseInt(expr.getOffset());
+            writeStore(newOffset + "", "%fp", "%o0");
+        } catch (Exception e){}
+        // newOffset -= 4;
+        writeAssembly(AssemblyMsg.NEWLINE);
+        decreaseIndent();
     }
 
     public void whileLabelPush(){

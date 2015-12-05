@@ -189,6 +189,8 @@ class AssemblyMsg{
     public static final String XOR_MSG       = "! (%s)^(%s)\n";
     public static final String OR_MSG        = "! (%s)|(%s)\n";
     public static final String AND_MSG       = "! (%s)&(%s)\n";
+    public static final String ANDAND_MSG       = "! (%s)&&(%s)\n";
+    public static final String OROR_MSG       = "! (%s)||(%s)\n";
     public static final String UNARYNEG_MSG  = "! -(%s)\n";
     public static final String UNARYPOS_MSG  = "! +(%s)\n";
 
@@ -196,6 +198,7 @@ class AssemblyMsg{
     public static final String POSTINC_MSG   = "! (%s)++\n";
     public static final String PREDEC_MSG    = "! --(%s)\n";
     public static final String POSTDEC_MSG   = "! (%s)--\n";
+    public static final String NOT_MSG       = "! !%s\n";
 
     public static final String GT_MSG        = "! (%s)>(%s)\n";
     public static final String GTE_MSG       = "! (%s)>=(%s)\n";
