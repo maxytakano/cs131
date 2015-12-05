@@ -710,6 +710,7 @@ Stmt ::=     T_FOREACH T_LPAREN Type:_type OptRef:_ref T_ID:_3 T_COLON Expr:_exp
 BreakStmt ::=       T_BREAK
                     {:
                         ((MyParser) parser).breakContinueCheck(1);
+                        ((MyParser) parser).doBreakAss();
                     :} 
                     T_SEMI
     ;
@@ -718,6 +719,7 @@ BreakStmt ::=       T_BREAK
 ContinueStmt ::=    T_CONTINUE
                     {:
                         ((MyParser) parser).breakContinueCheck(2);
+                        ((MyParser) parser).doConAss();
                     :}
                     T_SEMI
     ;

@@ -923,7 +923,7 @@ public class AssemblyGenerator {
         if(!ifOrWhileStack.isEmpty()){
             ifOrWhileCheck = (int) ifOrWhileStack.pop();
         }
-        System.out.println(ifOrWhileCheck + " popped");
+        // System.out.println(ifOrWhileCheck + " popped");
         String beTarget = "";
         if(ifOrWhileCheck == 0){
             elseCounter++;
@@ -1909,6 +1909,54 @@ public class AssemblyGenerator {
         String whileEndLabel = (String) loopEndStack.pop();
         writeAssembly(AssemblyMsg.LABEL, whileEndLabel);
         writeAssembly(AssemblyMsg.NEWLINE);
+    }
+
+    public void doBreakAss(){
+        increaseIndent();
+        writeAssembly(AssemblyMsg.BREAK_MSG);
+        writeAssembly(AssemblyMsg.BA_OP);
+        int ifOrWhileCheck = 0;
+        if(!ifOrWhileStack.isEmpty()){
+            ifOrWhileCheck = (int) ifOrWhileStack.pop();
+        }
+        // System.out.println(ifOrWhileCheck + " popped");
+        String beTarget = "";
+        if(ifOrWhileCheck == 0){
+            beTarget = AssemblyMsg.ELSE_LABEL + elseCounter;
+            //push onto stack so that we can keep track of else scopes
+            elseLabelStack.push(beTarget);
+        }else{
+            beTarget = (String) loopEndStack.pop();
+            loopEndStack.push(beTarget);
+        }
+        writeAssembly(AssemblyMsg.ONE_VAL, beTarget);
+        writeAssembly(AssemblyMsg.NOP);
+        writeAssembly(AssemblyMsg.NEWLINE);
+        decreaseIndent();
+    }
+
+    public void doConAss(){
+        increaseIndent();
+        writeAssembly(AssemblyMsg.CONTINUE_MSG);
+        writeAssembly(AssemblyMsg.BA_OP);
+        int ifOrWhileCheck = 1;
+        if(!ifOrWhileStack.isEmpty()){
+            ifOrWhileCheck = (int) ifOrWhileStack.pop();
+        }
+        // System.out.println(ifOrWhileCheck + " popped");
+        String beTarget = "";
+        if(ifOrWhileCheck == 0){
+            beTarget = AssemblyMsg.ELSE_LABEL + elseCounter;
+            //push onto stack so that we can keep track of else scopes
+            elseLabelStack.push(beTarget);
+        }else{
+            beTarget = (String) loopCheckStack.pop();
+            loopCheckStack.push(beTarget);
+        }
+        writeAssembly(AssemblyMsg.ONE_VAL, beTarget);
+        writeAssembly(AssemblyMsg.NOP);
+        writeAssembly(AssemblyMsg.NEWLINE);
+        decreaseIndent();
     }
 
     public void ifLabelPush(){

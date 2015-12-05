@@ -2010,6 +2010,14 @@ class MyParser extends parser
         assGen.whileEnd();
     }
 
+    void doBreakAss(){
+        assGen.doBreakAss();
+    }
+
+    void doConAss(){
+        assGen.doConAss();
+    }
+
 } /* end of file */
 
 

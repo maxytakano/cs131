@@ -211,6 +211,8 @@ class AssemblyMsg{
     public static final String WHILE_MSG     = "! while(...)\n";
 
     public static final String EXIT_MSG      = "! exit(%s)\n";
+    public static final String BREAK_MSG     = "! break\n";
+    public static final String CONTINUE_MSG  = "! continue\n";
 
     public static final String LHS_SHORT_CIRC= "! Short Circuit LHS\n";
     public static final String RHS_SHORT_CIRC= "! Short Circuit RHS\n";
