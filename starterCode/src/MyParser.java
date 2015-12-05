@@ -1329,7 +1329,7 @@ class MyParser extends parser
             }
             //there was no constants, we're dealing wiht only local vars/exprs
             // System.out.println(o.getName());
-            assGen.exprArith(a, b, result, o.getName(), "-" + m_symtab.getFunc().getOffsetCount(), m_foreachwhileflag);
+            assGen.exprArith(a, b, result, o.getName(), "-" + m_symtab.getFunc().getOffsetCount());
         }
         else if(lhsVal.equals("") && !rhsVal.equals("")){
             //Increment function's offset by local's size. the set sto's offset
@@ -1340,7 +1340,7 @@ class MyParser extends parser
                 m_symtab.getFunc().incOffsetCount(result.getType().getSize());
             }
             //rhs is a constant, we have to deal with it differently
-            assGen.constArith(a, rhsVal, rhsValType, result, o.getName(), true, "-" + m_symtab.getFunc().getOffsetCount(), m_foreachwhileflag);
+            assGen.constArith(a, rhsVal, rhsValType, result, o.getName(), true, "-" + m_symtab.getFunc().getOffsetCount());
         }
         else if(!lhsVal.equals("") && rhsVal.equals("")){
             //Increment function's offset by local's size. the set sto's offset
@@ -1351,11 +1351,11 @@ class MyParser extends parser
                 m_symtab.getFunc().incOffsetCount(result.getType().getSize());
             }
             //lhs is constant, rhs is not, deal with it same as else if
-            assGen.constArith(b, lhsVal, lhsValType, result, o.getName(), false, "-" + m_symtab.getFunc().getOffsetCount(), m_foreachwhileflag);
+            assGen.constArith(b, lhsVal, lhsValType, result, o.getName(), false, "-" + m_symtab.getFunc().getOffsetCount());
         }
         else if(!lhsVal.equals("") && !rhsVal.equals("") && o.getName().equals(">")){
             String resultVal = optInitExtractor(result);
-            assGen.constComparisonAssembly(lhsVal, rhsVal, resultVal, result, o, m_foreachwhileflag);
+            assGen.constComparisonAssembly(lhsVal, rhsVal, resultVal, result, o);
         }
         //at this point, 
         //neither a nor b are exprs. they both have vals, but no offset
@@ -2003,7 +2003,11 @@ class MyParser extends parser
     }
 
     void whilePush(){
-        assGen.whileLabelPush();
+         assGen.whileLabelPush();
+    }
+
+    void whileEnd(){
+        assGen.whileEnd();
     }
 
 } /* end of file */

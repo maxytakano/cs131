@@ -23,7 +23,7 @@ public class AssemblyGenerator {
     private Stack andorEndStack = new Stack();
     private Stack loopCheckStack = new Stack();
     private Stack loopEndStack = new Stack();
-    private Stack ifWhileStack = new Stack();
+    private Stack ifOrWhileStack = new Stack();
 
     // 3
     private FileWriter fileWriter;
@@ -821,7 +821,7 @@ public class AssemblyGenerator {
     //      (arithOpCall)
     //      (arithEnd)   or  (comparisonEnd)
     //-------------------------------------------------------------------
-    public void exprArith(STO a, STO b, STO result, String op, String promotionOffset, int whileFlag){
+    public void exprArith(STO a, STO b, STO result, String op, String promotionOffset){
         increaseIndent();
         //get the comment based on the op
         arithMsgCall(a.getName(), b.getName(), op);
@@ -853,7 +853,7 @@ public class AssemblyGenerator {
             writeLoadBlock(b, "%f1");
         }
 
-        arithOpCall(aType, bType, result, op, whileFlag);
+        arithOpCall(aType, bType, result, op);
 
         //call the part of the addition op that is the same regardless
         //of constant/expr addition or expr/expr addition
@@ -913,74 +913,34 @@ public class AssemblyGenerator {
     //      be          .$$.else.1
     //      nop  
     //-------------------------------------------------------------------
-    public void constComparisonAssembly(String lhs, String rhs, String resultVal, STO result, BinaryOp op, int whileFlag){
-        if(whileFlag == -1){
-            writeAssembly(AssemblyMsg.CONST_IF_MSG, lhs, rhs);
-        }
-        else{
-            writeAssembly(AssemblyMsg.WHILE_MSG);
-        }
+    public void constComparisonAssembly(String lhs, String rhs, String resultVal, STO result, BinaryOp op){
+        writeAssembly(AssemblyMsg.CONST_IF_MSG, lhs, rhs);
         writeAssembly(AssemblyMsg.SET_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, resultVal, "%o0");
 
-        // //push on the ifEndLabel
-        // cmpCounter++;
-        // String beTarget = AssemblyMsg.CMP_LABEL + cmpCounter;
-        //push the ifEndLabel onto the stack so that when the scope ends
-        //we know which label to use.
-        // ifCounter++;
-        // String ifEndLabel = AssemblyMsg.ENDIF_LABEL + ifCounter;
-        // ifLabelStack.push(ifEndLabel);
-
-        // //push on the else label stuff
-        // elseCounter++;
-        String beTarget = AssemblyMsg.ELSE_LABEL + elseCounter;
-        String target = "";
-        int ifOrWhileChecker = (int) ifWhileStack.pop();
-        if(ifOrWhileChecker == 0){
-            if(!ifLabelStack.isEmpty()){
-                target = (String) elseLabelStack.pop();
-            }
-        } else {
-            if(!loopCheckStack.isEmpty()){
-                target = (String) loopCheckStack.pop();
-            }
+        //push on the else label stuff
+        int ifOrWhileCheck = 0;
+        if(!ifOrWhileStack.isEmpty()){
+            ifOrWhileCheck = (int) ifOrWhileStack.pop();
         }
-        // //push onto stack so that we can keep track of else scopes
-        // elseLabelStack.push(beTarget);
+        System.out.println(ifOrWhileCheck + " popped");
+        String beTarget = "";
+        if(ifOrWhileCheck == 0){
+            elseCounter++;
+            beTarget = AssemblyMsg.ELSE_LABEL + elseCounter;
+            //push onto stack so that we can keep track of else scopes
+            elseLabelStack.push(beTarget);
+        }else{
+            beTarget = (String) loopEndStack.pop();
+            loopEndStack.push(beTarget);
+        }
         writeAssembly(AssemblyMsg.CMP_OP);
         writeAssembly(AssemblyMsg.TWO_VALS, "%o0", "%g0");
         writeAssembly(AssemblyMsg.BE_OP);
-        writeAssembly(AssemblyMsg.ONE_VAL, target);
+
+        writeAssembly(AssemblyMsg.ONE_VAL, beTarget);
         writeAssembly(AssemblyMsg.NOP);
         writeAssembly(AssemblyMsg.NEWLINE);
-    }
-
-    public void ifLabelPush(){
-        ifCounter++;
-        String ifEndLabel = AssemblyMsg.ENDIF_LABEL + ifCounter;
-        ifLabelStack.push(ifEndLabel);
-
-        //push on the else label stuff
-        elseCounter++;
-        String beTarget = AssemblyMsg.ELSE_LABEL + elseCounter;
-        //push onto stack so that we can keep track of else scopes
-        elseLabelStack.push(beTarget);
-
-        ifWhileStack.push(0);
-    }
-
-    public void whileLabelPush(){
-        loopCheckCounter++;
-        String whileEndLabel = AssemblyMsg.LOOPCHECK_LBL + loopCheckCounter;
-        loopCheckStack.push(whileEndLabel);
-
-        //push on the else label stuff
-        String beTarget = AssemblyMsg.LOOPEND_LBL + loopCheckCounter;
-        //push onto stack so that we can keep track of else scopes
-        loopEndStack.push(beTarget);
-
-        ifWhileStack.push(1);
     }
 
     //-------------------------------------------------------------------
@@ -988,25 +948,23 @@ public class AssemblyGenerator {
     //      (comparisonEnd)
     //-------------------------------------------------------------------
     public void elseBranchAssembly(STO result){
-        // elseCounter++;
-        String beTarget = AssemblyMsg.ELSE_LABEL + elseCounter;
-        String target = "";
-        int ifOrWhileChecker = 0;
-        if(!ifWhileStack.isEmpty()){
-            ifOrWhileChecker = (int) ifWhileStack.pop();
+
+        int ifOrWhileCheck = 0;
+        if(!ifOrWhileStack.isEmpty()){
+            ifOrWhileCheck = (int) ifOrWhileStack.pop();
         }
-        if(ifOrWhileChecker == 0){
-            if(!ifLabelStack.isEmpty()){
-                target = (String) elseLabelStack.pop();
-            }
-        } else {
-            if(!loopCheckStack.isEmpty()){
-                target = (String) loopCheckStack.pop();
-            }
+        // System.out.println(ifOrWhileCheck + " popped");
+        String beTarget = "";
+        if(ifOrWhileCheck == 0){
+            elseCounter++;
+            beTarget = AssemblyMsg.ELSE_LABEL + elseCounter;
+            //push onto stack so that we can keep track of else scopes
+            elseLabelStack.push(beTarget);
+        }else{
+            beTarget = (String) loopEndStack.pop();
+            loopEndStack.push(beTarget);
         }
-        // //push onto stack so that we can keep track of else scopes
-        // elseLabelStack.push(beTarget);
-        comparisonEnd(result, target);
+        comparisonEnd(result, beTarget);
     }
 
     //-------------------------------------------------------------------
@@ -1017,7 +975,7 @@ public class AssemblyGenerator {
     //      (arithCall)
     //      (arithEnd)   or  (comparisonEnd)
     //-------------------------------------------------------------------
-    public void constArith(STO a, String b, String bType, STO result, String op, boolean constIsRight, String promotionOffset, int whileFlag){
+    public void constArith(STO a, String b, String bType, STO result, String op, boolean constIsRight, String promotionOffset){
         increaseIndent();
         //call the part of the addition op that is the same regardless
         //of constant/expr addition or expr/expr addition
@@ -1080,7 +1038,7 @@ public class AssemblyGenerator {
 
 
         //do proper operation based on op
-        arithOpCall(aType, bType, result, op, whileFlag);
+        arithOpCall(aType, bType, result, op);
 
         switch(op){
             case "+":
@@ -1172,7 +1130,7 @@ public class AssemblyGenerator {
     // Method that writes out the assembly for arithmetic ops
     //      add or fadds       %o0, %o1, %o0, or %f0, %f1, %f0
     //-------------------------------------------------------------------
-    public void arithOpCall(String aType, String bType, STO result, String op, int whileFlag){
+    public void arithOpCall(String aType, String bType, STO result, String op){
         String resultType = result.getType().getName();
         switch(op){
             case "+":
@@ -1241,8 +1199,9 @@ public class AssemblyGenerator {
                 //push the ifEndLabel onto the stack so that when the scope ends
                 //we know which label to use.
                 // ifCounter++;
-                // String ifEndLabel = AssemblyMsg.ENDIF_LABEL + ifCounter;
-                // ifLabelStack.push(ifEndLabel);
+
+                // // String ifEndLabel = AssemblyMsg.ENDIF_LABEL + ifCounter;
+                // // ifLabelStack.push(ifEndLabel);
                 String branchOption = comparisonChooser(op, bleTarget, aType, bType);
 
                 if(aType.equals("float") || bType.equals("float")){
@@ -1583,40 +1542,26 @@ public class AssemblyGenerator {
         increaseIndent();
         writeAssembly(AssemblyMsg.BA_OP);
         //pop the label for the end of this scope
-        String target = "";
-        // int ifOrWhileChecker = (int) ifWhileStack.pop();
-        int ifOrWhileChecker = 0;
-        if(!ifWhileStack.isEmpty()){
-            ifOrWhileChecker = (int) ifWhileStack.pop();
-        }
-        if(ifOrWhileChecker == 0){
-            if(!ifLabelStack.isEmpty()){
-                target = (String) ifLabelStack.pop();
-            }
-        } else {
-            if(!loopCheckStack.isEmpty()){
-                target = (String) loopCheckStack.pop();
-            }
+        String endifTarget = "";
+        if(!ifLabelStack.isEmpty()){
+            endifTarget = (String) ifLabelStack.pop();
         }
         //then push it back onto the stack since we need it when we do the 
         //exit label for the if statement
-        ifLabelStack.push(target);
-        writeAssembly(AssemblyMsg.ONE_VAL, target);
+        ifLabelStack.push(endifTarget);
+        writeAssembly(AssemblyMsg.ONE_VAL, endifTarget);
         writeAssembly(AssemblyMsg.NOP);
         writeAssembly(AssemblyMsg.NEWLINE);
         decreaseIndent();
-        if(ifOrWhileChecker == 0){
-            writeAssembly(AssemblyMsg.ELSE_MSG);
-            decreaseIndent();
-            //pop the label for the end of this scope
-            String elseTarget = "";
-            if(!elseLabelStack.isEmpty()){
-                elseTarget = (String) elseLabelStack.pop();
-            }
-
-            writeAssembly(AssemblyMsg.LABEL, elseTarget);
-            writeAssembly(AssemblyMsg.NEWLINE);
+        writeAssembly(AssemblyMsg.ELSE_MSG);
+        decreaseIndent();
+        //pop the label for the end of this scope
+        String elseTarget = "";
+        if(!elseLabelStack.isEmpty()){
+            elseTarget = (String) elseLabelStack.pop();
         }
+        writeAssembly(AssemblyMsg.LABEL, elseTarget);
+        writeAssembly(AssemblyMsg.NEWLINE);
         increaseIndent();
     }
 
@@ -1932,6 +1877,49 @@ public class AssemblyGenerator {
         }
     }
 
+    public void whileLabelPush(){
+        loopCheckCounter++;
+        String loopCheckLbl = AssemblyMsg.LOOPCHECK_LBL + loopCheckCounter;
+        loopCheckStack.push(loopCheckLbl);
+        String loopEndLbl = AssemblyMsg.LOOPEND_LBL + loopCheckCounter;
+        loopEndStack.push(loopEndLbl);
+        ifOrWhileStack.push(1);
+
+        writeAssembly(AssemblyMsg.WHILE_MSG);
+        decreaseIndent();
+        writeAssembly(AssemblyMsg.LABEL, loopCheckLbl);
+        increaseIndent();
+        writeAssembly(AssemblyMsg.NEWLINE);
+        //increase twice more
+    }
+
+    public void whileEnd(){
+        increaseIndent();
+        writeAssembly(AssemblyMsg.BA_OP);
+        //pop the label for the end of this scope
+        String loopTarget = "";
+        if(!loopCheckStack.isEmpty()){
+            loopTarget = (String) loopCheckStack.pop();
+        }
+        writeAssembly(AssemblyMsg.ONE_VAL, loopTarget);
+        writeAssembly(AssemblyMsg.NOP);
+        writeAssembly(AssemblyMsg.NEWLINE);
+
+        decreaseIndent();
+        String whileEndLabel = (String) loopEndStack.pop();
+        writeAssembly(AssemblyMsg.LABEL, whileEndLabel);
+        writeAssembly(AssemblyMsg.NEWLINE);
+    }
+
+    public void ifLabelPush(){
+
+        ifCounter++;
+        String ifEndLabel = AssemblyMsg.ENDIF_LABEL + ifCounter;
+        ifLabelStack.push(ifEndLabel);
+
+        ifOrWhileStack.push(0);
+    }
+
     // 9
     public void writeAssembly(String template, String ... params) {
         StringBuilder asStmt = new StringBuilder();
@@ -1947,7 +1935,7 @@ public class AssemblyGenerator {
         asStmt.append(String.format(template, (Object[])params));
 
         try {
-        	// System.out.println("writing assembly: " + asStmt.toString());
+            // System.out.println("writing assembly: " + asStmt.toString());
             fileWriter.write(asStmt.toString());
         } catch (IOException e) {
             System.err.println(AssemblyMsg.ERROR_IO_WRITE);

@@ -678,12 +678,19 @@ OptElse ::=         T_ELSE
     ;
 
 
-WhileStmt ::=       T_WHILE Expr:_1 
+WhileStmt ::=       T_WHILE 
+                    {:
+                        ((MyParser) parser).whilePush();
+                    :} 
+                    Expr:_1 
                     {: 
                         ((MyParser) parser).setForEachWhileFlag();
                         ((MyParser) parser).doConditionCheck(_1); 
                     :} 
                     CodeBlock
+                    {:
+                        ((MyParser) parser).whileEnd();
+                    :}
     ;
 
 
